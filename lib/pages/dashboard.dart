@@ -1,8 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bookref/Models/books.dart';
 import 'package:bookref/Models/bookref_models.dart';
+import 'package:bookref/Models/person.dart';
+import 'package:bookref/graphql/graphQLConf.dart';
+import 'package:bookref/graphql/queryMutation.dart';
 import 'package:bookref/services/bookref_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -10,20 +16,72 @@ class Dashboard extends StatefulWidget {
 }
 
 class _Dashboard extends State<Dashboard> {
-  List<Data> books = [];
+  GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
+
+  List<Books> listCurrent = List<Books>();
+  List<Books> listWishlist = List<Books>();
+  List<Books> listRead = List<Books>();
 
   @override
   void initState() {
     super.initState();
-    getBooks();
+    fillList();
   }
 
-  getBooks() async {
-    BookrefApi instance = BookrefApi();
-    List<Data> books = await instance.fetchBooks();
-    setState(() {
-      this.books = books;
-    });
+  void fillList() async {
+    QueryMutation queryMutation = QueryMutation();
+    GraphQLClient _client = graphQLConfiguration.clientToQuery();
+
+    QueryResult current_result = await _client.query(
+      QueryOptions(
+        document: queryMutation.getCurrentDahsbaordBooks(),
+        //TODO: documentNode: gql("queryMutation.getCurrentDahsbaordBooks"),
+      ),
+    );
+
+    QueryResult wishlist_result = await _client.query(
+      QueryOptions(
+        document: queryMutation.getWishlistDahsbaordBooks(),
+        //TODO: documentNode: gql("queryMutation.getCurrentDahsbaordBooks"),
+      ),
+    );
+
+    QueryResult read_result = await _client.query(
+      QueryOptions(
+        document: queryMutation.getReadDahsbaordBooks(),
+        //TODO: documentNode: gql("queryMutation.getCurrentDahsbaordBooks"),
+      ),
+    );
+
+    if (!current_result.hasException) {
+      for (var i = 0; i < current_result.data["books"].length; i++) {
+        setState(() {
+          listCurrent.add(
+            Books(current_result.data["books"][i]),
+          );
+        });
+      }
+    }
+
+    if (!wishlist_result.hasException) {
+      for (var i = 0; i < wishlist_result.data["books"].length; i++) {
+        setState(() {
+          listWishlist.add(
+            Books(wishlist_result.data["books"][i]),
+          );
+        });
+      }
+    }
+
+    if (!read_result.hasException) {
+      for (var i = 0; i < read_result.data["books"].length; i++) {
+        setState(() {
+          listRead.add(
+            Books(read_result.data["books"][i]),
+          );
+        });
+      }
+    }
   }
 
   @override
@@ -81,7 +139,7 @@ class _Dashboard extends State<Dashboard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "CURRENT",
+                            "READ",
                             style: TextStyle(
                                 fontSize: 17.0,
                                 fontWeight: FontWeight.w700,
@@ -101,7 +159,7 @@ class _Dashboard extends State<Dashboard> {
                     child: ListView.builder(
                         padding: EdgeInsets.only(right: 25.0),
                         scrollDirection: Axis.horizontal,
-                        itemCount: books.length,
+                        itemCount: listRead.length,
                         itemBuilder: (context, index) {
                           return Stack(children: <Widget>[
                             Container(
@@ -159,12 +217,22 @@ class _Dashboard extends State<Dashboard> {
                                       children: <Widget>[
                                         Align(
                                           alignment: Alignment.centerLeft,
-                                          child: Text(books[index].title,
+                                          child: Text(
+                                              "${listRead[index].getBookTitle()}",
                                               maxLines: 4,
                                               style: TextStyle(
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w700,
                                                   height: 1.2,
+                                                  color: Colors.white),
+                                              textAlign: TextAlign.left),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                              "${listRead[index].getAuthor()}",
+                                              style: TextStyle(
+                                                  fontSize: 10.0,
                                                   color: Colors.white),
                                               textAlign: TextAlign.left),
                                         ),
@@ -223,7 +291,7 @@ class _Dashboard extends State<Dashboard> {
                     child: ListView.builder(
                         padding: EdgeInsets.only(right: 25.0),
                         scrollDirection: Axis.horizontal,
-                        itemCount: numbers.length,
+                        itemCount: listWishlist.length,
                         itemBuilder: (context, index) {
                           return Stack(children: <Widget>[
                             Container(
@@ -282,7 +350,8 @@ class _Dashboard extends State<Dashboard> {
                                         Align(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                              "Dieses Buch ist Bares Geld Wert",
+                                              "${listWishlist[index].getBookTitle()}",
+                                              maxLines: 4,
                                               style: TextStyle(
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w700,
@@ -292,7 +361,8 @@ class _Dashboard extends State<Dashboard> {
                                         ),
                                         Align(
                                           alignment: Alignment.centerLeft,
-                                          child: Text("Markus Elsässer",
+                                          child: Text(
+                                              "${listWishlist[index].getAuthor()}",
                                               style: TextStyle(
                                                   fontSize: 10.0,
                                                   color: Colors.white),
@@ -310,7 +380,6 @@ class _Dashboard extends State<Dashboard> {
                                   color: Colors.white,
                                 ),
                                 onTap: () {
-                                  print("Iconbutton!!!");
                                   _showDialog("Refenrenz hinzufügen",
                                       "Guckst du, hier kannst du Referenzen hinzufügen!!!");
                                 },
@@ -353,7 +422,7 @@ class _Dashboard extends State<Dashboard> {
                     child: ListView.builder(
                         padding: EdgeInsets.only(right: 25.0),
                         scrollDirection: Axis.horizontal,
-                        itemCount: numbers.length,
+                        itemCount: listCurrent.length,
                         itemBuilder: (context, index) {
                           return Stack(children: <Widget>[
                             Container(
@@ -413,7 +482,8 @@ class _Dashboard extends State<Dashboard> {
                                       Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                            "Dieses Buch ist Bares Geld Wert",
+                                            "${listCurrent[index].getBookTitle()}",
+                                            maxLines: 4,
                                             style: TextStyle(
                                                 fontSize: 15.0,
                                                 fontWeight: FontWeight.w700,
@@ -423,7 +493,8 @@ class _Dashboard extends State<Dashboard> {
                                       ),
                                       Align(
                                         alignment: Alignment.centerLeft,
-                                        child: Text("Markus Elsässer",
+                                        child: Text(
+                                            "${listCurrent[index].getAuthor()}",
                                             style: TextStyle(
                                                 fontSize: 10.0,
                                                 color: Colors.white),

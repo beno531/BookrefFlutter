@@ -1,4 +1,4 @@
-#Mon Dec 14 18:38:17 CET 2020
-base.0=C\:\\Users\\benit\\Desktop\\bookref\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
+#Fri Dec 18 23:20:06 CET 2020
+base.0=C\:\\Users\\benit\\Desktop\\BookrefFlutter\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

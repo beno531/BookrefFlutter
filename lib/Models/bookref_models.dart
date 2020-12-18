@@ -1,7 +1,10 @@
+/*
 class Book {
   List<Data> data;
 
-  Book({this.data});
+  Book(data) {
+    this.data = data;
+  }
 
   Book.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
@@ -354,3 +357,4 @@ class BookAuthors {
     return data;
   }
 }
+*/
