@@ -1,5 +1,3 @@
-import 'package:bookref/Models/books.dart';
-import 'package:bookref/graphql/graphQLConf.dart';
 import 'package:bookref/widgets/dashboard/currentWidget.dart';
 import 'package:bookref/widgets/dashboard/readWidget.dart';
 import 'package:bookref/widgets/dashboard/wishlistWidget.dart';
@@ -12,15 +10,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _Dashboard extends State<Dashboard> {
-  GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
-
-  List<Books> listCurrent = List<Books>();
-  List<Books> listWishlist = List<Books>();
-
   @override
   Widget build(BuildContext context) {
-    final List<int> numbers = [1, 2, 3, 4, 5, 6, 7, 8];
-
 /*
     //Nur zum Debugen
     void _showDialog(title, content) {
