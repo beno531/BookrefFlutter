@@ -68,5 +68,4 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    classpath 'com.android.tools.build:gradle:2.3.3'
 }
