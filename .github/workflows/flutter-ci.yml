@@ -34,7 +34,7 @@ jobs:
     - run: flutter pub get
     #- run: flutter test
     - run: flutter doctor -v
-
+    - run: flutter clean
     - run: flutter build apk -v
     - uses: actions/upload-artifact@v1
       with:
