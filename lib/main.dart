@@ -1,5 +1,5 @@
 import 'package:bookref/graphql/graphQLConf.dart';
-import 'package:bookref/pages/dashboard.dart';
+import 'package:bookref/pages/dashboardPage.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 

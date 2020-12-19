@@ -67,6 +67,7 @@ class _Dashboard extends State<Dashboard> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.black,
           selectedItemColor: Colors.orange,
           unselectedItemColor: Colors.white,
@@ -78,6 +79,14 @@ class _Dashboard extends State<Dashboard> {
             BottomNavigationBarItem(
               icon: Icon(Icons.local_library),
               label: 'CURRENT',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.restore),
+              label: 'WISH',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.done),
+              label: 'READ',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
