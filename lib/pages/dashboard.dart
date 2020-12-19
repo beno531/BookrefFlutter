@@ -1,18 +1,10 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bookref/Models/books.dart';
-import 'package:bookref/Models/bookref_models.dart';
-import 'package:bookref/Models/person.dart';
 import 'package:bookref/graphql/graphQLConf.dart';
-import 'package:bookref/graphql/queryMutation.dart';
-import 'package:bookref/services/bookref_api.dart';
 import 'package:bookref/widgets/dashboard/currentWidget.dart';
 import 'package:bookref/widgets/dashboard/readWidget.dart';
 import 'package:bookref/widgets/dashboard/wishlistWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import '../graphql/query.dart' as queries;
 
 class Dashboard extends StatefulWidget {
   @override
