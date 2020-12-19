@@ -27,7 +27,7 @@ dependencies:
   http: ^0.12.1
   json_string: ^2.0.1
   auto_size_text: ^2.1.0
-  graphql_flutter: ^3.0.0
+  graphql_flutter: ^2.1.1
 
 
 

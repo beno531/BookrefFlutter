@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import '../graphql/query.dart' as queries;
 
 class Dashboard extends StatefulWidget {
   @override
