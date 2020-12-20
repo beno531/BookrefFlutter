@@ -1,5 +1,6 @@
 import 'package:bookref/graphql/graphQLConf.dart';
 import 'package:bookref/pages/dashboardPage.dart';
+import 'package:bookref/screens/homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -12,9 +13,9 @@ void main() {
         child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Poppins'),
-      initialRoute: '/dashboard',
+      initialRoute: '/home',
       routes: {
-        '/dashboard': (context) => Dashboard(),
+        '/home': (context) => HomeScreen(),
       },
     )),
   ));
