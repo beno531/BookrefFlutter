@@ -35,7 +35,7 @@ class _BottomNavState extends State<BottomNav> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             _buildButton('/', Icons.dashboard, "Dashboard"),
-            _buildButton('/search', Icons.local_library, "CURRENTS"),
+            _buildButton('/currents', Icons.local_library, "CURRENTS"),
             _buildButton('/stats', Icons.emoji_objects, "WISHLIST"),
             _buildButton('/messages', Icons.library_books, "LIBARY"),
             //_buildButton('/more', Icons.more_horiz, "More"),
@@ -46,7 +46,6 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   Widget _buildButton(String namedRoute, IconData data, String tooltip) {
-    final ThemeData theme = Theme.of(context);
     return new Flexible(
       flex: 1,
       child: new Tooltip(

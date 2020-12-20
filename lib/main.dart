@@ -1,5 +1,5 @@
 import 'package:bookref/graphql/graphQLConf.dart';
-import 'package:bookref/pages/dashboardPage.dart';
+import 'package:bookref/screens/currentsScreen.dart';
 import 'package:bookref/screens/homeScreen.dart';
 import 'package:bookref/widgets/bottomNav.dart';
 import 'package:flutter/material.dart';
@@ -80,9 +80,9 @@ class MyAppState extends State<MyApp> {
   Route<dynamic> _onGenerateRoute(RouteSettings settings) {
     Widget child;
     if (settings.name == '/') {
-      child = new DashboardPage();
-    } else if (settings.name == '/search') {
-      //child = new OtherScreen('Search');
+      child = new HomeScreen();
+    } else if (settings.name == '/currents') {
+      child = new CurrentsScreen();
     } else if (settings.name == '/stats') {
       //child = new OtherScreen('Statistics');
     } else if (settings.name == '/messages') {
