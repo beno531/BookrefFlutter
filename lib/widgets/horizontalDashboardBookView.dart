@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-class BookView extends StatelessWidget {
+class HorizontalDashboardBookView extends StatelessWidget {
   final String query;
   final String categorieName;
 
-  BookView(this.query, this.categorieName);
+  HorizontalDashboardBookView(this.query, this.categorieName);
 
   @override
   Widget build(BuildContext context) {

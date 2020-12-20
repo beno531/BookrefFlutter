@@ -55,11 +55,11 @@ class _HomeScreen extends State<HomeScreen> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.local_library),
-                  label: 'CURRENT',
+                  label: 'CURRENTS',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.restore),
-                  label: 'WISH',
+                  label: 'WISHLIST',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.done),
