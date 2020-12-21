@@ -27,10 +27,31 @@ void main() {
 }
 */
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initHiveForFlutter();
+
+  final HttpLink httpLink = HttpLink(
+    'https://bookref-api-dev.mi5u.de/graphql/',
+  );
+
+  final AuthLink authLink = AuthLink(
+    getToken: () async => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
+    // OR
+    // getToken: () => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
+  );
+
+  final Link link = authLink.concat(httpLink);
+
+  ValueNotifier<GraphQLClient> client = ValueNotifier(
+    GraphQLClient(
+      link: link,
+      cache: GraphQLCache(store: HiveStore()),
+    ),
+  );
+
   runApp(GraphQLProvider(
-      client: graphQLConfiguration.client,
+      client: client,
       child: CacheProvider(
         child: new MyApp(),
       )));
