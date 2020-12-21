@@ -1,4 +1,5 @@
 import 'package:bookref/graphql/graphQLConf.dart';
+import 'package:bookref/hive_init.dart';
 import 'package:bookref/screens/currentsScreen.dart';
 import 'package:bookref/screens/homeScreen.dart';
 import 'package:bookref/screens/libaryScreen.dart';
@@ -27,10 +28,31 @@ void main() {
 }
 */
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await custominitHiveForFlutter();
+
+  final HttpLink httpLink = HttpLink(
+    'https://bookref-api-dev.mi5u.de/graphql/',
+  );
+
+  final AuthLink authLink = AuthLink(
+    getToken: () async => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
+    // OR
+    // getToken: () => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
+  );
+
+  final Link link = authLink.concat(httpLink);
+
+  ValueNotifier<GraphQLClient> client = ValueNotifier(
+    GraphQLClient(
+      link: link,
+      cache: GraphQLCache(store: HiveStore()),
+    ),
+  );
+
   runApp(GraphQLProvider(
-      client: graphQLConfiguration.client,
+      client: client,
       child: CacheProvider(
         child: new MyApp(),
       )));
