@@ -1,4 +1,5 @@
 import 'package:bookref/graphql/graphQLConf.dart';
+import 'package:bookref/hive_init.dart';
 import 'package:bookref/screens/currentsScreen.dart';
 import 'package:bookref/screens/homeScreen.dart';
 import 'package:bookref/screens/libaryScreen.dart';
@@ -29,7 +30,7 @@ void main() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initHiveForFlutter();
+  await custominitHiveForFlutter();
 
   final HttpLink httpLink = HttpLink(
     'https://bookref-api-dev.mi5u.de/graphql/',
