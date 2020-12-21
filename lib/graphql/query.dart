@@ -30,7 +30,7 @@ const String getWishlistDahsbaordBooks = r'''
   }
 ''';
 
-const String getReadDahsbaordBooks = r'''
+const String getDoneDahsbaordBooks = r'''
   query {
      books (where: { status: { eq: DONE } } ) {
           book {
