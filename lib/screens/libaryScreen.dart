@@ -1,16 +1,15 @@
-import 'package:bookref/widgets/horizontalDashboardBookView.dart';
 import 'package:bookref/widgets/standaloneGridBookView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bookref/graphql/query.dart' as queries;
 
-class CurrentsScreen extends StatefulWidget {
+class LibaryScreen extends StatefulWidget {
   @override
-  _CurrentsScreen createState() => _CurrentsScreen();
+  _LibaryScreen createState() => _LibaryScreen();
 }
 
-class _CurrentsScreen extends State<CurrentsScreen> {
+class _LibaryScreen extends State<LibaryScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,7 +17,7 @@ class _CurrentsScreen extends State<CurrentsScreen> {
       child: Column(
         children: <Widget>[
           new StanaloneGridBookView(
-              queries.getCurrentDahsbaordBooks, "CURRENTS VIEW")
+              queries.getDoneDahsbaordBooks, "LIBARY VIEW")
         ],
       ),
     );

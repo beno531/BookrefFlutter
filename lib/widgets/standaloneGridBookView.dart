@@ -74,8 +74,8 @@ class StanaloneGridBookView extends StatelessWidget {
                   crossAxisCount: 2,
                   padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
                   // Generate 100 widgets that display their index in the List.
-                  children: List.generate(100, (index) {
-                    //final book = books[index];
+                  children: List.generate(books.length, (index) {
+                    final book = books[index];
                     return Stack(children: <Widget>[
                       Container(
                           decoration: new BoxDecoration(
@@ -124,8 +124,7 @@ class StanaloneGridBookView extends StatelessWidget {
                                 children: <Widget>[
                                   Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Text(
-                                        "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+                                    child: Text("${book.getBookTitle()}",
                                         maxLines: 5,
                                         style: TextStyle(
                                             fontSize: 15.0,
@@ -136,7 +135,7 @@ class StanaloneGridBookView extends StatelessWidget {
                                   ),
                                   Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Text("Test",
+                                    child: Text("${book.getAuthor()}",
                                         maxLines: 1,
                                         style: TextStyle(
                                             fontSize: 10.0,

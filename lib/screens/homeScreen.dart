@@ -17,11 +17,14 @@ class _HomeScreen extends State<HomeScreen> {
       child: Column(
         children: <Widget>[
           new HorizontalDashboardBookView(
-              queries.getDoneDahsbaordBooks, "LIBARY"),
+              queries.getDoneDahsbaordBooks, "LIBARY",
+              seeAllCallback: () => {}),
           new HorizontalDashboardBookView(
-              queries.getWishlistDahsbaordBooks, "WISHLIST"),
+              queries.getWishlistDahsbaordBooks, "WISHLIST",
+              seeAllCallback: () => {}),
           new HorizontalDashboardBookView(
-              queries.getCurrentDahsbaordBooks, "CURRENT")
+              queries.getCurrentDahsbaordBooks, "CURRENT",
+              seeAllCallback: () => {})
         ],
       ),
     );

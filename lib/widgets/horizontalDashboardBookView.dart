@@ -6,8 +6,11 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 class HorizontalDashboardBookView extends StatelessWidget {
   final String query;
   final String categorieName;
+  final VoidCallback seeAllCallback;
 
-  HorizontalDashboardBookView(this.query, this.categorieName);
+  HorizontalDashboardBookView(this.query, this.categorieName,
+      {Key key, this.seeAllCallback})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +32,17 @@ class HorizontalDashboardBookView extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                             color: Colors.white),
                       ),
-                      Text(
-                        "SEE ALL",
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.blue),
+                      InkResponse(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/currents');
+                        },
+                        child: Text(
+                          "SEE ALL",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.blue),
+                        ),
                       )
                     ],
                   )),

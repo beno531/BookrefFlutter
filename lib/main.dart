@@ -1,6 +1,8 @@
 import 'package:bookref/graphql/graphQLConf.dart';
 import 'package:bookref/screens/currentsScreen.dart';
 import 'package:bookref/screens/homeScreen.dart';
+import 'package:bookref/screens/libaryScreen.dart';
+import 'package:bookref/screens/wishlistScreen.dart';
 import 'package:bookref/widgets/bottomNav.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -83,12 +85,10 @@ class MyAppState extends State<MyApp> {
       child = new HomeScreen();
     } else if (settings.name == '/currents') {
       child = new CurrentsScreen();
-    } else if (settings.name == '/stats') {
-      //child = new OtherScreen('Statistics');
-    } else if (settings.name == '/messages') {
-      //child = new OtherScreen('Messages');
-    } else if (settings.name == '/more') {
-      //child = new OtherScreen('More');
+    } else if (settings.name == '/wishlist') {
+      child = new WishlistScreen();
+    } else if (settings.name == '/libary') {
+      child = new LibaryScreen();
     }
     if (child != null) {
       return new MaterialPageRoute(builder: (c) => child);
