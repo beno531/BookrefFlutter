@@ -56,7 +56,7 @@ class _BottomNavState extends State<BottomNav> {
             child: new Icon(
               data,
               size: 32.0,
-              color: _currentRoute == namedRoute ? Colors.blue : Colors.white,
+              color: _currentRoute == namedRoute ? Colors.white : Colors.white,
             ),
           ),
         ),
