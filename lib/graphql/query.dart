@@ -1,15 +1,26 @@
 const String getCurrentDahsbaordBooks = r'''
   query {
     books (where: { status: { eq: ACTIVE } } ) {
-          book {
-            title
-            bookAuthors {
-              author {
-                name
-              }
-            }
-            isbn
-          }
+          userId
+    currentPage
+    status
+    book {
+      id
+      language
+      title
+      bookAuthors {
+        author {
+          name
+        }
+      }
+      created
+      isbn
+      bookCategories {
+        category {
+          name
+        }
+      }
+    }
         }
   }
 ''';
@@ -17,15 +28,26 @@ const String getCurrentDahsbaordBooks = r'''
 const String getWishlistDahsbaordBooks = r'''
   query {
     books (where: { status: { eq: WISH } } ) {
-          book {
-            title
-            bookAuthors {
-              author {
-                name
-              }
-            }
-            isbn
-          }
+         userId
+    currentPage
+    status
+    book {
+      id
+      language
+      title
+      bookAuthors {
+        author {
+          name
+        }
+      }
+      created
+      isbn
+      bookCategories {
+        category {
+          name
+        }
+      }
+    }
         }
   }
 ''';
@@ -33,15 +55,26 @@ const String getWishlistDahsbaordBooks = r'''
 const String getDoneDahsbaordBooks = r'''
   query {
      books (where: { status: { eq: DONE } } ) {
-          book {
-            title
-            bookAuthors {
-              author {
-                name
-              }
-            }
-            isbn
-          }
+          userId
+    currentPage
+    status
+    book {
+      id
+      language
+      title
+      bookAuthors {
+        author {
+          name
+        }
+      }
+      created
+      isbn
+      bookCategories {
+        category {
+          name
+        }
+      }
+    }
         }
   }
 ''';
