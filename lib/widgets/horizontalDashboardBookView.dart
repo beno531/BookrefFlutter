@@ -1,8 +1,9 @@
-import 'package:bookref/Models/books.dart';
+/*import 'package:bookref/Models/books.dart';
 import 'package:bookref/widgets/bookDetailView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:hive/hive.dart';
 
 class HorizontalDashboardBookView extends StatelessWidget {
   final String query;
@@ -180,3 +181,5 @@ class HorizontalDashboardBookView extends StatelessWidget {
         ]));
   }
 }
+
+*/

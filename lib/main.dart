@@ -1,36 +1,26 @@
+import 'package:bookref/Bloc/dashboard_bloc/dashboard_bloc.dart';
+import 'package:bookref/Pages/Dashboard/DashboardPage.dart';
 import 'package:bookref/graphql/graphQLConf.dart';
-import 'package:bookref/hive_init.dart';
-import 'package:bookref/screens/currentsScreen.dart';
-import 'package:bookref/screens/homeScreen.dart';
-import 'package:bookref/screens/libaryScreen.dart';
-import 'package:bookref/screens/wishlistScreen.dart';
-import 'package:bookref/widgets/bottomNav.dart';
+import 'package:bookref/services/bookref_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
 
 /*
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(GraphQLProvider(
-    client: graphQLConfiguration.client,
-    child: CacheProvider(
-        child: MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Poppins'),
-      initialRoute: '/home',
-      routes: {
-        '/home': (context) => HomeScreen(),
-      },
-    )),
-  ));
-}
-*/
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await custominitHiveForFlutter();
+
+  await initHiveForFlutter();
+
+  var box = await Hive.openBox('testBox');
+
+  box.put('name', 'David');
+
+  print('Name: ${box.get('name')}');
 
   final HttpLink httpLink = HttpLink(
     'https://bookref-api-dev.mi5u.de/graphql/',
@@ -118,3 +108,79 @@ class MyAppState extends State<MyApp> {
     return null;
   }
 }
+
+
+*/
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initHiveForFlutter();
+
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Bookref.',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      initialRoute: "/dashboard",
+      routes: {
+        '/dashboard': (_) => BlocProvider(
+              create: (context) => MyDashboardBloc(
+                bookrefRepository: BookrefRepository(
+                  client: _client(),
+                ),
+              ),
+              child: DashboardPage(),
+            ),
+      },
+    );
+  }
+
+  GraphQLClient _client() {
+    final HttpLink _httpLink = HttpLink(
+      'https://bookref-api-dev.mi5u.de/graphql/',
+    );
+
+    final Link _link = _httpLink;
+
+    return GraphQLClient(
+      cache: GraphQLCache(
+        store: HiveStore(),
+      ),
+      link: _link,
+    );
+  }
+}
+
+/*
+class Home extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Bookref."),
+      ),
+      body: ListView(
+        children: [
+          ListTile(
+            title: Text('BLOC example'),
+            onTap: () => Navigator.of(context).pushNamed('bloc'),
+          ),
+          Divider(),
+          ListTile(
+            title: Text('Extended BLOC example'),
+            onTap: () => Navigator.of(context).pushNamed('extended-bloc'),
+          ),
+          Divider(),
+        ],
+      ),
+    );
+  }
+  
+}
+*/

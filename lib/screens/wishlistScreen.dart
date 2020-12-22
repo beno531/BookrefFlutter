@@ -16,8 +16,7 @@ class _WishlistScreen extends State<WishlistScreen> {
       decoration: BoxDecoration(color: Color.fromRGBO(36, 36, 36, 1.0)),
       child: Column(
         children: <Widget>[
-          new StanaloneGridBookView(
-              queries.getWishlistDahsbaordBooks, "WISHLIST VIEW")
+          //new StanaloneGridBookView(queries.getWishlistDahsbaordBooks, "WISHLIST VIEW")
         ],
       ),
     );

@@ -16,8 +16,7 @@ class _LibaryScreen extends State<LibaryScreen> {
       decoration: BoxDecoration(color: Color.fromRGBO(36, 36, 36, 1.0)),
       child: Column(
         children: <Widget>[
-          new StanaloneGridBookView(
-              queries.getDoneDahsbaordBooks, "LIBARY VIEW")
+          //new StanaloneGridBookView(queries.getDoneDahsbaordBooks, "LIBARY VIEW")
         ],
       ),
     );

@@ -17,8 +17,7 @@ class _CurrentsScreen extends State<CurrentsScreen> {
       decoration: BoxDecoration(color: Color.fromRGBO(36, 36, 36, 1.0)),
       child: Column(
         children: <Widget>[
-          new StanaloneGridBookView(
-              queries.getCurrentDahsbaordBooks, "CURRENTS VIEW")
+          //new StanaloneGridBookView(queries.getCurrentDahsbaordBooks, "CURRENTS VIEW")
         ],
       ),
     );
