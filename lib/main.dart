@@ -1,61 +1,25 @@
+import 'package:bookref/Bloc/currents_bloc/currents_bloc.dart';
+import 'package:bookref/Bloc/wishlist_bloc/wishlist_bloc.dart';
+import 'package:bookref/Pages/Wishlist/wishlistPage.dart';
+import 'package:bookref/Bloc/libary_bloc/libary_bloc.dart';
+import 'package:bookref/Pages/Libary/libaryPage.dart';
+import 'package:bookref/Bloc/dashboard_bloc/dashboard_bloc.dart';
+import 'package:bookref/Pages/Currents/currentsPage.dart';
+import 'package:bookref/Pages/Dashboard/dashboardPage.dart';
 import 'package:bookref/graphql/graphQLConf.dart';
-import 'package:bookref/hive_init.dart';
-import 'package:bookref/screens/currentsScreen.dart';
-import 'package:bookref/screens/homeScreen.dart';
-import 'package:bookref/screens/libaryScreen.dart';
-import 'package:bookref/screens/wishlistScreen.dart';
+import 'package:bookref/services/bookref_repository.dart';
 import 'package:bookref/widgets/bottomNav.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
 
-/*
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(GraphQLProvider(
-    client: graphQLConfiguration.client,
-    child: CacheProvider(
-        child: MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Poppins'),
-      initialRoute: '/home',
-      routes: {
-        '/home': (context) => HomeScreen(),
-      },
-    )),
-  ));
-}
-*/
+  await initHiveForFlutter();
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await custominitHiveForFlutter();
-
-  final HttpLink httpLink = HttpLink(
-    'https://bookref-api-dev.mi5u.de/graphql/',
-  );
-
-  final AuthLink authLink = AuthLink(
-    getToken: () async => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
-    // OR
-    // getToken: () => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
-  );
-
-  final Link link = authLink.concat(httpLink);
-
-  ValueNotifier<GraphQLClient> client = ValueNotifier(
-    GraphQLClient(
-      link: link,
-      cache: GraphQLCache(store: HiveStore()),
-    ),
-  );
-
-  runApp(GraphQLProvider(
-      client: client,
-      child: CacheProvider(
-        child: new MyApp(),
-      )));
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -104,17 +68,60 @@ class MyAppState extends State<MyApp> {
   Route<dynamic> _onGenerateRoute(RouteSettings settings) {
     Widget child;
     if (settings.name == '/') {
-      child = new HomeScreen();
+      child = BlocProvider(
+        create: (context) => MyDashboardBloc(
+          bookrefRepository: BookrefRepository(
+            client: _client(),
+          ),
+        ),
+        child: DashboardPage(),
+      );
     } else if (settings.name == '/currents') {
-      child = new CurrentsScreen();
+      child = BlocProvider(
+        create: (context) => MyCurrentsBloc(
+          bookrefRepository: BookrefRepository(
+            client: _client(),
+          ),
+        ),
+        child: CurrentsPage(),
+      );
     } else if (settings.name == '/wishlist') {
-      child = new WishlistScreen();
+      child = BlocProvider(
+        create: (context) => MyWishlistBloc(
+          bookrefRepository: BookrefRepository(
+            client: _client(),
+          ),
+        ),
+        child: WishlistPage(),
+      );
     } else if (settings.name == '/libary') {
-      child = new LibaryScreen();
+      child = BlocProvider(
+        create: (context) => MyLibaryBloc(
+          bookrefRepository: BookrefRepository(
+            client: _client(),
+          ),
+        ),
+        child: LibaryPage(),
+      );
     }
     if (child != null) {
       return new MaterialPageRoute(builder: (c) => child);
     }
     return null;
+  }
+
+  GraphQLClient _client() {
+    final HttpLink _httpLink = HttpLink(
+      'https://bookref-api-dev.mi5u.de/graphql/',
+    );
+
+    final Link _link = _httpLink;
+
+    return GraphQLClient(
+      cache: GraphQLCache(
+        store: HiveStore(),
+      ),
+      link: _link,
+    );
   }
 }
