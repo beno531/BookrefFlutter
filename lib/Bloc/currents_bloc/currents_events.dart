@@ -8,5 +8,5 @@ abstract class MyCurrentEvent extends Equatable {
 
 class LoadMyCurrentBooks extends MyCurrentEvent {
   @override
-  String toString() => 'LoadMyDashboardCurrents';
+  String toString() => 'LoadMyCurrents';
 }
