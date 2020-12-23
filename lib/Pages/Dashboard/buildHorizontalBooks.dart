@@ -1,8 +1,10 @@
+import 'package:bookref/Models/books.dart';
+import 'package:bookref/widgets/bookDetailView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BuildHorizontalBooks extends StatelessWidget {
-  final List<dynamic> books;
+  final List<Books> books;
 
   BuildHorizontalBooks(this.books);
 
@@ -54,9 +56,9 @@ class BuildHorizontalBooks extends StatelessWidget {
                       textColor: Colors.black,
                       splashColor: Colors.black12,
                       onPressed: () {
-                        /*Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          BookDetailView({"book": book})));*/
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                BookDetailView({"book": books[index]})));
                       },
                       onLongPress: () {
                         print("Flatbutton!!!");
@@ -66,7 +68,7 @@ class BuildHorizontalBooks extends StatelessWidget {
                         children: <Widget>[
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("${books[index]["book"]["title"]}",
+                            child: Text("${books[index].getBookTitle()}",
                                 maxLines: 4,
                                 style: TextStyle(
                                     fontSize: 15.0,
@@ -77,7 +79,7 @@ class BuildHorizontalBooks extends StatelessWidget {
                           ),
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("Test2",
+                            child: Text("${books[index].getAuthor()}",
                                 style: TextStyle(
                                     fontSize: 10.0, color: Colors.white),
                                 textAlign: TextAlign.left),

@@ -1,21 +1,21 @@
-import 'package:bookref/Bloc/dashboard_bloc/dashboard_bloc.dart';
-import 'package:bookref/Bloc/dashboard_bloc/dashboard_current_events.dart';
-import 'package:bookref/Pages/Dashboard/displayDasboardBooks.dart';
+import 'package:bookref/Bloc/currents_bloc/currents_bloc.dart';
+import 'package:bookref/Bloc/currents_bloc/currents_events.dart';
+import 'package:bookref/Pages/Currents/displayDasboardBooks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DashboardPage extends StatefulWidget {
+class CurrentsPage extends StatefulWidget {
   @override
-  _DashboardPage createState() => _DashboardPage();
+  _CurrentsPage createState() => _CurrentsPage();
 }
 
-class _DashboardPage extends State<DashboardPage> {
+class _CurrentsPage extends State<CurrentsPage> {
   int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<MyDashboardBloc>(context).add(LoadMyDashboardBooks());
+    BlocProvider.of<MyCurrentsBloc>(context).add(LoadMyCurrentBooks());
   }
 
   @override
@@ -50,8 +50,8 @@ class _DashboardPage extends State<DashboardPage> {
       ),
       body: Container(
         decoration: BoxDecoration(color: Color.fromRGBO(36, 36, 36, 1.0)),
-        child: new DisplayDashboardBooks(
-          bloc: BlocProvider.of<MyDashboardBloc>(context),
+        child: new DisplayCurrentsBooks(
+          bloc: BlocProvider.of<MyCurrentsBloc>(context),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

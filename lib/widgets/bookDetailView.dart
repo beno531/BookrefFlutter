@@ -1,9 +1,6 @@
-/*import 'package:bookref/Models/books.dart';
-import 'package:bookref/widgets/horizontalDashboardBookView.dart';
+import 'package:bookref/Models/books.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:bookref/graphql/query.dart' as queries;
 
 class BookDetailView extends StatefulWidget {
   Map<String, dynamic> arguments;
@@ -20,7 +17,9 @@ class _BookDetailView extends State<BookDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    final Books book = arguments['book'];
+    final Books books = arguments['book'];
+
+    print(arguments['book']);
 
     return Scaffold(
       appBar: AppBar(
@@ -33,14 +32,14 @@ class _BookDetailView extends State<BookDetailView> {
           decoration: BoxDecoration(color: Color.fromRGBO(36, 36, 36, 1.0)),
           child: ListView(
             children: <Widget>[
-              CustomListTile("Title", book.getBookTitle()),
-              CustomListTile("Author", book.getAuthor()),
-              CustomListTile("Sprache", book.getBookLang()),
-              CustomListTile("ISBN", book.getBookIsbn()),
-              CustomListTile("Kategorien", ""),
+              CustomListTile("Title", books.getBookTitle()),
+              CustomListTile("Author", books.getAuthor()),
+              CustomListTile("Sprache", books.getBookLang()),
+              CustomListTile("ISBN", books.getBookIsbn()),
+              CustomListTile("Kategorien", "#Kommt später"),
               CustomListTile(
-                  "Aktuelle Seite", book.getBookCurrentPage().toString()),
-              CustomListTile("Erstellt am", book.getBookCreated()),
+                  "Aktuelle Seite", books.getBookCurrentPage().toString()),
+              CustomListTile("Erstellt am", books.getBookCreated()),
             ],
           ),
         ),
@@ -71,19 +70,3 @@ class CustomListTile extends StatelessWidget {
     );
   }
 }
-
-/*
-
-Container(
-      decoration: BoxDecoration(color: Color.fromRGBO(36, 36, 36, 1.0)),
-      child: Column(
-        children: <Widget>[new Text("${book.getBookTitle()}")],
-      ),
-    );
-
-
-
-    */
-
-
-*/

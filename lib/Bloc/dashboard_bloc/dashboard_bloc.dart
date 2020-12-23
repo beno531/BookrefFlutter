@@ -5,14 +5,13 @@ import 'package:bookref/Models/books.dart';
 import 'package:bookref/services/bookref_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class MyDashboardBloc extends Bloc<MyDahsboardEvent, MyDashboardBooksState> {
   final BookrefRepository bookrefRepository;
 
-  // this a bit of a hack
-  List<Books> books;
-
-  MyDashboardBloc({@required this.bookrefRepository}) : super(BooksLoading());
+  MyDashboardBloc({@required this.bookrefRepository})
+      : super(DashboardBooksLoading());
 
   @override
   Stream<MyDashboardBooksState> mapEventToState(
@@ -30,7 +29,7 @@ class MyDashboardBloc extends Bloc<MyDahsboardEvent, MyDashboardBooksState> {
 
   Stream<MyDashboardBooksState> _mapDashboardBooksToState() async* {
     try {
-      yield BooksLoading();
+      yield DashboardBooksLoading();
 
       final currentsQueryResults =
           await this.bookrefRepository.getDashboardCurrents();
@@ -42,50 +41,37 @@ class MyDashboardBloc extends Bloc<MyDahsboardEvent, MyDashboardBooksState> {
           await this.bookrefRepository.getDashboardLibary();
 
       if (currentsQueryResults.hasException) {
-        yield BooksNotLoaded(currentsQueryResults.exception.graphqlErrors);
+        yield DashboardBooksNotLoaded(
+            currentsQueryResults.exception.graphqlErrors);
         return;
       } else if (wishlistQueryResults.hasException) {
-        yield BooksNotLoaded(wishlistQueryResults.exception.graphqlErrors);
+        yield DashboardBooksNotLoaded(
+            wishlistQueryResults.exception.graphqlErrors);
         return;
       } else if (libaryQueryResults.hasException) {
-        yield BooksNotLoaded(libaryQueryResults.exception.graphqlErrors);
+        yield DashboardBooksNotLoaded(
+            libaryQueryResults.exception.graphqlErrors);
         return;
       }
 
-/*
-      final List<dynamic> repos = queryResults.data['books'] as List<dynamic>;
-
-      final List<Books> listOfbooks = repos
-          .map((dynamic e) => Books(
-              isbn: e['isbn'] as String,
-              book: Book(
-                  title: e["book"]["title"] as String,
-                  bookAuthors: BookAuthors(
-                      author: Author(
-                          name: e["book"]["bookAuthors"][0]["author"]
-                              ["name"])))))
-          .toList();
-
-      books = listOfbooks;
-
-      */
-
-      //print(queryResults.data['books']);
-
-      final List<dynamic> currentBooks = currentsQueryResults.data['books'];
-
-      final List<dynamic> wishlistBooks = wishlistQueryResults.data['books'];
-
-      final List<dynamic> libaryBooks = libaryQueryResults.data['books'];
-
-      // pass the data instead
-      /// Muss angepasst werden
-      ///
-      ///
-      yield BooksLoaded(
-          currents: currentBooks, wishlist: wishlistBooks, libary: libaryBooks);
+      yield DashboardBooksLoaded(
+          currents: _convertQueryToList(currentsQueryResults),
+          wishlist: _convertQueryToList(wishlistQueryResults),
+          libary: _convertQueryToList(libaryQueryResults));
     } catch (error) {
-      yield BooksNotLoaded(error);
+      yield DashboardBooksNotLoaded(error);
     }
+  }
+
+  List<Books> _convertQueryToList(QueryResult queryResult) {
+    var listBooks = List<Books>();
+
+    for (var i = 0; i < queryResult.data["books"].length; i++) {
+      listBooks.add(
+        Books(queryResult.data["books"][i]),
+      );
+    }
+
+    return listBooks;
   }
 }

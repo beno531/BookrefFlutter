@@ -1,5 +1,6 @@
 import 'package:bookref/Bloc/dashboard_bloc/dashboard_bloc.dart';
 import 'package:bookref/Bloc/dashboard_bloc/dashboard_current_states.dart';
+import 'package:bookref/Models/books.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bookref/Pages/Dashboard/buildHorizontalBooks.dart';
@@ -15,7 +16,7 @@ class DisplayDashboardBooks extends StatelessWidget {
     return BlocBuilder<MyDashboardBloc, MyDashboardBooksState>(
       cubit: bloc,
       builder: (BuildContext context, MyDashboardBooksState state) {
-        if (state is BooksLoading) {
+        if (state is DashboardBooksLoading) {
           return Container(
             child: Center(
               child: CircularProgressIndicator(
@@ -25,14 +26,14 @@ class DisplayDashboardBooks extends StatelessWidget {
           );
         }
 
-        if (state is BooksNotLoaded) {
+        if (state is DashboardBooksNotLoaded) {
           return Text("${state.errors}");
         }
 
-        if (state is BooksLoaded) {
-          final List<dynamic> currents = state.currents;
-          final List<dynamic> wishlist = state.wishlist;
-          final List<dynamic> libary = state.libary;
+        if (state is DashboardBooksLoaded) {
+          final List<Books> currents = state.currents;
+          final List<Books> wishlist = state.wishlist;
+          final List<Books> libary = state.libary;
 
           return Container(
             decoration: BoxDecoration(color: Color.fromRGBO(36, 36, 36, 1.0)),
@@ -48,7 +49,7 @@ class DisplayDashboardBooks extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Hallo",
+                                "LIBARY",
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w700,
@@ -68,7 +69,7 @@ class DisplayDashboardBooks extends StatelessWidget {
                               )
                             ],
                           )),
-                      BuildHorizontalBooks(currents),
+                      BuildHorizontalBooks(libary),
                     ])),
                 Expanded(
                     child: Column(
@@ -80,7 +81,7 @@ class DisplayDashboardBooks extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Hallo",
+                                "WISHLIST",
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w700,
@@ -112,7 +113,7 @@ class DisplayDashboardBooks extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Hallo",
+                                "CURRENTS",
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w700,
@@ -132,7 +133,7 @@ class DisplayDashboardBooks extends StatelessWidget {
                               )
                             ],
                           )),
-                      BuildHorizontalBooks(libary),
+                      BuildHorizontalBooks(currents),
                     ]))
               ],
             ),

@@ -1,3 +1,4 @@
+import 'package:bookref/Models/books.dart';
 import 'package:equatable/equatable.dart';
 import 'package:graphql/client.dart';
 import 'package:meta/meta.dart';
@@ -7,26 +8,26 @@ abstract class MyDashboardBooksState extends Equatable {
   MyDashboardBooksState([List props = const []]) : super(props);
 }
 
-class BooksLoading extends MyDashboardBooksState {
+class DashboardBooksLoading extends MyDashboardBooksState {
   @override
   String toString() => 'BooksLoading';
 }
 
-class BooksLoaded extends MyDashboardBooksState {
-  final List<dynamic> currents;
-  final List<dynamic> wishlist;
-  final List<dynamic> libary;
+class DashboardBooksLoaded extends MyDashboardBooksState {
+  final List<Books> currents;
+  final List<Books> wishlist;
+  final List<Books> libary;
 
-  BooksLoaded(
+  DashboardBooksLoaded(
       {@required this.currents,
       @required this.wishlist,
       @required this.libary});
 }
 
-class BooksNotLoaded extends MyDashboardBooksState {
+class DashboardBooksNotLoaded extends MyDashboardBooksState {
   final List<GraphQLError> errors;
 
-  BooksNotLoaded([this.errors]) : super([errors]);
+  DashboardBooksNotLoaded([this.errors]) : super([errors]);
 
   @override
   String toString() => 'BooksNotLoaded';
