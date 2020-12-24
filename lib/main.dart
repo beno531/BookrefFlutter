@@ -6,14 +6,11 @@ import 'package:bookref/Pages/Libary/libaryPage.dart';
 import 'package:bookref/Bloc/dashboard_bloc/dashboard_bloc.dart';
 import 'package:bookref/Pages/Currents/currentsPage.dart';
 import 'package:bookref/Pages/Dashboard/dashboardPage.dart';
-import 'package:bookref/graphql/graphQLConf.dart';
 import 'package:bookref/services/bookref_repository.dart';
 import 'package:bookref/widgets/bottomNav.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-
-GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -104,6 +101,7 @@ class MyAppState extends State<MyApp> {
         child: LibaryPage(),
       );
     }
+
     if (child != null) {
       return new MaterialPageRoute(builder: (c) => child);
     }

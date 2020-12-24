@@ -36,7 +36,7 @@ class _BookDetailView extends State<BookDetailView> {
               CustomListTile("Author", books.getAuthor()),
               CustomListTile("Sprache", books.getBookLang()),
               CustomListTile("ISBN", books.getBookIsbn()),
-              CustomListTile("Kategorien", "#Kommt später"),
+              CustomListTile("Kategorien", "#Kommt später ;)"),
               CustomListTile(
                   "Aktuelle Seite", books.getBookCurrentPage().toString()),
               CustomListTile("Erstellt am", books.getBookCreated()),
