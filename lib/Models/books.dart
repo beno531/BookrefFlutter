@@ -3,8 +3,6 @@ class Books {
 
   final dynamic books;
 
-  getUserId() => this.books["userId"];
-
   getBook() => this.books["book"];
 
   getBookTitle() => this.books["book"]["title"];
@@ -18,9 +16,9 @@ class Books {
   getBookIsbn() => this.books["book"]["isbn"];
 
   getAuthor() {
-    var authors = this.books["book"]["bookAuthors"];
+    var authors = this.books["book"]["authors"];
 
-    return authors[0]["author"]["name"];
+    return authors[0]["name"];
   }
 }
 
