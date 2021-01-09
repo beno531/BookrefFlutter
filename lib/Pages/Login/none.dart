@@ -1,22 +1,22 @@
 import 'package:bookref/Models/books.dart';
 import 'package:bookref/widgets/bookDetailView.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:bookref/Bloc/wishlist_bloc/wishlist_bloc.dart';
+import 'package:bookref/Bloc/wishlist_bloc/wishlist_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bookref/Bloc/libary_bloc/libary_bloc.dart';
-import 'package:bookref/Bloc/libary_bloc/libary_states.dart';
 
-class DisplayLibaryBooks extends StatelessWidget {
-  final MyLibaryBloc bloc;
+class DisplayWishlistBooks extends StatelessWidget {
+  final MyWishlistBloc bloc;
 
-  const DisplayLibaryBooks({Key key, this.bloc}) : super(key: key);
+  const DisplayWishlistBooks({Key key, this.bloc}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MyLibaryBloc, MyLibaryState>(
+    return BlocBuilder<MyWishlistBloc, MyWishlistState>(
       cubit: bloc,
-      builder: (BuildContext context, MyLibaryState state) {
-        if (state is LibaryBooksLoading) {
+      builder: (BuildContext context, MyWishlistState state) {
+        if (state is WishlistBooksLoading) {
           return Container(
             child: Center(
               child: CircularProgressIndicator(
@@ -26,12 +26,12 @@ class DisplayLibaryBooks extends StatelessWidget {
           );
         }
 
-        if (state is LibaryBooksNotLoaded) {
+        if (state is WishlistBooksNotLoaded) {
           return Text("${state.errors}");
         }
 
-        if (state is LibaryBooksLoaded) {
-          final List<Books> currents = state.libary;
+        if (state is WishlistBooksLoaded) {
+          final List<Books> currents = state.wishlist;
           return Container(
             decoration: BoxDecoration(color: Color.fromRGBO(36, 36, 36, 1.0)),
             child: Column(
@@ -42,7 +42,7 @@ class DisplayLibaryBooks extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "LIBARY VIEW",
+                          "WISHLIST VIEW",
                           style: TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,

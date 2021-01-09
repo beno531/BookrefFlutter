@@ -35,6 +35,8 @@ dependencies:
   equatable: ^0.2.0
   flutter_bloc: ^6.0.5
   graphql_flutter_bloc: ^0.4.4-beta.1
+  flutter_launcher_icons: "^0.8.0"
+  toast: ^0.1.5
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -44,6 +46,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/icon/Bookref.png"
+  image_path_android: "assets/icon/Bookref.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

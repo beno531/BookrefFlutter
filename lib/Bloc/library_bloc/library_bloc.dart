@@ -2,22 +2,22 @@ import 'package:bookref/Models/books.dart';
 import 'package:bookref/services/bookref_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bookref/Bloc/libary_bloc/libary_events.dart';
-import 'package:bookref/Bloc/libary_bloc/libary_states.dart';
+import 'package:bookref/Bloc/library_bloc/library_events.dart';
+import 'package:bookref/Bloc/library_bloc/library_states.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-class MyLibaryBloc extends Bloc<MyLibaryEvent, MyLibaryState> {
+class MyLibraryBloc extends Bloc<MyLibraryEvent, MyLibraryState> {
   final BookrefRepository bookrefRepository;
 
-  MyLibaryBloc({@required this.bookrefRepository})
-      : super(LibaryBooksLoading());
+  MyLibraryBloc({@required this.bookrefRepository})
+      : super(LibraryBooksLoading());
 
   @override
-  Stream<MyLibaryState> mapEventToState(
-    MyLibaryEvent event,
+  Stream<MyLibraryState> mapEventToState(
+    MyLibraryEvent event,
   ) async* {
     try {
-      if (event is LoadMyLibaryBooks) {
+      if (event is LoadMyLibraryBooks) {
         yield* _mapCurrentBooksToState();
       }
     } catch (_, stackTrace) {
@@ -26,23 +26,23 @@ class MyLibaryBloc extends Bloc<MyLibaryEvent, MyLibaryState> {
     }
   }
 
-  Stream<MyLibaryState> _mapCurrentBooksToState() async* {
+  Stream<MyLibraryState> _mapCurrentBooksToState() async* {
     try {
-      yield LibaryBooksLoading();
+      yield LibraryBooksLoading();
 
       final currentsQueryResults =
           await this.bookrefRepository.getDashboardLibary();
 
       if (currentsQueryResults.hasException) {
-        yield LibaryBooksNotLoaded(
+        yield LibraryBooksNotLoaded(
             currentsQueryResults.exception.graphqlErrors);
         return;
       }
 
-      yield LibaryBooksLoaded(
-          libary: _convertQueryToList(currentsQueryResults));
+      yield LibraryBooksLoaded(
+          library: _convertQueryToList(currentsQueryResults));
     } catch (error) {
-      yield LibaryBooksNotLoaded(error);
+      yield LibraryBooksNotLoaded(error);
     }
   }
 
