@@ -1,6 +1,4 @@
-import 'package:bookref/Models/books.dart';
 import 'package:equatable/equatable.dart';
-import 'package:graphql/client.dart';
 import 'package:meta/meta.dart';
 
 @immutable

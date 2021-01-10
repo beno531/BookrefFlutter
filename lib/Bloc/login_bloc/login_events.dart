@@ -23,5 +23,5 @@ class LoginEvent extends MyLoginEvent {
   final String password;
 
   LoginEvent({@required this.username, @required this.password})
-      : assert(username != null && password != null);
+      : assert(username.isEmpty == false && password.isEmpty == false);
 }

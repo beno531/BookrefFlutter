@@ -41,26 +41,30 @@ class BookrefRepository {
     return await client.query(_options);
   }
 
-  Future<QueryResult> registerUser(Map<String, dynamic> params) async {
-    final WatchQueryOptions _options = WatchQueryOptions(
-      document: parseString(interpolate(queries.registerUser, params)),
-      pollInterval: Duration(seconds: 4),
-      fetchResults: true,
+  Future<QueryResult> registerUser(
+      String email, String username, String password) async {
+    final MutationOptions _options = MutationOptions(
+      document: parseString(queries.registerUser),
+      variables: {
+        'input': {
+          'email': '$email',
+          'username': '$username',
+          'password': '$password'
+        }
+      },
     );
 
-    return await client.query(_options);
+    return await client.mutate(_options);
   }
 
-  // String preparing for Mutation
-  String interpolate(String string, Map<String, dynamic> params) {
-    var keys = params.keys;
-    String result = string;
-    for (var key in keys) {
-      result = result.replaceAll('{{$key}}', params[key]);
-    }
+  Future<QueryResult> loginUser(String username, String password) async {
+    final MutationOptions _options = MutationOptions(
+      document: parseString(queries.loginUser),
+      variables: {
+        'input': {'username': '$username', 'password': '$password'}
+      },
+    );
 
-    print(result);
-
-    return result;
+    return await client.mutate(_options);
   }
 }

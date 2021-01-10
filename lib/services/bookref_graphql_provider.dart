@@ -80,11 +80,22 @@ query {
 ''';
 
 String registerUser = r'''
-mutation newUser {
-    newUser(input: {  email: "{{email}}", username: "{{username}}", password: "{{password}}") {
-        errors {
-          message
-        }
+mutation registerUser ($input: NewUserInput!){
+    newUser(input: $input) {
+      errors {
+        message
+      }
+    }
+}
+''';
+
+String loginUser = r'''
+mutation login ($input: SingInInput!){
+    singIn(input: $input) {
+      data,
+      errors {
+        message
+      }
     }
 }
 ''';

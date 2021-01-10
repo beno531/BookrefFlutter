@@ -9,7 +9,7 @@ class LoginPage extends StatefulWidget {
   _LoginPage createState() => _LoginPage();
 }
 
-final usernameLoginInputController = TextEditingController();
+final userLoginInputController = TextEditingController();
 final passwordLoginInputController = TextEditingController();
 
 final emailRegisterInputController = TextEditingController();
@@ -184,8 +184,7 @@ class _LoginPage extends State<LoginPage> {
                                       ),
                                       SizedBox(height: 15),
                                       TextField(
-                                        controller:
-                                            usernameLoginInputController,
+                                        controller: userLoginInputController,
                                         decoration: new InputDecoration(
                                           border: new OutlineInputBorder(
                                               borderSide: new BorderSide(
@@ -220,18 +219,26 @@ class _LoginPage extends State<LoginPage> {
                                         width: double.infinity,
                                         child: FlatButton(
                                             onPressed: () async {
-                                              /*TokenService instance = TokenService();
+                                              BlocProvider.of<MyLoginBloc>(
+                                                      context)
+                                                  .add(LoginEvent(
+                                                      username:
+                                                          userLoginInputController
+                                                              .text,
+                                                      password:
+                                                          passwordLoginInputController
+                                                              .text));
+                                              Navigator.pushReplacementNamed(
+                                                  context, "/home");
 
-                              await checkCredentials();
+                                              Toast.show(
+                                                  "Login finished!", context,
+                                                  duration: Toast.LENGTH_LONG,
+                                                  gravity: Toast.CENTER);
 
-                              if (isAuth == true &&
-                                  instance.getLocalToken() != null) {
-                                Navigator.pushReplacementNamed(context, '/home');
-                              } else if (isAuth == true &&
-                                  instance.getLocalToken() == null) {
-                                Navigator.pushReplacementNamed(
-                                    context, '/konfiguration');
-                              }*/
+                                              userLoginInputController.clear();
+                                              passwordLoginInputController
+                                                  .clear();
                                             },
                                             color: Colors.blue,
                                             child: Text(
