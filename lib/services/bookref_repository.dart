@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bookref/Models/newUser.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
@@ -32,11 +33,38 @@ class BookrefRepository {
 
   Future<QueryResult> getDashboardLibary() async {
     final WatchQueryOptions _options = WatchQueryOptions(
-      document: parseString(queries.readDashboardLibary),
+      document: parseString(queries.readDashboardLibrary),
       pollInterval: Duration(seconds: 4),
       fetchResults: true,
     );
 
     return await client.query(_options);
+  }
+
+  Future<QueryResult> registerUser(
+      String email, String username, String password) async {
+    final MutationOptions _options = MutationOptions(
+      document: parseString(queries.registerUser),
+      variables: {
+        'input': {
+          'email': '$email',
+          'username': '$username',
+          'password': '$password'
+        }
+      },
+    );
+
+    return await client.mutate(_options);
+  }
+
+  Future<QueryResult> loginUser(String username, String password) async {
+    final MutationOptions _options = MutationOptions(
+      document: parseString(queries.loginUser),
+      variables: {
+        'input': {'username': '$username', 'password': '$password'}
+      },
+    );
+
+    return await client.mutate(_options);
   }
 }

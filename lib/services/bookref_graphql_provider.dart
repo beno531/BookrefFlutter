@@ -1,4 +1,4 @@
-const String readDashboardCurrents = r'''
+String readDashboardCurrents = r'''
 query {
   books(where: {status: {eq: ACTIVE}}) {
     id
@@ -25,7 +25,7 @@ query {
 }
 ''';
 
-const String readDashboardWishlist = r'''
+String readDashboardWishlist = r'''
 query {
   books(where: {status: {eq: WISH}}) {
     id
@@ -52,7 +52,7 @@ query {
 }
 ''';
 
-const String readDashboardLibary = r'''
+String readDashboardLibrary = r'''
 query {
   books(where: {status: {eq: DONE}}) {
     id
@@ -76,5 +76,26 @@ query {
     startDate
     status
   }
+}
+''';
+
+String registerUser = r'''
+mutation registerUser ($input: NewUserInput!){
+    newUser(input: $input) {
+      errors {
+        message
+      }
+    }
+}
+''';
+
+String loginUser = r'''
+mutation login ($input: SingInInput!){
+    singIn(input: $input) {
+      data,
+      errors {
+        message
+      }
+    }
 }
 ''';
