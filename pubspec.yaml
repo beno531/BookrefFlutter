@@ -37,6 +37,7 @@ dependencies:
   graphql_flutter_bloc: ^0.4.4-beta.1
   flutter_launcher_icons: "^0.8.0"
   toast: ^0.1.5
+  flutter_secure_storage: ^3.3.5
 
 
   # The following adds the Cupertino Icons font to your application.

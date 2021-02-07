@@ -121,7 +121,8 @@ class DisplayCurrentsBooks extends StatelessWidget {
                                   ),
                                   Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Text("${book.getAuthor()}",
+                                    //child: Text("${book.getAuthor()}",
+                                    child: Text("Placeholder",
                                         maxLines: 1,
                                         style: TextStyle(
                                             fontSize: 10.0,

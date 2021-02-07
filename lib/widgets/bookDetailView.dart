@@ -33,13 +33,12 @@ class _BookDetailView extends State<BookDetailView> {
           child: ListView(
             children: <Widget>[
               CustomListTile("Title", books.getBookTitle()),
-              CustomListTile("Author", books.getAuthor()),
-              CustomListTile("Sprache", books.getBookLang()),
-              CustomListTile("ISBN", books.getBookIsbn()),
-              CustomListTile("Kategorien", "#Kommt später ;)"),
-              CustomListTile(
-                  "Aktuelle Seite", books.getBookCurrentPage().toString()),
-              CustomListTile("Erstellt am", books.getBookCreated()),
+              //CustomListTile("Author", books.getAuthor()),
+              //CustomListTile("Sprache", books.getBookLang()),
+              //CustomListTile("ISBN", books.getBookIsbn()),
+              //CustomListTile("Kategorien", "#Kommt später ;)"),
+              //CustomListTile("Aktuelle Seite", books.getBookCurrentPage().toString()),
+              //CustomListTile("Erstellt am", books.getBookCreated()),
             ],
           ),
         ),

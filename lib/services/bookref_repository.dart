@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bookref/Models/newUser.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
