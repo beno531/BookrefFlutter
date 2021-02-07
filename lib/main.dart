@@ -23,8 +23,6 @@ Future<void> main() async {
   final storage = new FlutterSecureStorage();
   String token = await storage.read(key: "token");
 
-  print(token);
-
   if (token != null) {
     runApp(MyMainApp());
   } else {
@@ -205,7 +203,7 @@ class MyMainAppState extends State<MyMainApp> {
         ),
         child: DashboardPage(),
       );
-      print("Actually Login");
+      print("Actually Dashboard");
     } else if (settings.name == '/currents') {
       isAuth = true;
       child = BlocProvider(

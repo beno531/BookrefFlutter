@@ -22,7 +22,6 @@ class MyLoginBloc extends Bloc<MyLoginEvent, MyLoginState> {
 
         yield RegisterFinishedState(error: _convertErrorResponse(result));
       } else if (event is LoginEvent) {
-        print("Testttttsadasd");
         final result =
             await bookrefRepository.loginUser(event.username, event.password);
 
