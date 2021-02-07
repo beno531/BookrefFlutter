@@ -1,81 +1,39 @@
 String readDashboardCurrents = r'''
 query {
-  books(where: {status: {eq: ACTIVE}}) {
-    id
-    status
-    bookId
-    book {
-      title
-      categories {
-        name
-      }
-      authors {
-        name
-      }
-      created
-      isbn
-      language
+    books(where: { status: { eq: ACTIVE } }) {
+        id
+        status
+        bookId
+        book {
+            title
+        }
     }
-    currentPage
-    format
-    personalLibraryId
-    startDate
-    status
-  }
 }
 ''';
 
 String readDashboardWishlist = r'''
 query {
-  books(where: {status: {eq: WISH}}) {
-    id
-    status
-    bookId
-    book {
-      title
-      categories {
-        name
-      }
-      authors {
-        name
-      }
-      created
-      isbn
-      language
+    books(where: { status: { eq: WISH } }) {
+        id
+        status
+        bookId
+        book {
+            title
+        }
     }
-    currentPage
-    format
-    personalLibraryId
-    startDate
-    status
-  }
 }
 ''';
 
 String readDashboardLibrary = r'''
 query {
-  books(where: {status: {eq: DONE}}) {
-    id
-    status
-    bookId
-    book {
-      title
-      categories {
-        name
-      }
-      authors {
-        name
-      }
-      created
-      isbn
-      language
+    books(where: { status: { eq: DONE } }) {
+        id
+        status
+        bookId
+        book {
+            title
+        }
     }
-    currentPage
-    format
-    personalLibraryId
-    startDate
-    status
-  }
 }
 ''';
 

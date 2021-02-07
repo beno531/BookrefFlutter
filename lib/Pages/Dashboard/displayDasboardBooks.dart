@@ -1,6 +1,7 @@
 import 'package:bookref/Bloc/dashboard_bloc/dashboard_bloc.dart';
 import 'package:bookref/Bloc/dashboard_bloc/dashboard_current_states.dart';
 import 'package:bookref/Models/books.dart';
+import 'package:bookref/widgets/bottomNav.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bookref/Pages/Dashboard/buildHorizontalBooks.dart';
@@ -49,7 +50,7 @@ class DisplayDashboardBooks extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "LIBARY",
+                                "LIBRARY",
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w700,
@@ -134,7 +135,7 @@ class DisplayDashboardBooks extends StatelessWidget {
                             ],
                           )),
                       BuildHorizontalBooks(currents),
-                    ]))
+                    ])),
               ],
             ),
           );

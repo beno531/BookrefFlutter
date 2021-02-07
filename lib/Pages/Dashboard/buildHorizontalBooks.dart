@@ -79,7 +79,8 @@ class BuildHorizontalBooks extends StatelessWidget {
                           ),
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("${books[index].getAuthor()}",
+                            //child: Text("${books[index].getAuthor()}",
+                            child: Text("Placeholder",
                                 style: TextStyle(
                                     fontSize: 10.0, color: Colors.white),
                                 textAlign: TextAlign.left),

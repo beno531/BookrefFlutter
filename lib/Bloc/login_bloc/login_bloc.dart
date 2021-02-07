@@ -3,6 +3,7 @@ import 'package:bookref/Bloc/login_bloc/login_states.dart';
 import 'package:bookref/services/bookref_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class MyLoginBloc extends Bloc<MyLoginEvent, MyLoginState> {
@@ -21,8 +22,16 @@ class MyLoginBloc extends Bloc<MyLoginEvent, MyLoginState> {
 
         yield RegisterFinishedState(error: _convertErrorResponse(result));
       } else if (event is LoginEvent) {
+        print("Testttttsadasd");
         final result =
             await bookrefRepository.loginUser(event.username, event.password);
+
+        var token = _convertDataResponse(result);
+        if (token != null) {
+          final storage = new FlutterSecureStorage();
+
+          await storage.write(key: "token", value: token);
+        }
 
         yield LoginFinishedState(
             data: _convertDataResponse(result),
@@ -39,9 +48,10 @@ class MyLoginBloc extends Bloc<MyLoginEvent, MyLoginState> {
   }
 
   String _convertErrorResponse(QueryResult queryResult) {
-    print("Helllllooooooo");
-    print(queryResult.data);
-
-    return queryResult.data['singIn']['errors']['messages'];
+    try {
+      return queryResult.data['singIn']['errors']['messages'];
+    } catch (e) {
+      return "";
+    }
   }
 }

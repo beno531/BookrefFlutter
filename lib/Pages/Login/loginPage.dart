@@ -1,5 +1,6 @@
 import 'package:bookref/Bloc/login_bloc/login_bloc.dart';
 import 'package:bookref/Bloc/login_bloc/login_events.dart';
+import 'package:bookref/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toast/toast.dart';
@@ -218,7 +219,7 @@ class _LoginPage extends State<LoginPage> {
                                       SizedBox(
                                         width: double.infinity,
                                         child: FlatButton(
-                                            onPressed: () async {
+                                            onPressed: () {
                                               BlocProvider.of<MyLoginBloc>(
                                                       context)
                                                   .add(LoginEvent(
@@ -228,8 +229,6 @@ class _LoginPage extends State<LoginPage> {
                                                       password:
                                                           passwordLoginInputController
                                                               .text));
-                                              Navigator.pushReplacementNamed(
-                                                  context, "/home");
 
                                               Toast.show(
                                                   "Login finished!", context,
@@ -239,6 +238,13 @@ class _LoginPage extends State<LoginPage> {
                                               userLoginInputController.clear();
                                               passwordLoginInputController
                                                   .clear();
+
+                                              Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MyMainApp()),
+                                              );
                                             },
                                             color: Colors.blue,
                                             child: Text(
