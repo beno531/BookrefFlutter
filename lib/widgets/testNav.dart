@@ -2,29 +2,12 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class BottomNav extends StatefulWidget {
-  final String initialRoute;
-  final ValueChanged<String> navCallback;
-
-  BottomNav({
-    Key key,
-    this.initialRoute: '/',
-    @required this.navCallback,
-  }) : super(key: key);
-
+class TestBottomNav extends StatefulWidget {
   @override
-  _BottomNavState createState() => new _BottomNavState();
+  _TestBottomNavState createState() => new _TestBottomNavState();
 }
 
-class _BottomNavState extends State<BottomNav> {
-  String _currentRoute;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentRoute = widget.initialRoute;
-  }
-
+class _TestBottomNavState extends State<TestBottomNav> {
   @override
   Widget build(BuildContext context) {
     return ConvexAppBar(
@@ -43,30 +26,21 @@ class _BottomNavState extends State<BottomNav> {
   buildRoute(int i) {
     switch (i) {
       case 0:
-        onButtonTap("/dashboard");
+        Navigator.pushNamed(context, "/dashboard");
         break;
       case 1:
-        onButtonTap("/currents");
+        Navigator.pushNamed(context, "/currents");
         break;
       case 2:
-        onButtonTap("/addbook");
+        Navigator.pushNamed(context, "/dashboard");
         break;
       case 3:
-        onButtonTap("/wishlist");
+        Navigator.pushNamed(context, "/wishlist");
         break;
       case 4:
-        onButtonTap("/library");
+        Navigator.pushNamed(context, "/library");
         break;
       default:
-    }
-  }
-
-  onButtonTap(String namedRoute) {
-    if (_currentRoute != namedRoute) {
-      setState(() {
-        _currentRoute = namedRoute;
-      });
-      widget.navCallback(_currentRoute);
     }
   }
 }

@@ -238,13 +238,6 @@ class _LoginPage extends State<LoginPage> {
                                               userLoginInputController.clear();
                                               passwordLoginInputController
                                                   .clear();
-
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MyMainApp()),
-                                              );
                                             },
                                             color: Colors.blue,
                                             child: Text(

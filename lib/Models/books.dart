@@ -15,6 +15,8 @@ class Books {
 
   getBookIsbn() => this.books["book"]["isbn"];
 
+  getBookSubtitle() => this.books["book"]["subtitle"];
+
   getAuthor() {
     var authors = this.books["book"]["authors"];
 

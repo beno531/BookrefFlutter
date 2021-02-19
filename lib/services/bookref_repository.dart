@@ -66,4 +66,64 @@ class BookrefRepository {
 
     return await client.mutate(_options);
   }
+
+  Future<QueryResult> addBook(
+      String identifier, String title, String subtitle) async {
+    final MutationOptions _options = MutationOptions(
+      document: parseString(queries.addBook),
+      variables: {
+        'input': {
+          'identifier': '$identifier',
+          'title': '$title',
+          'subtitle': '$subtitle'
+        }
+      },
+    );
+
+    return await client.mutate(_options);
+  }
+
+  Future<QueryResult> moveBookInLibrary(String bookId, String status) async {
+    final MutationOptions _options = MutationOptions(
+      document: parseString(queries.moveBookInLibrary),
+      variables: {
+        'input': {'bookId': '$bookId', 'status': '$status'}
+      },
+    );
+
+    return await client.mutate(_options);
+  }
+
+  Future<QueryResult> addNewAuthor(String bookId, String authorName) async {
+    final MutationOptions _options = MutationOptions(
+      document: parseString(queries.addNewAuthor),
+      variables: {
+        'input': {'bookId': '$bookId', 'name': '$authorName'}
+      },
+    );
+
+    return await client.mutate(_options);
+  }
+
+  Future<QueryResult> addAuthor(String bookId, String authorId) async {
+    final MutationOptions _options = MutationOptions(
+      document: parseString(queries.addAuthor),
+      variables: {
+        'input': {'bookId': '$bookId', 'authorId': '$authorId'}
+      },
+    );
+
+    return await client.mutate(_options);
+  }
+
+  Future<QueryResult> checkAuthorName(String authorName) async {
+    final WatchQueryOptions _options = WatchQueryOptions(
+      document: parseString(queries.checkAuthorName),
+      variables: {'input': authorName},
+      pollInterval: Duration(seconds: 4),
+      fetchResults: true,
+    );
+
+    return await client.query(_options);
+  }
 }

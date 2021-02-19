@@ -1,5 +1,6 @@
 import 'package:bookref/Models/books.dart';
 import 'package:bookref/widgets/bookDetailView.dart';
+import 'package:bookref/widgets/bookReferOverView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -78,13 +79,13 @@ class BuildHorizontalBooks extends StatelessWidget {
                                 textAlign: TextAlign.left),
                           ),
                           Align(
-                            alignment: Alignment.centerLeft,
-                            //child: Text("${books[index].getAuthor()}",
-                            child: Text("Placeholder",
-                                style: TextStyle(
-                                    fontSize: 10.0, color: Colors.white),
-                                textAlign: TextAlign.left),
-                          ),
+                              alignment: Alignment.centerLeft,
+                              child: Text("${books[index].getBookSubtitle()}",
+                                  style: TextStyle(
+                                      fontSize: 11.0,
+                                      fontWeight: FontWeight.w500,
+                                      height: 1.2,
+                                      color: Colors.white))),
                         ],
                       ))),
               Positioned(
@@ -96,7 +97,9 @@ class BuildHorizontalBooks extends StatelessWidget {
                     color: Colors.white,
                   ),
                   onTap: () {
-                    print("Flatbutton!!!");
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            BookReferOverView({"book": books[index]})));
                   },
                 ),
               ),

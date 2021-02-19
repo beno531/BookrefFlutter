@@ -8,8 +8,10 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 class MyLoginBloc extends Bloc<MyLoginEvent, MyLoginState> {
   final BookrefRepository bookrefRepository;
+  final GlobalKey<NavigatorState> navigatorKey;
 
-  MyLoginBloc({@required this.bookrefRepository}) : super(null);
+  MyLoginBloc({@required this.bookrefRepository, this.navigatorKey})
+      : super(null);
 
   @override
   Stream<MyLoginState> mapEventToState(
@@ -31,6 +33,8 @@ class MyLoginBloc extends Bloc<MyLoginEvent, MyLoginState> {
 
           await storage.write(key: "token", value: token);
         }
+
+        navigatorKey.currentState.pushNamed("/home");
 
         yield LoginFinishedState(
             data: _convertDataResponse(result),

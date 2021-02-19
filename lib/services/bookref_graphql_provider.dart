@@ -6,6 +6,7 @@ query {
         bookId
         book {
             title
+            subtitle
         }
     }
 }
@@ -19,6 +20,7 @@ query {
         bookId
         book {
             title
+            subtitle
         }
     }
 }
@@ -32,6 +34,7 @@ query {
         bookId
         book {
             title
+            subtitle
         }
     }
 }
@@ -54,6 +57,67 @@ mutation login ($input: SingInInput!){
       errors {
         message
       }
+    }
+}
+''';
+
+String addBook = r'''
+mutation addBook ($input: AddBookInput!){
+    addBook(input: $input) {
+      data{
+        id
+      },
+      errors {
+        message
+      }
+    }
+}
+''';
+
+String moveBookInLibrary = r'''
+mutation moveBookInLibrary ($input: MoveBookToLibraryInput!){
+    moveBookInLibrary(input: $input) {
+      data{
+        id
+      },
+      errors {
+        message
+      }
+    }
+}
+''';
+
+String addNewAuthor = r'''
+mutation addNewAuthor ($input: AddNewAuthorInput!){
+    addNewAuthor(input: $input) {
+      data{
+        id
+      },
+      errors {
+        message
+      }
+    }
+}
+''';
+
+String addAuthor = r'''
+mutation addAuthor ($input: AddExistingAuthorInput!){
+    addAuthor(input: $input) {
+      data{
+        id
+      },
+      errors {
+        message
+      }
+    }
+}
+''';
+
+String checkAuthorName = r'''
+query ($input: String!){
+    authors(where: { name: { contains: $input } }) {
+        id
+        name
     }
 }
 ''';
