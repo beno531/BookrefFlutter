@@ -34,7 +34,7 @@ class _BottomNavState extends State<BottomNav> {
           TabItem(icon: Icons.local_library, title: 'Currents'),
           TabItem(icon: Icons.add, title: 'Add'),
           TabItem(icon: Icons.emoji_objects, title: 'Wishlist'),
-          TabItem(icon: Icons.library_books, title: 'Library'),
+          TabItem(icon: Icons.library_books, title: '´Library'),
         ],
         initialActiveIndex: 0,
         onTap: (int i) => {buildRoute(i)});

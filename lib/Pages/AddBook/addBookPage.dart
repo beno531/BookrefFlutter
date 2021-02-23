@@ -1,5 +1,5 @@
-import 'package:bookref/Bloc/addBook_bloc%20copy/addBook_bloc.dart';
-import 'package:bookref/Bloc/addBook_bloc%20copy/addBook_events.dart';
+import 'package:bookref/Bloc/addBook_bloc/addBook_bloc.dart';
+import 'package:bookref/Bloc/addBook_bloc/addBook_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';

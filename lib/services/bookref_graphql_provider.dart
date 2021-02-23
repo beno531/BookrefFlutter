@@ -121,3 +121,89 @@ query ($input: String!){
     }
 }
 ''';
+
+String checkPeopleName = r'''
+query ($input: String!){
+    people(where: { name: { startsWith: $input } }) {
+        id
+        name
+    }
+}
+''';
+
+String addPerson = r'''
+mutation addPerson ($input: AddPersonInput!){
+    addPerson(input: $input) {
+      data{
+        id
+      },
+      errors {
+        message
+      }
+    }
+}
+''';
+
+String addPersonRecommendation = r'''
+mutation addPersonRecommendation ($input: AddPersonRecommendationInput!){
+    addPersonRecommendation(input: $input) {
+      data{
+        id
+      },
+      errors {
+        message
+      }
+    }
+}
+''';
+
+String addBookRecommendation = r'''
+mutation addBookRecommendation ($input: AddBookRecommendationInput!){
+    addBookRecommendation(input: $input) {
+      data{
+        id
+      },
+      errors {
+        message
+      }
+    }
+}
+''';
+
+String getBookByTitle = r'''
+query ($input: String!){
+  allBooks(where: { title: {eq: $input} } ) {
+        edges {
+          node {
+            id
+          }
+        }
+    }
+}
+''';
+
+String getPeopleRecommendationsForBook = r'''
+query ($input: ID!){
+    peopleRecommendationsForBook(id: $input) {
+        recommendedPerson{
+          name
+        }
+        note {
+          content
+        }
+    }
+}
+''';
+
+String getBookRecommendationsForBook = r'''
+query ($input: ID!){
+    bookRecommendationsForBook(id: $input) {
+        recommendedBook{
+          title
+        }
+        note {
+          content
+        }
+    }
+}
+''';

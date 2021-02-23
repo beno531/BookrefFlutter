@@ -1,5 +1,5 @@
-import 'package:bookref/Bloc/addBook_bloc%20copy/addBook_events.dart';
-import 'package:bookref/Bloc/addBook_bloc%20copy/addBook_states.dart';
+import 'package:bookref/Bloc/addBook_bloc/addBook_events.dart';
+import 'package:bookref/Bloc/addBook_bloc/addBook_states.dart';
 import 'package:bookref/Bloc/login_bloc/login_events.dart';
 import 'package:bookref/Bloc/login_bloc/login_states.dart';
 import 'package:bookref/services/bookref_repository.dart';

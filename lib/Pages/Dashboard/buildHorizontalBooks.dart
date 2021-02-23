@@ -1,6 +1,6 @@
 import 'package:bookref/Models/books.dart';
+import 'package:bookref/Pages/AddRecommendation/addRecommendationPage.dart';
 import 'package:bookref/widgets/bookDetailView.dart';
-import 'package:bookref/widgets/bookReferOverView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -57,9 +57,8 @@ class BuildHorizontalBooks extends StatelessWidget {
                       textColor: Colors.black,
                       splashColor: Colors.black12,
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                BookDetailView({"book": books[index]})));
+                        Navigator.of(context)
+                            .pushNamed("/bookDetails", arguments: books[index]);
                       },
                       onLongPress: () {
                         print("Flatbutton!!!");
@@ -97,9 +96,8 @@ class BuildHorizontalBooks extends StatelessWidget {
                     color: Colors.white,
                   ),
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            BookReferOverView({"book": books[index]})));
+                    Navigator.of(context).pushNamed("/addRecommendation",
+                        arguments: books[index].getBookId());
                   },
                 ),
               ),

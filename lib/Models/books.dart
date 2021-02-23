@@ -5,6 +5,10 @@ class Books {
 
   getBook() => this.books["book"];
 
+  getId() => this.books["id"];
+
+  getBookId() => this.books["bookId"];
+
   getBookTitle() => this.books["book"]["title"];
 
   getBookLang() => this.books["book"]["language"];

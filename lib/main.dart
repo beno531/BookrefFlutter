@@ -1,16 +1,20 @@
-import 'package:bookref/Bloc/addBook_bloc%20copy/addBook_bloc.dart';
+import 'package:bookref/Bloc/addBook_bloc/addBook_bloc.dart';
+import 'package:bookref/Bloc/addRecommendation_bloc/addRecommendation_bloc.dart';
+import 'package:bookref/Bloc/bookDetails_bloc/bookDetails_bloc.dart';
 import 'package:bookref/Bloc/currents_bloc/currents_bloc.dart';
 import 'package:bookref/Bloc/login_bloc/login_bloc.dart';
 import 'package:bookref/Bloc/wishlist_bloc/wishlist_bloc.dart';
 import 'package:bookref/Pages/AddBook/addBookPage.dart';
+import 'package:bookref/Pages/AddRecommendation/addRecommendationPage.dart';
+import 'package:bookref/Pages/BookDetails/bookDetailsPage.dart';
 import 'package:bookref/Pages/Login/loginPage.dart';
+import 'package:bookref/Pages/TestPage/testPage.dart';
 import 'package:bookref/Pages/Wishlist/wishlistPage.dart';
 import 'package:bookref/Bloc/library_bloc/library_bloc.dart';
 import 'package:bookref/Pages/Library/libraryPage.dart';
 import 'package:bookref/Bloc/dashboard_bloc/dashboard_bloc.dart';
 import 'package:bookref/Pages/Currents/currentsPage.dart';
 import 'package:bookref/Pages/Dashboard/dashboardPage.dart';
-import 'package:bookref/services/authenticationService.dart';
 import 'package:bookref/services/bookref_repository.dart';
 import 'package:bookref/widgets/bottomNav.dart';
 import 'package:bookref/widgets/testNav.dart';
@@ -81,7 +85,8 @@ class _MyAppState extends State<MyApp> {
                           ? BottomNav(navCallback: (String namedRoute) {
                               print("Navigating to $namedRoute");
                               _navigatorKey.currentState
-                                  .pushReplacementNamed(namedRoute);
+                                  .pushNamedAndRemoveUntil(
+                                      namedRoute, (r) => false);
                             })
                           : null,
                     )),
@@ -124,14 +129,15 @@ class _MyAppState extends State<MyApp> {
     switch (settings.name) {
       case '/dashboard':
         return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => MyDashboardBloc(
-                    bookrefRepository: BookrefRepository(
-                      client: _client(_token),
-                    ),
-                  ),
-                  child: DashboardPage(),
-                ));
+          builder: (_) => BlocProvider(
+            create: (context) => MyDashboardBloc(
+              bookrefRepository: BookrefRepository(
+                client: _client(_token),
+              ),
+            ),
+            child: DashboardPage(),
+          ),
+        );
       case '/login':
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
@@ -182,6 +188,29 @@ class _MyAppState extends State<MyApp> {
                   ),
                   child: AddBookPage(),
                 ));
+      case '/addRecommendation':
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => MyAddRecommendationBloc(
+                      bookrefRepository: BookrefRepository(
+                        client: _client(_token),
+                      ),
+                      bookId: settings.arguments),
+                  child: AddRecommendationPage(),
+                ));
+      case '/bookDetails':
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => MyBooksDetailsBloc(
+                      bookrefRepository: BookrefRepository(
+                        client: _client(_token),
+                      ),
+                      book: settings.arguments),
+                  child: BookDetailsPage(settings.arguments),
+                ));
+      case '/test':
+        print(settings.arguments.toString());
+        return MaterialPageRoute(builder: (context) => TestPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
@@ -203,17 +232,17 @@ GraphQLClient _client(token) {
 
   final Link _link = _httpLink;
 
-  /*return GraphQLClient(
+  return GraphQLClient(
     cache: GraphQLCache(store: InMemoryStore()),
     link: _link,
-  );*/
+  );
 
-  return GraphQLClient(
+  /*return GraphQLClient(
     cache: GraphQLCache(
       store: HiveStore(),
     ),
     link: _link,
-  );
+  );*/
 }
 
 ///////////////////////////////////////////////////////////////
