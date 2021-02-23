@@ -66,4 +66,157 @@ class BookrefRepository {
 
     return await client.mutate(_options);
   }
+
+  Future<QueryResult> addBook(
+      String identifier, String title, String subtitle) async {
+    final MutationOptions _options = MutationOptions(
+      document: parseString(queries.addBook),
+      variables: {
+        'input': {
+          'identifier': '$identifier',
+          'title': '$title',
+          'subtitle': '$subtitle'
+        }
+      },
+    );
+
+    return await client.mutate(_options);
+  }
+
+  Future<QueryResult> moveBookInLibrary(String bookId, String status) async {
+    final MutationOptions _options = MutationOptions(
+      document: parseString(queries.moveBookInLibrary),
+      variables: {
+        'input': {'bookId': '$bookId', 'status': '$status'}
+      },
+    );
+
+    return await client.mutate(_options);
+  }
+
+  Future<QueryResult> addNewAuthor(String bookId, String authorName) async {
+    final MutationOptions _options = MutationOptions(
+      document: parseString(queries.addNewAuthor),
+      variables: {
+        'input': {'bookId': '$bookId', 'name': '$authorName'}
+      },
+    );
+
+    return await client.mutate(_options);
+  }
+
+  Future<QueryResult> addAuthor(String bookId, String authorId) async {
+    final MutationOptions _options = MutationOptions(
+      document: parseString(queries.addAuthor),
+      variables: {
+        'input': {'bookId': '$bookId', 'authorId': '$authorId'}
+      },
+    );
+
+    return await client.mutate(_options);
+  }
+
+  Future<QueryResult> checkAuthorName(String authorName) async {
+    final WatchQueryOptions _options = WatchQueryOptions(
+      document: parseString(queries.checkAuthorName),
+      variables: {'input': authorName},
+      pollInterval: Duration(seconds: 4),
+      fetchResults: true,
+    );
+
+    return await client.query(_options);
+  }
+
+  Future<QueryResult> checkPersonName(String personName) async {
+    final WatchQueryOptions _options = WatchQueryOptions(
+      document: parseString(queries.checkPeopleName),
+      variables: {'input': personName},
+      pollInterval: Duration(seconds: 4),
+      fetchResults: true,
+    );
+
+    return await client.query(_options);
+  }
+
+  Future<QueryResult> getBookByTitle(String title) async {
+    final WatchQueryOptions _options = WatchQueryOptions(
+      document: parseString(queries.getBookByTitle),
+      variables: {'input': title},
+      pollInterval: Duration(seconds: 4),
+      fetchResults: true,
+    );
+
+    return await client.query(_options);
+  }
+
+  Future<QueryResult> addPerson(String personName) async {
+    final WatchQueryOptions _options = WatchQueryOptions(
+      document: parseString(queries.addPerson),
+      variables: {
+        'input': {'name': '$personName'}
+      },
+      pollInterval: Duration(seconds: 4),
+      fetchResults: true,
+    );
+
+    return await client.query(_options);
+  }
+
+  Future<QueryResult> addPersonRecommendation(
+      String bookId, String personId, String note) async {
+    final WatchQueryOptions _options = WatchQueryOptions(
+      document: parseString(queries.addPersonRecommendation),
+      variables: {
+        'input': {
+          'sourceBookId': '$bookId',
+          'targetPersonId': '$personId',
+          'note': '$note'
+        }
+      },
+      pollInterval: Duration(seconds: 4),
+      fetchResults: true,
+    );
+
+    return await client.query(_options);
+  }
+
+  Future<QueryResult> addBookRecommendation(
+      String sourceBookId, String targetBookId, String note) async {
+    final WatchQueryOptions _options = WatchQueryOptions(
+      document: parseString(queries.addBookRecommendation),
+      variables: {
+        'input': {
+          'sourceBookId': '$sourceBookId',
+          'targetBookId': '$targetBookId',
+          'note': '$note'
+        }
+      },
+      pollInterval: Duration(seconds: 4),
+      fetchResults: true,
+    );
+
+    return await client.query(_options);
+  }
+
+  Future<QueryResult> getPeopleRecommendationsForBook(String bookId) async {
+    final WatchQueryOptions _options = WatchQueryOptions(
+      document: parseString(queries.getPeopleRecommendationsForBook),
+      variables: {'input': bookId},
+      pollInterval: Duration(seconds: 4),
+      fetchResults: true,
+    );
+
+    return await client.query(_options);
+  }
+
+  Future<QueryResult> getBookRecommendationsForBook(String bookId) async {
+    final WatchQueryOptions _options = WatchQueryOptions(
+      document: parseString(queries.getBookRecommendationsForBook),
+      variables: {'input': bookId},
+      pollInterval: Duration(seconds: 4),
+      fetchResults: true,
+    );
+
+    return await client.query(_options);
+  }
 }

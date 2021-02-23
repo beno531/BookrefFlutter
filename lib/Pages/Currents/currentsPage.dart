@@ -23,11 +23,15 @@ class _CurrentsPage extends State<CurrentsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: Color.fromRGBO(36, 36, 36, 1.0)),
-      child: new DisplayCurrentsBooks(
-        bloc: BlocProvider.of<MyCurrentsBloc>(context),
-      ),
+    return Stack(
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(color: Color.fromRGBO(36, 36, 36, 1.0)),
+          child: new DisplayCurrentsBooks(
+            bloc: BlocProvider.of<MyCurrentsBloc>(context),
+          ),
+        ),
+      ],
     );
   }
 }

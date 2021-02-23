@@ -32,7 +32,8 @@ class _BookDetailView extends State<BookDetailView> {
           decoration: BoxDecoration(color: Color.fromRGBO(36, 36, 36, 1.0)),
           child: ListView(
             children: <Widget>[
-              CustomListTile("Title", books.getBookTitle()),
+              CustomListTile("Title", books.getBookTitle() ?? "none"),
+              CustomListTile("Subtitle", books.getBookSubtitle() ?? "none"),
               //CustomListTile("Author", books.getAuthor()),
               //CustomListTile("Sprache", books.getBookLang()),
               //CustomListTile("ISBN", books.getBookIsbn()),

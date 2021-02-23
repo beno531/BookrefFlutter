@@ -1,3 +1,4 @@
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,42 +27,38 @@ class _BottomNavState extends State<BottomNav> {
 
   @override
   Widget build(BuildContext context) {
-    return new Material(
-      color: Colors.black,
-      elevation: 12.0,
-      child: new Container(
-        height: 56.0,
-        child: new Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            _buildButton('/', Icons.dashboard, "Dashboard"),
-            _buildButton('/currents', Icons.local_library, "CURRENTS"),
-            _buildButton('/wishlist', Icons.emoji_objects, "WISHLIST"),
-            _buildButton('/libary', Icons.library_books, "LIBARY"),
-            //_buildButton('/more', Icons.more_horiz, "More"),
-          ],
-        ),
-      ),
-    );
+    return ConvexAppBar(
+        style: TabStyle.fixedCircle,
+        items: [
+          TabItem(icon: Icons.dashboard, title: 'Home'),
+          TabItem(icon: Icons.local_library, title: 'Currents'),
+          TabItem(icon: Icons.add, title: 'Add'),
+          TabItem(icon: Icons.emoji_objects, title: 'Wishlist'),
+          TabItem(icon: Icons.library_books, title: '´Library'),
+        ],
+        initialActiveIndex: 0,
+        onTap: (int i) => {buildRoute(i)});
   }
 
-  Widget _buildButton(String namedRoute, IconData data, String tooltip) {
-    return new Flexible(
-      flex: 1,
-      child: new Tooltip(
-        message: tooltip,
-        child: new InkWell(
-          onTap: () => onButtonTap(namedRoute),
-          child: new Center(
-            child: new Icon(
-              data,
-              size: 32.0,
-              color: _currentRoute == namedRoute ? Colors.white : Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
+  buildRoute(int i) {
+    switch (i) {
+      case 0:
+        onButtonTap("/dashboard");
+        break;
+      case 1:
+        onButtonTap("/currents");
+        break;
+      case 2:
+        onButtonTap("/addbook");
+        break;
+      case 3:
+        onButtonTap("/wishlist");
+        break;
+      case 4:
+        onButtonTap("/library");
+        break;
+      default:
+    }
   }
 
   onButtonTap(String namedRoute) {
