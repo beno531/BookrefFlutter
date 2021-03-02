@@ -55,7 +55,7 @@ class _BottomNavState extends State<BottomNav> {
         onButtonTap("/wishlist");
         break;
       case 4:
-        onButtonTap("/library");
+        onButtonTap("/login");
         break;
       default:
     }

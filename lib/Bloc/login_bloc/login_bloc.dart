@@ -34,7 +34,7 @@ class MyLoginBloc extends Bloc<MyLoginEvent, MyLoginState> {
           await storage.write(key: "token", value: token);
         }
 
-        navigatorKey.currentState.pushNamed("/home");
+        //navigatorKey.currentState.pushNamed("/dahsboard");
 
         yield LoginFinishedState(
             data: _convertDataResponse(result),

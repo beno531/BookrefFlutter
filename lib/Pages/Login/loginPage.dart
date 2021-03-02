@@ -1,36 +1,33 @@
 import 'package:bookref/Bloc/login_bloc/login_bloc.dart';
 import 'package:bookref/Bloc/login_bloc/login_events.dart';
+import 'package:bookref/Bloc/login_bloc/login_states.dart';
 import 'package:bookref/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toast/toast.dart';
 
-class LoginPage extends StatefulWidget {
-  @override
-  _LoginPage createState() => _LoginPage();
-}
+class LoginPage extends StatelessWidget {
+  final MyLoginBloc bloc;
 
-final userLoginInputController = TextEditingController();
-final passwordLoginInputController = TextEditingController();
+  LoginPage({Key key, this.bloc}) : super(key: key);
 
-final emailRegisterInputController = TextEditingController();
-final userRegisterInputController = TextEditingController();
-final passwordRegisterInputController = TextEditingController();
+  final userLoginInputController = TextEditingController();
+  final passwordLoginInputController = TextEditingController();
 
-class _LoginPage extends State<LoginPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  final emailRegisterInputController = TextEditingController();
+  final userRegisterInputController = TextEditingController();
+  final passwordRegisterInputController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return BlocBuilder<MyLoginBloc, MyLoginState>(
+      cubit: bloc,
+      builder: (BuildContext context, MyLoginState state) {
+        
+        
+        
+        
+        DefaultTabController(
       length: 2,
       child: SafeArea(
         child: Center(
