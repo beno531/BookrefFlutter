@@ -8,7 +8,7 @@ class BottomNav extends StatefulWidget {
 
   BottomNav({
     Key key,
-    this.initialRoute: '/',
+    this.initialRoute: '/dashbaord',
     @required this.navCallback,
   }) : super(key: key);
 
@@ -28,13 +28,14 @@ class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     return ConvexAppBar(
+        backgroundColor: Colors.grey[900],
         style: TabStyle.fixedCircle,
         items: [
           TabItem(icon: Icons.dashboard, title: 'Home'),
           TabItem(icon: Icons.local_library, title: 'Currents'),
           TabItem(icon: Icons.add, title: 'Add'),
           TabItem(icon: Icons.emoji_objects, title: 'Wishlist'),
-          TabItem(icon: Icons.library_books, title: '´Library'),
+          TabItem(icon: Icons.library_books, title: 'Library'),
         ],
         initialActiveIndex: 0,
         onTap: (int i) => {buildRoute(i)});
@@ -55,7 +56,7 @@ class _BottomNavState extends State<BottomNav> {
         onButtonTap("/wishlist");
         break;
       case 4:
-        onButtonTap("/login");
+        onButtonTap("/library");
         break;
       default:
     }
