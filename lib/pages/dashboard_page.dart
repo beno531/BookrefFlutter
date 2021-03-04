@@ -1,10 +1,10 @@
+import 'package:bookref/Models/book.dart';
+import 'package:bookref/blocs/dashboard/dashboard_bloc.dart';
+import 'package:bookref/blocs/dashboard/dashboard_event.dart';
+import 'package:bookref/blocs/dashboard/dashboard_state.dart';
+import 'package:bookref/widgets/buildHorizontalBooks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_authentication/blocs/dashboard/dashboard_bloc.dart';
-import 'package:flutter_bloc_authentication/blocs/dashboard/dashboard_event.dart';
-import 'package:flutter_bloc_authentication/blocs/dashboard/dashboard_state.dart';
-import 'package:flutter_bloc_authentication/models/book.dart';
-import 'package:flutter_bloc_authentication/widgets/buildHorizontalBooks.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({Key key}) : super(key: key);
@@ -27,10 +27,22 @@ class DashboardPage extends StatelessWidget {
         );
       }
 
+      if (state is ReloadDashboardItems) {
+        dashboardBloc.add(LoadDashboardItems());
+        return Container(
+          decoration: BoxDecoration(color: Colors.grey[800]),
+          child: Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+            ),
+          ),
+        );
+      }
+
       if (state is DashboardItemsFinished) {
         final List<Book> currents = state.dashboardBooks.currents;
         final List<Book> wishlist = state.dashboardBooks.wishlist;
-        final List<Book> libary = state.dashboardBooks.library;
+        final List<Book> library = state.dashboardBooks.library;
 
         return Container(
             decoration: BoxDecoration(color: Colors.grey[800]),
@@ -71,7 +83,7 @@ class DashboardPage extends StatelessWidget {
                                   // )
                                 ],
                               )),
-                          BuildHorizontalBooks(libary),
+                          BuildHorizontalBooks(library),
                         ])),
                     Expanded(
                         child: Column(
@@ -167,6 +179,8 @@ class DashboardPage extends StatelessWidget {
           )),
         );
       }
+
+      return Text("Error");
     });
   }
 }

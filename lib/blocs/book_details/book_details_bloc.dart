@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:bookref/Models/book.dart';
+import 'package:bookref/Models/recommendedBook.dart';
+import 'package:bookref/Models/recommendedPerson.dart';
+import 'package:bookref/Models/testbook.dart';
+import 'package:bookref/blocs/book_details/book_details_event.dart';
+import 'package:bookref/blocs/book_details/book_details_state.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc_authentication/blocs/book_details/book_details_event.dart';
-import 'package:flutter_bloc_authentication/blocs/book_details/book_details_state.dart';
-import 'package:flutter_bloc_authentication/models/book.dart';
 import '../../services/services.dart';
 
 class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
@@ -21,17 +24,16 @@ class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
       LoadBookDetails event) async* {
     print("Load Book Details");
     try {
-      Book book = await dataService.getFullBookById(event.book.getBookId());
+      // Full Book
+      TestBook book = await dataService.getFullBookById(event.book.getBookId());
       // Buch Recommandations
-      dynamic bookRec = await dataService
+      List<RecommendedBook> bookRec = await dataService
           .getBookRecommendationsForBook(event.book.getBookId());
       // Person Recommendations
-      dynamic personRec = await dataService
+      List<RecommendedPerson> personRec = await dataService
           .getPeopleRecommendationsForBook(event.book.getBookId());
 
-      print(bookRec.toString());
-
-      yield BookDetailsFinished(book: book);
+      yield BookDetailsFinished(book: book, bookRecommendation: bookRec, personRecommendation: personRec);
     } catch (err) {
       yield BookDetailsFailure(
           message: err.message ?? 'An unknown error occured');

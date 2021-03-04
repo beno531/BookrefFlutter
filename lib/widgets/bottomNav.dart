@@ -63,11 +63,9 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   onButtonTap(String namedRoute) {
-    if (_currentRoute != namedRoute) {
-      setState(() {
+    setState(() {
         _currentRoute = namedRoute;
       });
       widget.navCallback(_currentRoute);
-    }
   }
 }

@@ -1,28 +1,27 @@
+import 'package:bookref/blocs/add_book/add_book.dart';
+import 'package:bookref/blocs/add_recommendation.dart/add_recommendation.dart';
+import 'package:bookref/blocs/book_details/book_details_bloc.dart';
+import 'package:bookref/blocs/currents/currents_bloc.dart';
+import 'package:bookref/blocs/dashboard/dashboard_bloc.dart';
+import 'package:bookref/blocs/library/library_bloc.dart';
+import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
+import 'package:bookref/pages/addBook_page.dart';
+import 'package:bookref/pages/addRecommendation_page.dart';
+import 'package:bookref/pages/currents_page.dart';
+import 'package:bookref/pages/dashboard_page.dart';
+import 'package:bookref/pages/details_page.dart';
+import 'package:bookref/pages/library_page.dart';
+import 'package:bookref/pages/wishlist_page.dart';
+import 'package:bookref/repositories/repositories.dart';
+import 'package:bookref/widgets/bottomNav.dart';
+import 'package:bookref/widgets/navDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_authentication/blocs/add_book/add_book_bloc.dart';
-import 'package:flutter_bloc_authentication/blocs/book_details/book_details_bloc.dart';
-import 'package:flutter_bloc_authentication/blocs/currents/currents_bloc.dart';
-import 'package:flutter_bloc_authentication/blocs/dashboard/dashboard_bloc.dart';
-import 'package:flutter_bloc_authentication/blocs/library/library_bloc.dart';
-import 'package:flutter_bloc_authentication/blocs/wishlist/wishlist_bloc.dart';
-import 'package:flutter_bloc_authentication/pages/addBook_page.dart';
-import 'package:flutter_bloc_authentication/pages/currents_page.dart';
-import 'package:flutter_bloc_authentication/pages/dashboard_page.dart';
-import 'package:flutter_bloc_authentication/pages/details_page.dart';
-import 'package:flutter_bloc_authentication/pages/library_page.dart';
-import 'package:flutter_bloc_authentication/pages/wishlist_page.dart';
-import 'package:flutter_bloc_authentication/repositories/bookref_repository.dart';
-import 'package:flutter_bloc_authentication/widgets/bottomNav.dart';
-import 'package:flutter_bloc_authentication/widgets/navDrawer.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'blocs/blocs.dart';
-import 'pages/home_page.dart';
 import 'services/services.dart';
 import 'pages/pages.dart';
-import 'services/services.dart';
-import 'services/services.dart';
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -149,22 +148,19 @@ Route<dynamic> generateRoute(RouteSettings settings) {
                 create: (context) => AddBookBloc(dataService: DataService()),
                 child: AddBookPage(),
               ));
-    //   case '/addRecommendation':
-    //     return MaterialPageRoute(
-    //         builder: (_) => BlocProvider(
-    //               create: (context) => MyAddRecommendationBloc(
-    //                   bookrefRepository: BookrefRepository(
-    //                     client: _client(_token),
-    //                   ),
-    //                   bookId: settings.arguments),
-    //               child: AddRecommendationPage(),
-    //             ));
+    case '/addRecommendation':
+      return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+                create: (context) => AddRecommendationBloc(
+                    dataService: DataService(), bookId: settings.arguments),
+                child: AddRecommendationPage(),
+              ));
     case '/bookDetails':
       return MaterialPageRoute(
           builder: (_) => BlocProvider(
                 create: (context) =>
                     BookDetailsBloc(dataService: DataService()),
-                child: BookDetailsPage(book: settings.arguments),
+                child: BookDetailsPage(bookRef: settings.arguments),
               ));
     default:
       return MaterialPageRoute(

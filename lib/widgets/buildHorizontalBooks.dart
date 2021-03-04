@@ -1,11 +1,11 @@
+import 'package:bookref/Models/book.dart';
+import 'package:bookref/blocs/dashboard/dashboard_bloc.dart';
+import 'package:bookref/blocs/dashboard/dashboard_event.dart';
 import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_authentication/blocs/dashboard/dashboard_bloc.dart';
-import 'package:flutter_bloc_authentication/blocs/dashboard/dashboard_event.dart';
-import 'package:flutter_bloc_authentication/models/book.dart';
 
 class BuildHorizontalBooks extends StatelessWidget {
   final List<Book> books;
@@ -162,7 +162,7 @@ class BuildHorizontalBooks extends StatelessWidget {
                                                     ..add(MoveDashboardBook(
                                                         personalBookId:
                                                             books[index]
-                                                                .getBookId(),
+                                                                .getId(),
                                                         newStatus:
                                                             statusValue));
 

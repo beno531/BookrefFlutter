@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:bookref/Models/book.dart';
+import 'package:bookref/blocs/wishlist/wishlist_event.dart';
+import 'package:bookref/blocs/wishlist/wishlist_state.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc_authentication/blocs/wishlist/wishlist_event.dart';
-import 'package:flutter_bloc_authentication/blocs/wishlist/wishlist_state.dart';
-import 'package:flutter_bloc_authentication/models/book.dart';
 import '../../services/services.dart';
 
 class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {

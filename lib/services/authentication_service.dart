@@ -1,6 +1,5 @@
-import 'package:flutter_bloc_authentication/repositories/bookref_repository.dart';
-import 'package:flutter_bloc_authentication/repositories/user_repository.dart';
-import 'package:flutter_bloc_authentication/services/connection_service.dart';
+import 'package:bookref/repositories/repositories.dart';
+import 'package:bookref/services/connection_service.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'dart:async';
 import 'package:graphql/client.dart';
@@ -33,6 +32,25 @@ class AuthenticationService {
     }
     await _connectionService.setToken(signinResult.data['singIn']['data']);
     await _userRepository.setUsername(username);
+
+    return User(name: "username", token: signinResult.data['singIn']['data']);
+  }
+
+  Future<User> signUp(String email, String username, String password) async {
+    final result =
+        await _bookrefRepository.registerUser(email, username, password);
+
+    QueryResult signinResult;
+
+    if (result != null) {
+      signinResult = await _bookrefRepository.loginUser(username, password);
+
+      if (signinResult.data['singIn']['errors'] != null) {
+        throw AuthenticationException(message: 'Wrong username or password');
+      }
+      await _connectionService.setToken(signinResult.data['singIn']['data']);
+      await _userRepository.setUsername(username);
+    }
 
     return User(name: "username", token: signinResult.data['singIn']['data']);
   }

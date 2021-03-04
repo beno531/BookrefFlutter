@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:bookref/Models/book.dart';
+import 'package:bookref/blocs/currents/currents_event.dart';
+import 'package:bookref/blocs/currents/currents_state.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc_authentication/blocs/currents/currents_event.dart';
-import 'package:flutter_bloc_authentication/blocs/currents/currents_state.dart';
-import 'package:flutter_bloc_authentication/models/book.dart';
 import '../../services/services.dart';
 
 class CurrentBloc extends Bloc<CurrentsEvent, CurrentsState> {

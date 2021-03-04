@@ -12,7 +12,7 @@ class LoginPage extends StatelessWidget {
       //   title: Text('Login'),
       // ),
       body: Container(
-        decoration: BoxDecoration(color: Colors.grey[200]),
+        decoration: BoxDecoration(color: Colors.grey[900]),
         child: SafeArea(
             minimum: const EdgeInsets.all(16),
             child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
@@ -24,14 +24,15 @@ class LoginPage extends StatelessWidget {
                     child: Center(
                         child: SingleChildScrollView(
                       child: SizedBox(
-                        height: 450,
+                        height: 355,
                         child: Container(
-                          decoration: BoxDecoration(color: Colors.grey[200]),
+                          decoration: BoxDecoration(color: Colors.grey[900]),
                           child: DefaultTabController(
                             length: 2,
                             child: SizedBox(
-                              height: 100.0,
+                              height: 150.0,
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   TabBar(
                                     tabs: <Widget>[
@@ -40,14 +41,14 @@ class LoginPage extends StatelessWidget {
                                             style: TextStyle(
                                                 fontSize: 15.0,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.grey[600])),
+                                                color: Colors.white)),
                                       ),
                                       Tab(
                                         icon: Text('Registration',
                                             style: TextStyle(
                                                 fontSize: 15.0,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.grey[600])),
+                                                color: Colors.white)),
                                       )
                                     ],
                                   ),
@@ -60,18 +61,7 @@ class LoginPage extends StatelessWidget {
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  'Login',
-                                                  style: TextStyle(
-                                                      fontSize: 25.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.grey[850]),
-                                                ),
-                                                SizedBox(height: 35),
-                                                _LoginForm()
-                                              ],
+                                              children: [_LoginForm()],
                                             ),
                                           ),
                                         ),
@@ -81,16 +71,7 @@ class LoginPage extends StatelessWidget {
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  'Registration',
-                                                  style: TextStyle(
-                                                      fontSize: 25.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.grey[850]),
-                                                ),
-                                              ],
+                                              children: [_RegisterForm()],
                                             ),
                                           ),
                                         ),
@@ -152,6 +133,22 @@ class _LoginForm extends StatelessWidget {
   }
 }
 
+class _RegisterForm extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final authService = RepositoryProvider.of<AuthenticationService>(context);
+    final authBloc = BlocProvider.of<AuthenticationBloc>(context);
+
+    return Container(
+      alignment: Alignment.center,
+      child: BlocProvider<LoginBloc>(
+        create: (context) => LoginBloc(authBloc, authService),
+        child: _SignUpForm(),
+      ),
+    );
+  }
+}
+
 class _SignInForm extends StatefulWidget {
   @override
   __SignInFormState createState() => __SignInFormState();
@@ -160,7 +157,7 @@ class _SignInForm extends StatefulWidget {
 class __SignInFormState extends State<_SignInForm> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   bool _autoValidate = false;
 
   @override
@@ -170,7 +167,8 @@ class __SignInFormState extends State<_SignInForm> {
     _onLoginButtonPressed() {
       if (_key.currentState.validate()) {
         _loginBloc.add(LoginInWithEmailButtonPressed(
-            email: _emailController.text, password: _passwordController.text));
+            username: _usernameController.text,
+            password: _passwordController.text));
       } else {
         setState(() {
           _autoValidate = true;
@@ -201,11 +199,18 @@ class __SignInFormState extends State<_SignInForm> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   TextFormField(
+                    style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
                       labelText: 'Username',
+                      labelStyle: TextStyle(color: Colors.white),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
                     ),
-                    controller: _emailController,
+                    controller: _usernameController,
                     keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
                     validator: (value) {
@@ -219,9 +224,16 @@ class __SignInFormState extends State<_SignInForm> {
                     height: 12,
                   ),
                   TextFormField(
+                    style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
                       labelText: 'Password',
+                      labelStyle: TextStyle(color: Colors.white),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
                     ),
                     obscureText: true,
                     controller: _passwordController,
@@ -242,6 +254,163 @@ class __SignInFormState extends State<_SignInForm> {
                     shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(2.0)),
                     child: Text('LOG IN'),
+                    onPressed:
+                        state is LoginLoading ? () {} : _onLoginButtonPressed,
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _showError(String error) {
+    Flushbar(
+      title: "Error!",
+      message: error,
+      duration: Duration(seconds: 2),
+      backgroundColor: Colors.red,
+      margin: EdgeInsets.all(8),
+      borderRadius: 8,
+      flushbarPosition: FlushbarPosition.TOP,
+    )..show(context);
+  }
+}
+
+class _SignUpForm extends StatefulWidget {
+  @override
+  __SignUpFormState createState() => __SignUpFormState();
+}
+
+class __SignUpFormState extends State<_SignUpForm> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
+  bool _autoValidate = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final _loginBloc = BlocProvider.of<LoginBloc>(context);
+
+    _onLoginButtonPressed() {
+      if (_key.currentState.validate()) {
+        _loginBloc.add(RegisterWithEmailButtonPressed(
+            email: _emailController.text,
+            username: _usernameController.text,
+            password: _passwordController.text));
+      } else {
+        setState(() {
+          _autoValidate = true;
+        });
+      }
+    }
+
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state is LoginFailure) {
+          _showError(state.error);
+        }
+      },
+      child: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
+          if (state is LoginLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return Form(
+            key: _key,
+            autovalidateMode: _autoValidate
+                ? AutovalidateMode.always
+                : AutovalidateMode.disabled,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  TextFormField(
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
+                      labelText: 'Email',
+                      labelStyle: TextStyle(color: Colors.white),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
+                    ),
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Email is required.';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  TextFormField(
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
+                      labelText: 'Username',
+                      labelStyle: TextStyle(color: Colors.white),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
+                    ),
+                    controller: _usernameController,
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Username is required.';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  TextFormField(
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
+                      labelText: 'Password',
+                      labelStyle: TextStyle(color: Colors.white),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
+                    ),
+                    obscureText: true,
+                    controller: _passwordController,
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Password is required.';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  RaisedButton(
+                    color: Theme.of(context).primaryColor,
+                    textColor: Colors.white,
+                    padding: const EdgeInsets.all(16),
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(2.0)),
+                    child: Text('REGISTER'),
                     onPressed:
                         state is LoginLoading ? () {} : _onLoginButtonPressed,
                   )

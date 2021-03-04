@@ -1,5 +1,7 @@
-import 'package:flutter_bloc_authentication/models/book.dart';
-import 'package:flutter_bloc_authentication/models/recommendedPerson.dart';
+import 'package:bookref/Models/book.dart';
+import 'package:bookref/Models/recommendedBook.dart';
+import 'package:bookref/Models/recommendedPerson.dart';
+import 'package:bookref/Models/testbook.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
@@ -11,9 +13,9 @@ abstract class BookDetailsState extends Equatable {
 class BookDetailsLoading extends BookDetailsState {}
 
 class BookDetailsFinished extends BookDetailsState {
-  final Book book;
-  final Book bookRecommendation;
-  final RecommendedPerson personRecommendation;
+  final TestBook book;
+  final List<RecommendedBook> bookRecommendation;
+  final List<RecommendedPerson> personRecommendation;
   BookDetailsFinished(
       {@required this.book,
       @required this.bookRecommendation,

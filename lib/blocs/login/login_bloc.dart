@@ -22,6 +22,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (event is LoginInWithEmailButtonPressed) {
       yield* _mapLoginWithEmailToState(event);
     }
+
+    if (event is RegisterWithEmailButtonPressed) {
+      yield* _mapRegisterWithEmailToState(event);
+    }
   }
 
   Stream<LoginState> _mapLoginWithEmailToState(
@@ -29,7 +33,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     yield LoginLoading();
     try {
       final user =
-          await _authenticationService.signIn(event.email, event.password);
+          await _authenticationService.signIn(event.username, event.password);
+      if (user != null) {
+        _authenticationBloc.add(UserLoggedIn(user: user));
+        print(user.token);
+        yield LoginSuccess();
+        yield LoginInitial();
+      } else {
+        yield LoginFailure(error: 'Something very weird just happened');
+      }
+    } on AuthenticationException catch (e) {
+      yield LoginFailure(error: e.message);
+    } catch (err) {
+      yield LoginFailure(error: err.message ?? 'An unknown error occured');
+    }
+  }
+
+  Stream<LoginState> _mapRegisterWithEmailToState(
+      RegisterWithEmailButtonPressed event) async* {
+    yield LoginLoading();
+    try {
+      final user = await _authenticationService.signUp(
+          event.email, event.username, event.password);
       if (user != null) {
         _authenticationBloc.add(UserLoggedIn(user: user));
         print(user.token);

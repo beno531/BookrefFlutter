@@ -1,4 +1,4 @@
-import 'package:flutter_bloc_authentication/models/book.dart';
+import 'package:bookref/Models/book.dart';
 
 class DashboardBooks {
   DashboardBooks(this.currents, this.wishlist, this.library);

@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import '../../models/models.dart';
 
 abstract class AuthenticationEvent extends Equatable {
-  const AuthenticationEvent();
+  AuthenticationEvent();
 
   @override
   List<Object> get props => [];

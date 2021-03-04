@@ -1,7 +1,6 @@
-import 'package:flutter_bloc_authentication/models/dashboardBooks.dart';
+import 'package:bookref/Models/dashboardBooks.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
-import '../../models/models.dart';
 
 abstract class DashboardState extends Equatable {
   @override
@@ -9,6 +8,8 @@ abstract class DashboardState extends Equatable {
 }
 
 class DashboardItemsLoading extends DashboardState {}
+
+class ReloadDashboardItems extends DashboardState {}
 
 class DashboardItemsFinished extends DashboardState {
   final DashboardBooks dashboardBooks;

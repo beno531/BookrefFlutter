@@ -1,8 +1,10 @@
-import 'package:flutter_bloc_authentication/models/book.dart';
-import 'package:flutter_bloc_authentication/models/bookResult.dart';
-import 'package:flutter_bloc_authentication/models/dashboardBooks.dart';
-import 'package:flutter_bloc_authentication/repositories/bookref_repository.dart';
-import 'package:flutter_bloc_authentication/repositories/user_repository.dart';
+import 'package:bookref/Models/book.dart';
+import 'package:bookref/Models/bookResult.dart';
+import 'package:bookref/Models/dashboardBooks.dart';
+import 'package:bookref/Models/recommendedBook.dart';
+import 'package:bookref/Models/recommendedPerson.dart';
+import 'package:bookref/Models/testbook.dart';
+import 'package:bookref/repositories/repositories.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'dart:async';
 import 'package:graphql/client.dart';
@@ -21,26 +23,26 @@ class DataService {
     final wishlist = await _bookrefRepository.getDashboardWishlist();
     final libraries = await _bookrefRepository.getDashboardLibary();
 
-    return DashboardBooks(convertQueryToList(currents),
-        convertQueryToList(wishlist), convertQueryToList(libraries));
+    return DashboardBooks(convertBookQueryToList(currents),
+        convertBookQueryToList(wishlist), convertBookQueryToList(libraries));
   }
 
   Future<List<Book>> getCurrentBooks() async {
     final currents = await _bookrefRepository.getDashboardCurrents();
 
-    return convertQueryToList(currents);
+    return convertBookQueryToList(currents);
   }
 
   Future<List<Book>> getWishlistBooks() async {
     final wishlist = await _bookrefRepository.getDashboardWishlist();
 
-    return convertQueryToList(wishlist);
+    return convertBookQueryToList(wishlist);
   }
 
   Future<List<Book>> getLibraryBooks() async {
     final library = await _bookrefRepository.getDashboardLibary();
 
-    return convertQueryToList(library);
+    return convertBookQueryToList(library);
   }
 
   Future<BookResult> addBook(
@@ -74,26 +76,61 @@ class DataService {
     return await _bookrefRepository.changeBookStatus(personalBookId, newStatus);
   }
 
-  Future<Book> getFullBookById(String bookId) async {
+  Future<TestBook> getFullBookById(String bookId) async {
     final book = await _bookrefRepository.getFullBookById(bookId);
 
-    return Book(book.data['bookById']);
+    return TestBook(book.data['bookById']);
   }
 
-  Future<dynamic> getPeopleRecommendationsForBook(String bookId) async {
-    final rec =
+  Future<List<RecommendedPerson>> getPeopleRecommendationsForBook(
+      String bookId) async {
+    final personrec =
         await _bookrefRepository.getPeopleRecommendationsForBook(bookId);
 
-    return rec.data['peopleRecommendationsForBook'];
+    return convertRecommendedPersonQueryToList(personrec);
   }
 
-  Future<dynamic> getBookRecommendationsForBook(String bookId) async {
-    final rec = await _bookrefRepository.getBookRecommendationsForBook(bookId);
+  Future<List<RecommendedBook>> getBookRecommendationsForBook(
+      String bookId) async {
+    final bookrec =
+        await _bookrefRepository.getBookRecommendationsForBook(bookId);
 
-    return rec.data['bookRecommendationsForBook'];
+    print(bookrec.data.toString());
+
+    return convertRecommendedBookQueryToList(bookrec);
   }
 
-  List<Book> convertQueryToList(QueryResult queryResult) {
+  Future addPersonRecommendation(
+      String bookId, String personName, String notes) async {
+    QueryResult person = await _bookrefRepository.checkPersonName(personName);
+
+    if (await extractPersonsId(person) == null) {
+      person = await _bookrefRepository.addPerson(personName);
+
+      final result = await _bookrefRepository.addPersonRecommendation(
+          bookId, await person.data['addPerson']['data']['id'], personName);
+    } else {
+      final result = await _bookrefRepository.addPersonRecommendation(
+          bookId, await extractPersonsId(person), personName);
+    }
+  }
+
+  Future addBookRecommendation(
+      String bookId, String identifier, String title, String notes) async {
+    QueryResult book = await _bookrefRepository.getBookByTitle(title);
+
+    if (await extractExternalBookId(book) == null) {
+      book = await _bookrefRepository.addBook(identifier, title, "Placeholder");
+
+      final result = _bookrefRepository.addBookRecommendation(
+          bookId, book.data['addBook']['data']['id'], notes);
+    } else {
+      final result = _bookrefRepository.addBookRecommendation(
+          bookId, await extractExternalBookId(book), notes);
+    }
+  }
+
+  List<Book> convertBookQueryToList(QueryResult queryResult) {
     var listBooks = List<Book>();
 
     for (var i = 0; i < queryResult.data["books"].length; i++) {
@@ -105,9 +142,55 @@ class DataService {
     return listBooks;
   }
 
+  List<RecommendedBook> convertRecommendedBookQueryToList(
+      QueryResult queryResult) {
+    var listBooks = List<RecommendedBook>();
+
+    for (var i = 0;
+        i < queryResult.data["bookRecommendationsForBook"].length;
+        i++) {
+      listBooks.add(
+        RecommendedBook(queryResult.data["bookRecommendationsForBook"][i]),
+      );
+    }
+
+    return listBooks;
+  }
+
+  List<RecommendedPerson> convertRecommendedPersonQueryToList(
+      QueryResult queryResult) {
+    var listBooks = List<RecommendedPerson>();
+
+    for (var i = 0;
+        i < queryResult.data["peopleRecommendationsForBook"].length;
+        i++) {
+      listBooks.add(
+        RecommendedPerson(queryResult.data["peopleRecommendationsForBook"][i]),
+      );
+    }
+
+    return listBooks;
+  }
+
   extractAuthorsName(QueryResult queryResult) async {
     try {
       return queryResult.data['authors'][0];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  extractPersonsId(QueryResult queryResult) async {
+    try {
+      return queryResult.data['people'][0]['id'];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  extractExternalBookId(QueryResult queryResult) async {
+    try {
+      return queryResult.data['allBooks']['edges'][0]['node']['id'];
     } catch (e) {
       return null;
     }

@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:bookref/Models/book.dart';
+import 'package:bookref/blocs/library/library_event.dart';
+import 'package:bookref/blocs/library/library_state.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc_authentication/blocs/library/library_event.dart';
-import 'package:flutter_bloc_authentication/blocs/library/library_state.dart';
-import 'package:flutter_bloc_authentication/models/book.dart';
 import '../../services/services.dart';
 
 class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {

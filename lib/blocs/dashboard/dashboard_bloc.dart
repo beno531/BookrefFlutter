@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:bookref/Models/dashboardBooks.dart';
+import 'package:bookref/blocs/dashboard/dashboard_event.dart';
+import 'package:bookref/blocs/dashboard/dashboard_state.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc_authentication/blocs/dashboard/dashboard_event.dart';
-import 'package:flutter_bloc_authentication/blocs/dashboard/dashboard_state.dart';
-import 'package:flutter_bloc_authentication/models/dashboardBooks.dart';
-import 'package:flutter_bloc_authentication/repositories/bookref_repository.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import '../../services/services.dart';
 
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
@@ -46,8 +44,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     try {
       var result =
           await dataService.changeBookStatus(personalBooKId, newStatus);
-      mapEventToState(LoadDashboardItems());
-      print(result.data.toString());
+      yield ReloadDashboardItems();
     } catch (err) {
       yield DashboardItemsFailure(
           message: err.message ?? 'An unknown error occured');

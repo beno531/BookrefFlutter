@@ -1,7 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc_authentication/repositories/bookref_repository.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-
 import 'authentication_event.dart';
 import 'authentication_state.dart';
 import '../../services/services.dart';

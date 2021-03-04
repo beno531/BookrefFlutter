@@ -1,11 +1,8 @@
-import 'package:custom_radio_grouped_button/CustomButtons/CustomCheckBoxGroup.dart';
-import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
+import 'package:bookref/blocs/add_book/add_book.dart';
+import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_authentication/blocs/add_book/add_book.dart';
-import 'package:flutter_bloc_authentication/models/models.dart';
-import 'package:toast/toast.dart';
 
 class AddBookPage extends StatefulWidget {
   @override
@@ -167,6 +164,9 @@ class __AddBookPageState extends State<AddBookPage> {
                                                 authorInputController.text));
 
                                     _showSuccess("Book added!");
+
+                                    // Navigator.pushReplacementNamed(
+                                    //     context, "/dashboard");
                                   } catch (err) {
                                     _showError(err.message ??
                                         "Some fields are required!");
@@ -193,6 +193,8 @@ class __AddBookPageState extends State<AddBookPage> {
           ),
         );
       }
+
+      return Text("Error");
     });
   }
 

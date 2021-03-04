@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:flutter_bloc_authentication/services/connection_service.dart';
+import 'package:bookref/services/connection_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gql/language.dart';
 import 'package:graphql/client.dart';

@@ -1,10 +1,9 @@
+import 'package:bookref/Models/book.dart';
+import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
+import 'package:bookref/blocs/wishlist/wishlist_event.dart';
+import 'package:bookref/blocs/wishlist/wishlist_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_authentication/blocs/currents/currents_event.dart';
-import 'package:flutter_bloc_authentication/blocs/wishlist/wishlist_bloc.dart';
-import 'package:flutter_bloc_authentication/blocs/wishlist/wishlist_event.dart';
-import 'package:flutter_bloc_authentication/blocs/wishlist/wishlist_state.dart';
-import 'package:flutter_bloc_authentication/models/book.dart';
 
 class WishlistPage extends StatelessWidget {
   const WishlistPage({Key key}) : super(key: key);
@@ -92,9 +91,8 @@ class WishlistPage extends StatelessWidget {
                             textColor: Colors.black,
                             splashColor: Colors.black12,
                             onPressed: () {
-                              /*Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      BookDetailView({"book": book})));*/
+                              Navigator.of(context)
+                                  .pushNamed("/bookDetails", arguments: book);
                             },
                             onLongPress: () {
                               print("Flatbutton!!!");
@@ -132,7 +130,8 @@ class WishlistPage extends StatelessWidget {
                           color: Colors.white,
                         ),
                         onTap: () {
-                          print("Flatbutton!!!");
+                          Navigator.of(context).pushNamed("/addRecommendation",
+                              arguments: book.getBookId());
                         },
                       ),
                     ),
@@ -164,6 +163,8 @@ class WishlistPage extends StatelessWidget {
           )),
         );
       }
+
+      return Text("Error");
     });
   }
 }

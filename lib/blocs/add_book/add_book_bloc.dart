@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc_authentication/exceptions/authentication_exception.dart';
 import 'add_book_event.dart';
 import 'add_book_state.dart';
 import '../../services/services.dart';
