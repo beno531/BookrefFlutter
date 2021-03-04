@@ -57,248 +57,258 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                         Expanded(
                           child: TabBarView(
                             children: <Widget>[
-                              Container(
-                                height: 900,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "BOOK RECOMMENDATION",
-                                        style: TextStyle(
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white),
-                                      ),
-                                      SizedBox(height: 35),
-                                      TextField(
-                                        controller: titleInputController,
-                                        onEditingComplete: () =>
-                                            node.nextFocus(),
-                                        style: TextStyle(color: Colors.white),
-                                        decoration: InputDecoration(
-                                          hintText: 'The Wind in the Willows',
-                                          hintStyle: TextStyle(
-                                              color: Colors.grey[700]),
-                                          labelText: "Title",
-                                          labelStyle:
-                                              TextStyle(color: Colors.white),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always,
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5.0)),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.lightBlueAccent,
-                                                width: 1.0),
+                              SingleChildScrollView(
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "BOOK RECOMMENDATION",
+                                          style: TextStyle(
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.white),
+                                        ),
+                                        SizedBox(height: 35),
+                                        TextField(
+                                          controller: titleInputController,
+                                          onEditingComplete: () =>
+                                              node.nextFocus(),
+                                          style: TextStyle(color: Colors.white),
+                                          decoration: InputDecoration(
+                                            hintText: 'The Wind in the Willows',
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey[700]),
+                                            labelText: "Title",
+                                            labelStyle:
+                                                TextStyle(color: Colors.white),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5.0)),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.lightBlueAccent,
+                                                  width: 1.0),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(height: 15),
-                                      TextField(
-                                        controller: identifierInputController,
-                                        onEditingComplete: () =>
-                                            node.nextFocus(),
-                                        style: TextStyle(color: Colors.white),
-                                        decoration: InputDecoration(
-                                          hintText: 'ISBN 978-3-7657-1111-4',
-                                          hintStyle: TextStyle(
-                                              color: Colors.grey[700]),
-                                          labelText: "Identifier/ ISBN",
-                                          labelStyle:
-                                              TextStyle(color: Colors.white),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always,
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5.0)),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.lightBlueAccent,
-                                                width: 1.0),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 15),
-                                      TextField(
-                                        controller: bookNotesInputController,
-                                        onEditingComplete: () => node.unfocus(),
-                                        maxLines: 5,
-                                        style: TextStyle(color: Colors.white),
-                                        decoration: InputDecoration(
-                                          hintText: 'I like this book...',
-                                          hintStyle: TextStyle(
-                                              color: Colors.grey[700]),
-                                          labelText: "Notes",
-                                          labelStyle:
-                                              TextStyle(color: Colors.white),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always,
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5.0)),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.lightBlueAccent,
-                                                width: 1.0),
+                                        SizedBox(height: 15),
+                                        TextField(
+                                          controller: identifierInputController,
+                                          onEditingComplete: () =>
+                                              node.unfocus(),
+                                          style: TextStyle(color: Colors.white),
+                                          decoration: InputDecoration(
+                                            hintText: 'ISBN 978-3-7657-1111-4',
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey[700]),
+                                            labelText: "Identifier/ ISBN",
+                                            labelStyle:
+                                                TextStyle(color: Colors.white),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5.0)),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.lightBlueAccent,
+                                                  width: 1.0),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(height: 15),
-                                      SizedBox(height: 20.0),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: FlatButton(
-                                            onPressed: () async {
-                                              try {
-                                                recommendationBloc.add(
-                                                    AddBookRecommendationButtonPressed(
-                                                        identifier:
-                                                            identifierInputController
-                                                                .text,
-                                                        title:
-                                                            titleInputController
-                                                                .text,
-                                                        notes:
-                                                            bookNotesInputController
-                                                                .text));
+                                        SizedBox(height: 15),
+                                        TextField(
+                                          controller: bookNotesInputController,
+                                          maxLines: 5,
+                                          style: TextStyle(color: Colors.white),
+                                          decoration: InputDecoration(
+                                            hintText: 'I like this book...',
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey[700]),
+                                            labelText: "Notes",
+                                            labelStyle:
+                                                TextStyle(color: Colors.white),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5.0)),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.lightBlueAccent,
+                                                  width: 1.0),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 15),
+                                        SizedBox(height: 20.0),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: FlatButton(
+                                              onPressed: () async {
+                                                try {
+                                                  recommendationBloc.add(
+                                                      AddBookRecommendationButtonPressed(
+                                                          identifier:
+                                                              identifierInputController
+                                                                  .text,
+                                                          title:
+                                                              titleInputController
+                                                                  .text,
+                                                          notes:
+                                                              bookNotesInputController
+                                                                  .text));
 
-                                                _showSuccess(
-                                                    "Recommendation added!");
+                                                  _showSuccess(
+                                                      "Recommendation added!");
 
-                                                Navigator.pushReplacementNamed(
-                                                    context, "/dashboard");
-                                              } catch (err) {
-                                                _showError(err.message ??
-                                                    "Some fields are required!");
-                                              }
+                                                  Navigator
+                                                      .pushReplacementNamed(
+                                                          context,
+                                                          "/dashboard");
+                                                } catch (err) {
+                                                  _showError(err.message ??
+                                                      "Some fields are required!");
+                                                }
 
-                                              identifierInputController.clear();
-                                              titleInputController.clear();
-                                              bookNotesInputController.clear();
-                                            },
-                                            color: Colors.blue,
-                                            child: Text(
-                                              'Confirm',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            )),
-                                      )
-                                    ],
+                                                identifierInputController
+                                                    .clear();
+                                                titleInputController.clear();
+                                                bookNotesInputController
+                                                    .clear();
+                                              },
+                                              color: Colors.blue,
+                                              child: Text(
+                                                'Confirm',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                              Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "PERSON RECOMMENDATION",
-                                        style: TextStyle(
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white),
-                                      ),
-                                      SizedBox(height: 35),
-                                      TextField(
-                                        controller: personInputController,
-                                        onEditingComplete: () =>
-                                            node.nextFocus(),
-                                        style: TextStyle(color: Colors.white),
-                                        decoration: InputDecoration(
-                                          hintText: 'Albert Einstein',
-                                          hintStyle: TextStyle(
-                                              color: Colors.grey[700]),
-                                          labelText: "Name",
-                                          labelStyle:
-                                              TextStyle(color: Colors.white),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always,
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5.0)),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.lightBlueAccent,
-                                                width: 1.0),
+                              SingleChildScrollView(
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "PERSON RECOMMENDATION",
+                                          style: TextStyle(
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.white),
+                                        ),
+                                        SizedBox(height: 35),
+                                        TextField(
+                                          controller: personInputController,
+                                          onEditingComplete: () =>
+                                              node.unfocus(),
+                                          style: TextStyle(color: Colors.white),
+                                          decoration: InputDecoration(
+                                            hintText: 'Albert Einstein',
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey[700]),
+                                            labelText: "Name",
+                                            labelStyle:
+                                                TextStyle(color: Colors.white),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5.0)),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.lightBlueAccent,
+                                                  width: 1.0),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(height: 15),
-                                      TextField(
-                                        controller: personNotesInputController,
-                                        onEditingComplete: () => node.unfocus(),
-                                        maxLines: 5,
-                                        style: TextStyle(color: Colors.white),
-                                        decoration: InputDecoration(
-                                          hintText: 'I like this person...',
-                                          hintStyle: TextStyle(
-                                              color: Colors.grey[700]),
-                                          labelText: "Notes",
-                                          labelStyle:
-                                              TextStyle(color: Colors.white),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always,
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5.0)),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.lightBlueAccent,
-                                                width: 1.0),
+                                        SizedBox(height: 15),
+                                        TextField(
+                                          controller:
+                                              personNotesInputController,
+                                          maxLines: 5,
+                                          style: TextStyle(color: Colors.white),
+                                          decoration: InputDecoration(
+                                            hintText: 'I like this person...',
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey[700]),
+                                            labelText: "Notes",
+                                            labelStyle:
+                                                TextStyle(color: Colors.white),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5.0)),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.lightBlueAccent,
+                                                  width: 1.0),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(height: 15),
-                                      SizedBox(height: 20.0),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: FlatButton(
-                                            onPressed: () async {
-                                              try {
-                                                recommendationBloc.add(
-                                                    AddPersonRecommendationButtonPressed(
-                                                        person:
-                                                            personInputController
-                                                                .text,
-                                                        notes:
-                                                            personNotesInputController
-                                                                .text));
+                                        SizedBox(height: 15),
+                                        SizedBox(height: 20.0),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: FlatButton(
+                                              onPressed: () async {
+                                                try {
+                                                  recommendationBloc.add(
+                                                      AddPersonRecommendationButtonPressed(
+                                                          person:
+                                                              personInputController
+                                                                  .text,
+                                                          notes:
+                                                              personNotesInputController
+                                                                  .text));
 
-                                                _showSuccess(
-                                                    "Recommendation added!");
-                                                Navigator.pushReplacementNamed(
-                                                    context, "/dashboard");
-                                              } catch (err) {
-                                                _showError(err.message ??
-                                                    "Some fields are required!");
-                                              }
+                                                  _showSuccess(
+                                                      "Recommendation added!");
+                                                  Navigator
+                                                      .pushReplacementNamed(
+                                                          context,
+                                                          "/dashboard");
+                                                } catch (err) {
+                                                  _showError(err.message ??
+                                                      "Some fields are required!");
+                                                }
 
-                                              personInputController.clear();
-                                              personNotesInputController
-                                                  .clear();
-                                            },
-                                            color: Colors.blue,
-                                            child: Text(
-                                              'Confirm',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            )),
-                                      )
-                                    ],
+                                                personInputController.clear();
+                                                personNotesInputController
+                                                    .clear();
+                                              },
+                                              color: Colors.blue,
+                                              child: Text(
+                                                'Confirm',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

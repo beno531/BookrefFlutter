@@ -38,7 +38,7 @@ class LibraryPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "CURRENTS",
+                        "LIBRARY",
                         style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.w700,
