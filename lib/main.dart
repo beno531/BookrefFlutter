@@ -1,526 +1,172 @@
-import 'package:bookref/Bloc/addBook_bloc/addBook_bloc.dart';
-import 'package:bookref/Bloc/addRecommendation_bloc/addRecommendation_bloc.dart';
-import 'package:bookref/Bloc/bookDetails_bloc/bookDetails_bloc.dart';
-import 'package:bookref/Bloc/currents_bloc/currents_bloc.dart';
-import 'package:bookref/Bloc/login_bloc/login_bloc.dart';
-import 'package:bookref/Bloc/wishlist_bloc/wishlist_bloc.dart';
-import 'package:bookref/Pages/AddBook/addBookPage.dart';
-import 'package:bookref/Pages/AddRecommendation/addRecommendationPage.dart';
-import 'package:bookref/Pages/BookDetails/bookDetailsPage.dart';
-import 'package:bookref/Pages/Login/loginPage.dart';
-import 'package:bookref/Pages/TestPage/testPage.dart';
-import 'package:bookref/Pages/Wishlist/wishlistPage.dart';
-import 'package:bookref/Bloc/library_bloc/library_bloc.dart';
-import 'package:bookref/Pages/Library/libraryPage.dart';
-import 'package:bookref/Bloc/dashboard_bloc/dashboard_bloc.dart';
-import 'package:bookref/Pages/Currents/currentsPage.dart';
-import 'package:bookref/Pages/Dashboard/dashboardPage.dart';
-import 'package:bookref/services/bookref_repository.dart';
+import 'package:bookref/blocs/add_book/add_book.dart';
+import 'package:bookref/blocs/add_recommendation.dart/add_recommendation.dart';
+import 'package:bookref/blocs/book_details/book_details_bloc.dart';
+import 'package:bookref/blocs/currents/currents_bloc.dart';
+import 'package:bookref/blocs/dashboard/dashboard_bloc.dart';
+import 'package:bookref/blocs/library/library_bloc.dart';
+import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
+import 'package:bookref/pages/addBook_page.dart';
+import 'package:bookref/pages/addRecommendation_page.dart';
+import 'package:bookref/pages/currents_page.dart';
+import 'package:bookref/pages/dashboard_page.dart';
+import 'package:bookref/pages/details_page.dart';
+import 'package:bookref/pages/library_page.dart';
+import 'package:bookref/pages/wishlist_page.dart';
+import 'package:bookref/repositories/repositories.dart';
 import 'package:bookref/widgets/bottomNav.dart';
-import 'package:bookref/widgets/testNav.dart';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:bookref/widgets/navDrawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:http/http.dart';
-
-/*Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await initHiveForFlutter();
-
-  final storage = new FlutterSecureStorage();
-  String token = await storage.read(key: "token");
-
-  runApp(MaterialApp(
-      onGenerateRoute: await Router.generateRoute, initialRoute: "/dashboard"));
-}*/
+import 'blocs/blocs.dart';
+import 'services/services.dart';
+import 'pages/pages.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.grey[900], // navigation bar color
+    statusBarColor: Colors.grey[900], // status bar color
+    statusBarBrightness: Brightness.dark, //status bar brigtness
+    statusBarIconBrightness: Brightness.dark, //status barIcon Brightness
+    systemNavigationBarDividerColor:
+        Colors.greenAccent, //Navigation bar divider color
+    systemNavigationBarIconBrightness: Brightness.light, //navigation bar icon
+  ));
+
   await initHiveForFlutter();
 
-  runApp(MyApp());
+  runApp(
+      // Injects the Authentication service
+      MultiRepositoryProvider(
+    providers: [
+      RepositoryProvider<AuthenticationService>(create: (context) {
+        return AuthenticationService();
+      }),
+      RepositoryProvider<BookrefRepository>(create: (context) {
+        return BookrefRepository();
+      }),
+    ],
+    child: BlocProvider<AuthenticationBloc>(
+      create: (context) {
+        final authService =
+            RepositoryProvider.of<AuthenticationService>(context);
+        //final bookrefService = RepositoryProvider.of<BookrefService>(context);
+        return AuthenticationBloc(authService)..add(AppLoaded());
+      },
+      child: MyApp(),
+    ),
+  ));
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final storage = new FlutterSecureStorage();
+class MyApp extends StatelessWidget {
   final _navigatorKey = new GlobalKey<NavigatorState>();
-  bool isBusy = true;
-  bool isLoggedIn = false;
-  bool isOnLogin = true;
-  String _token;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Auth0 Demo',
-        home: Scaffold(
-          appBar: AppBar(
-              toolbarHeight: 75.0,
-              backgroundColor: Colors.black,
-              titleSpacing: 25,
-              title: const Text(
-                "BOOKREF.",
-                style: TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              )),
-          body: Center(
-              child: isBusy
-                  ? CircularProgressIndicator()
-                  : Scaffold(
-                      body: Navigator(
-                        initialRoute: isLoggedIn ? "/dashboard" : "/login",
-                        onGenerateRoute: generateRoute,
-                        key: _navigatorKey,
-                      ),
-                      bottomNavigationBar: isLoggedIn
-                          ? BottomNav(navCallback: (String namedRoute) {
-                              print("Navigating to $namedRoute");
-                              _navigatorKey.currentState
-                                  .pushNamedAndRemoveUntil(
-                                      namedRoute, (r) => false);
-                            })
-                          : null,
-                    )),
-        ));
-  }
-
-  Future<String> fetchToken() async {
-    return await storage.read(key: "token");
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initAction();
-  }
-
-  void initAction() async {
-    String token = await fetchToken();
-
-    if (token != null) {
-      setState(() {
-        _token = token;
-        isLoggedIn = true;
-      });
-    }
-
-    setState(() {
-      isBusy = false;
-    });
-  }
-
-  changeIsOnLoginState(state) {
-    setState(() {
-      isOnLogin = state;
-    });
-  }
-
-  // TODO: Hier fehlt noch die Validierung, ob Angemeldet!!!
-  Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case '/dashboard':
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => MyDashboardBloc(
-              bookrefRepository: BookrefRepository(
-                client: _client(_token),
+      title: 'Bookref',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          if (state is AuthenticationAuthenticated) {
+            return Scaffold(
+              drawer: NavDrawer(
+                user: state.user,
               ),
-            ),
-            child: DashboardPage(),
-          ),
-        );
-      case '/login':
-        return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => MyLoginBloc(
-                    bookrefRepository: BookrefRepository(
-                      client: _client(_token),
-                    ),
-                  ),
-                  child: LoginPage(),
-                ));
-      case '/currents':
-        return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => MyCurrentsBloc(
-                    bookrefRepository: BookrefRepository(
-                      client: _client(_token),
-                    ),
-                  ),
-                  child: CurrentsPage(),
-                ));
-      case '/wishlist':
-        return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => MyWishlistBloc(
-                    bookrefRepository: BookrefRepository(
-                      client: _client(_token),
-                    ),
-                  ),
-                  child: WishlistPage(),
-                ));
-      case '/library':
-        return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => MyLibraryBloc(
-                    bookrefRepository: BookrefRepository(
-                      client: _client(_token),
-                    ),
-                  ),
-                  child: LibraryPage(),
-                ));
-      case '/addbook':
-        return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => MyAddBookBloc(
-                    bookrefRepository: BookrefRepository(
-                      client: _client(_token),
-                    ),
-                  ),
-                  child: AddBookPage(),
-                ));
-      case '/addRecommendation':
-        return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => MyAddRecommendationBloc(
-                      bookrefRepository: BookrefRepository(
-                        client: _client(_token),
-                      ),
-                      bookId: settings.arguments),
-                  child: AddRecommendationPage(),
-                ));
-      case '/bookDetails':
-        return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => MyBooksDetailsBloc(
-                      bookrefRepository: BookrefRepository(
-                        client: _client(_token),
-                      ),
-                      book: settings.arguments),
-                  child: BookDetailsPage(settings.arguments),
-                ));
-      case '/test':
-        print(settings.arguments.toString());
-        return MaterialPageRoute(builder: (context) => TestPage());
-      default:
-        return MaterialPageRoute(
-            builder: (_) => Scaffold(
-                  body: Center(
-                      child: Text('No route defined for ${settings.name}')),
-                ));
-    }
-  }
-}
-
-GraphQLClient _client(token) {
-  print(token);
-  final HttpLink _httpLink = HttpLink(
-    'https://bookref-api-dev.mi5u.de/graphql/',
-    defaultHeaders: <String, String>{
-      'Authorization': 'Bearer $token',
-    },
-  );
-
-  final Link _link = _httpLink;
-
-  return GraphQLClient(
-    cache: GraphQLCache(store: InMemoryStore()),
-    link: _link,
-  );
-
-  /*return GraphQLClient(
-    cache: GraphQLCache(
-      store: HiveStore(),
-    ),
-    link: _link,
-  );*/
-}
-
-///////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-/*
-GraphQLClient _client(token) {
-  print(token);
-  final HttpLink _httpLink = HttpLink(
-    'https://bookref-api-dev.mi5u.de/graphql/',
-    defaultHeaders: <String, String>{
-      'Authorization': 'Bearer $token',
-    },
-  );
-
-  final Link _link = _httpLink;
-
-  return GraphQLClient(
-    cache: GraphQLCache(store: InMemoryStore()),
-    link: _link,
-  );
-
-  /*return GraphQLClient(
-    cache: GraphQLCache(
-      store: HiveStore(),
-    ),
-    link: _link,
-  );*/
-}
-
-getToken() async {
-  final storage = new FlutterSecureStorage();
-  return await storage.read(key: "token");
-}
-
-class MyLoginApp extends StatefulWidget {
-  @override
-  MyLoginAppState createState() => MyLoginAppState();
-}
-
-class MyLoginAppState extends State<MyLoginApp> {
-  String _token;
-
-  @override
-  void initState() {
-    _getThingsOnStartup().then((value) {
-      print('Token done');
-    });
-    super.initState();
-  }
-
-  Future _getThingsOnStartup() async {
-    var token = await getToken();
-    setState(() {
-      _token = token;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Bookref.',
-        theme: ThemeData(fontFamily: 'Poppins'),
-        home: Scaffold(
-          appBar: AppBar(
-              toolbarHeight: 75.0,
-              backgroundColor: Colors.black,
-              titleSpacing: 25,
-              title: const Text(
-                "BOOKREF.",
-                style: TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              )),
-          body: new Column(
-            children: <Widget>[
-              new Expanded(
-                  child: BlocProvider(
-                create: (context) {
-                  var bookrefRepository2 = BookrefRepository(
-                    client: _client(_token),
-                  );
-                  return MyLoginBloc(
-                    bookrefRepository: bookrefRepository2,
-                  );
+              appBar: AppBar(
+                  toolbarHeight: 75.0,
+                  backgroundColor: Colors.grey[900],
+                  titleSpacing: 25,
+                  title: const Text(
+                    "BOOKREF.",
+                    style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  )),
+              body: Navigator(
+                initialRoute: "/dashboard",
+                onGenerateRoute: (settings) {
+                  return generateRoute(settings);
                 },
-                child: LoginPage(),
-              )),
-            ],
-          ),
-        ));
-  }
-}
-
-class MyMainApp extends StatefulWidget {
-  @override
-  MyMainAppState createState() => MyMainAppState();
-}
-
-class MyMainAppState extends State<MyMainApp> {
-  final _navigatorKey = new GlobalKey<NavigatorState>();
-  bool isAuth = false;
-  String _token;
-
-  Future<String> _getThingsOnStartup() async {
-    var token = await getToken();
-    setState(() {
-      _token = token;
-    });
-    return 'Data Received'; //TODO: Optimieren mit Token!!!
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Bookref.',
-      theme: ThemeData(fontFamily: 'Poppins'),
-      routes: {
-        '/home': (context) => MyLoginApp(),
-      },
-      home: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 75.0,
-            backgroundColor: Colors.black,
-            titleSpacing: 25,
-            title: const Text(
-              "BOOKREF.",
-              style: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
-            /*actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.login),
-                  tooltip: 'Show Login Page',
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyLoginApp()),
-                    );
-                  },
-                ),
-              ],*/
-          ),
-          body: FutureBuilder(
-              future: _getThingsOnStartup(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  return Scaffold(
-                    body: new Column(
-                      children: <Widget>[
-                        new Expanded(
-                          child: new Navigator(
-                            key: _navigatorKey,
-                            onGenerateRoute: _onGenerateRoute,
-                          ),
-                        ),
-                        /*new BottomNav(navCallback: (String namedRoute) {
-                          print("Navigating to $namedRoute");
-                          _navigatorKey.currentState
-                              .pushReplacementNamed(namedRoute);
-                        }),*/
-                      ],
-                    ),
-                    bottomNavigationBar: ConvexAppBar(
-                        style: TabStyle.fixedCircle,
-                        items: [
-                          TabItem(icon: Icons.dashboard, title: 'Home'),
-                          TabItem(icon: Icons.local_library, title: 'Currents'),
-                          TabItem(icon: Icons.add, title: 'Add'),
-                          TabItem(icon: Icons.emoji_objects, title: 'Wishlist'),
-                          TabItem(icon: Icons.library_books, title: 'Library'),
-                        ],
-                        initialActiveIndex: 0,
-                        onTap: (int i) => {buildRoute(i)}),
-                  );
-                } else {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              })),
+                key: _navigatorKey,
+              ),
+              bottomNavigationBar: BottomNav(navCallback: (String namedRoute) {
+                print("Navigating to $namedRoute");
+                _navigatorKey.currentState
+                    .pushNamedAndRemoveUntil(namedRoute, (r) => false);
+              }),
+            );
+          }
+          // otherwise show login page
+          return LoginPage();
+        },
+      ),
     );
   }
+}
 
-  buildRoute(int i) {
-    switch (i) {
-      case 0:
-        _navigatorKey.currentState.pushReplacementNamed("/");
-        break;
-      case 1:
-        _navigatorKey.currentState.pushReplacementNamed("/currents");
-        break;
-      case 2:
-        _navigatorKey.currentState.pushReplacementNamed("/addbook");
-        break;
-      case 3:
-        _navigatorKey.currentState.pushReplacementNamed("/wishlist");
-        break;
-      case 4:
-        _navigatorKey.currentState.pushReplacementNamed("/libary");
-        break;
-      default:
-        _navigatorKey.currentState.pushReplacementNamed("/");
-    }
-  }
+Route<dynamic> generateRoute(RouteSettings settings) {
+  switch (settings.name) {
+    case '/dashboard':
+      return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+                create: (context) => DashboardBloc(
+                  dataService: DataService(),
+                ),
+                child: DashboardPage(),
+              ));
+    case '/currents':
+      return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+                create: (context) => CurrentBloc(
+                  dataService: DataService(),
+                ),
+                child: CurrentsPage(),
+              ));
 
-  Route<dynamic> _onGenerateRoute(RouteSettings settings) {
-    Widget child;
-    if (settings.name == '/') {
-      isAuth = false;
-      child = BlocProvider(
-        create: (context) => MyDashboardBloc(
-          bookrefRepository: BookrefRepository(
-            client: _client(_token),
-          ),
-        ),
-        child: DashboardPage(),
-      );
-      print("Actually Dashboard");
-    } else if (settings.name == '/currents') {
-      isAuth = true;
-      child = BlocProvider(
-        create: (context) => MyCurrentsBloc(
-          bookrefRepository: BookrefRepository(
-            client: _client(_token),
-          ),
-        ),
-        child: CurrentsPage(),
-      );
-      print("Actually Currents");
-    } else if (settings.name == '/addbook') {
-      isAuth = true;
-      child = BlocProvider(
-        create: (context) => MyAddBookBloc(
-          bookrefRepository: BookrefRepository(
-            client: _client(_token),
-          ),
-        ),
-        child: AddBookPage(),
-      );
-      print("Actually Currents");
-    } else if (settings.name == '/wishlist') {
-      isAuth = true;
-      child = BlocProvider(
-        create: (context) => MyWishlistBloc(
-          bookrefRepository: BookrefRepository(
-            client: _client(_token),
-          ),
-        ),
-        child: WishlistPage(),
-      );
-      print("Actually Wishlist");
-    } else if (settings.name == '/libary') {
-      isAuth = true;
-      child = BlocProvider(
-        create: (context) => MyLibraryBloc(
-          bookrefRepository: BookrefRepository(
-            client: _client(_token),
-          ),
-        ),
-        child: LibraryPage(),
-      );
-      print("Actually Library");
-    }
-
-    if (child != null) {
-      return new MaterialPageRoute(builder: (c) => child);
-    }
-    return null;
+    case '/wishlist':
+      return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+                create: (context) => WishlistBloc(
+                  dataService: DataService(),
+                ),
+                child: WishlistPage(),
+              ));
+    case '/library':
+      return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+                create: (context) => LibraryBloc(dataService: DataService()),
+                child: LibraryPage(),
+              ));
+    case '/addbook':
+      return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+                create: (context) => AddBookBloc(dataService: DataService()),
+                child: AddBookPage(),
+              ));
+    case '/addRecommendation':
+      return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+                create: (context) => AddRecommendationBloc(
+                    dataService: DataService(), bookId: settings.arguments),
+                child: AddRecommendationPage(),
+              ));
+    case '/bookDetails':
+      return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+                create: (context) =>
+                    BookDetailsBloc(dataService: DataService()),
+                child: BookDetailsPage(bookRef: settings.arguments),
+              ));
+    default:
+      return MaterialPageRoute(
+          builder: (_) => Scaffold(
+                body: Center(
+                    child: Text('No route defined for ${settings.name}')),
+              ));
   }
 }
-*/
