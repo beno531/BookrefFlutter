@@ -76,10 +76,10 @@ class DataService {
     return await _bookrefRepository.changeBookStatus(personalBookId, newStatus);
   }
 
-  Future<TestBook> getFullBookById(String bookId) async {
+  Future<DetailsBook> getFullBookById(String bookId) async {
     final book = await _bookrefRepository.getFullBookById(bookId);
 
-    return TestBook(book.data['bookById']);
+    return DetailsBook(book.data['bookById']);
   }
 
   Future<List<RecommendedPerson>> getPeopleRecommendationsForBook(

@@ -13,7 +13,8 @@ class BookDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<BookDetailsBloc>(context).add(LoadBookDetails(book: bookRef));
+    BlocProvider.of<BookDetailsBloc>(context)
+        .add(LoadBookDetails(book: bookRef));
     return BlocBuilder<BookDetailsBloc, BookDetailsState>(
         builder: (context, state) {
       final bookDetailsBloc = BlocProvider.of<BookDetailsBloc>(context);
@@ -30,81 +31,86 @@ class BookDetailsPage extends StatelessWidget {
       }
 
       if (state is BookDetailsFinished) {
-        final TestBook book = state.book;
+        final DetailsBook book = state.book;
         ////final List<Book> wishlist = state.dashboardBooks.wishlist;
         ////final List<Book> libary = state.dashboardBooks.library;
         ///
-        
+
         print(state.bookRecommendation.length);
 
         return SafeArea(
-          child: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
-              tabs: [
-                Tab(text: "Info"),
-                Tab(text: "Book Rec."),
-                Tab(text: "Person Rec."),
-              ],
-            ),
-            title: Text('Book Details'),
-            backgroundColor: Colors.grey[850],
-          ),
-          body: TabBarView(
-            children: [
-              Container(
-              decoration: BoxDecoration(color: Colors.grey[800]),
-              child: ListView(
-                children: <Widget>[
-                  CustomListTile(
-                      "Title", book.getBookTitle() ?? "none"),
-                  CustomListTile(
-                      "Subtitle", book.getBookSubtitle() ?? "none"),
-                  CustomListTile("Author", book.getAuthor() ?? "none"),
-                  //CustomListTile("Sprache", books.getBookLang()),
-                  //CustomListTile("ISBN", books.getBookIsbn()),
-                  //CustomListTile("Kategorien", "#Kommt später ;)"),
-                  //CustomListTile("Aktuelle Seite", books.getBookCurrentPage().toString()),
-                  //CustomListTile("Erstellt am", books.getBookCreated()),
+            child: DefaultTabController(
+          length: 3,
+          child: Scaffold(
+            appBar: AppBar(
+              bottom: TabBar(
+                tabs: [
+                  Tab(text: "Info"),
+                  Tab(text: "Book Rec."),
+                  Tab(text: "Person Rec."),
                 ],
               ),
+              title: Text('Book Details'),
+              backgroundColor: Colors.grey[850],
             ),
-              Container(
-              decoration: BoxDecoration(color: Colors.grey[800]),
-              child: 
-          ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: state.bookRecommendation.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text(state.bookRecommendation[index].getTitle() ?? "None",
-                      style: TextStyle(color: Colors.white)),
-                  subtitle: Text(state.bookRecommendation[index].getNote() ?? "None",
-                      style: TextStyle(color: Colors.white)),
-                );
-              }),
+            body: TabBarView(
+              children: [
+                Container(
+                  decoration: BoxDecoration(color: Colors.grey[800]),
+                  child: ListView(
+                    children: <Widget>[
+                      CustomListTile("Title", book.getBookTitle() ?? "none"),
+                      CustomListTile(
+                          "Subtitle", book.getBookSubtitle() ?? "none"),
+                      CustomListTile("Author", book.getAuthor() ?? "none"),
+                      //CustomListTile("Sprache", books.getBookLang()),
+                      //CustomListTile("ISBN", books.getBookIsbn()),
+                      //CustomListTile("Kategorien", "#Kommt später ;)"),
+                      //CustomListTile("Aktuelle Seite", books.getBookCurrentPage().toString()),
+                      //CustomListTile("Erstellt am", books.getBookCreated()),
+                    ],
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(color: Colors.grey[800]),
+                  child: ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: state.bookRecommendation.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Text(
+                              state.bookRecommendation[index].getTitle() ??
+                                  "None",
+                              style: TextStyle(color: Colors.white)),
+                          subtitle: Text(
+                              state.bookRecommendation[index].getNote() ??
+                                  "None",
+                              style: TextStyle(color: Colors.white)),
+                        );
+                      }),
+                ),
+                Container(
+                  decoration: BoxDecoration(color: Colors.grey[800]),
+                  child: ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: state.personRecommendation.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Text(
+                              state.personRecommendation[index].getName() ??
+                                  "None",
+                              style: TextStyle(color: Colors.white)),
+                          subtitle: Text(
+                              state.personRecommendation[index].getNote() ??
+                                  "None",
+                              style: TextStyle(color: Colors.white)),
+                        );
+                      }),
+                ),
+              ],
             ),
-              Container(
-              decoration: BoxDecoration(color: Colors.grey[800]),
-              child: 
-          ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: state.personRecommendation.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text(state.personRecommendation[index].getName() ?? "None",
-                      style: TextStyle(color: Colors.white)),
-                  subtitle: Text(state.personRecommendation[index].getNote() ?? "None",
-                      style: TextStyle(color: Colors.white)),
-                );
-              }),
-            ),
-            ],
           ),
-        ),
-      ));
+        ));
       }
 
       if (state is BookDetailsFailure) {
@@ -129,7 +135,6 @@ class BookDetailsPage extends StatelessWidget {
       }
 
       return Text("Error");
-
     });
   }
 }

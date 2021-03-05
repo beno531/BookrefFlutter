@@ -13,7 +13,7 @@ abstract class BookDetailsState extends Equatable {
 class BookDetailsLoading extends BookDetailsState {}
 
 class BookDetailsFinished extends BookDetailsState {
-  final TestBook book;
+  final DetailsBook book;
   final List<RecommendedBook> bookRecommendation;
   final List<RecommendedPerson> personRecommendation;
   BookDetailsFinished(

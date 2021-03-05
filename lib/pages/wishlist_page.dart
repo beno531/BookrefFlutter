@@ -1,17 +1,30 @@
 import 'package:bookref/Models/book.dart';
+import 'package:bookref/blocs/move_book.dart/move_book_bloc.dart';
+import 'package:bookref/blocs/move_book.dart/move_book_state.dart';
 import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
 import 'package:bookref/blocs/wishlist/wishlist_event.dart';
 import 'package:bookref/blocs/wishlist/wishlist_state.dart';
+import 'package:bookref/widgets/moveBookDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WishlistPage extends StatelessWidget {
-  const WishlistPage({Key key}) : super(key: key);
+  MoveBookDialog moveBookDialog;
+
+  WishlistPage() {
+    this.moveBookDialog = MoveBookDialog();
+  }
 
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<WishlistBloc>(context).add(LoadWishlistItems());
-    return BlocBuilder<WishlistBloc, WishlistState>(builder: (context, state) {
+    return BlocListener<MoveBookBloc, MoveBookState>(
+        listener: (context, state) {
+      if (state is MoveBookFinished) {
+        BlocProvider.of<WishlistBloc>(context).add(LoadWishlistItems());
+      }
+    }, child:
+            BlocBuilder<WishlistBloc, WishlistState>(builder: (context, state) {
       final wishlistBloc = BlocProvider.of<WishlistBloc>(context);
 
       if (state is WishlistItemsLoading) {
@@ -95,7 +108,7 @@ class WishlistPage extends StatelessWidget {
                                   .pushNamed("/bookDetails", arguments: book);
                             },
                             onLongPress: () {
-                              print("Flatbutton!!!");
+                              moveBookDialog.show(book, context);
                             },
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -165,6 +178,6 @@ class WishlistPage extends StatelessWidget {
       }
 
       return Text("Error");
-    });
+    }));
   }
 }

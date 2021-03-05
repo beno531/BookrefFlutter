@@ -19,6 +19,7 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
 
   Stream<WishlistState> _mapLoadWishlistItemsToState(
       LoadWishlistItems event) async* {
+    yield WishlistItemsLoading();
     print("Load Wishlist Items");
     try {
       List<Book> wishlistBooks = await dataService.getWishlistBooks();

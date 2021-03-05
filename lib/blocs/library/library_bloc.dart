@@ -19,6 +19,7 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
 
   Stream<LibraryState> _mapLoadWishlistItemsToState(
       LoadLibraryItems event) async* {
+    yield LibraryItemsLoading();
     print("Load Library Items");
     try {
       List<Book> libraryBooks = await dataService.getLibraryBooks();

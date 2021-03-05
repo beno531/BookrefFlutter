@@ -1,8 +1,7 @@
-class TestBook {
-  TestBook(this.book);
+class DetailsBook {
+  DetailsBook(this.book);
 
   final dynamic book;
-
 
   getId() => this.book["id"];
 

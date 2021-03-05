@@ -4,6 +4,7 @@ import 'package:bookref/blocs/book_details/book_details_bloc.dart';
 import 'package:bookref/blocs/currents/currents_bloc.dart';
 import 'package:bookref/blocs/dashboard/dashboard_bloc.dart';
 import 'package:bookref/blocs/library/library_bloc.dart';
+import 'package:bookref/blocs/move_book.dart/move_book_bloc.dart';
 import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
 import 'package:bookref/pages/addBook_page.dart';
 import 'package:bookref/pages/addRecommendation_page.dart';
@@ -113,33 +114,63 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/dashboard':
       return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-                create: (context) => DashboardBloc(
-                  dataService: DataService(),
-                ),
+          builder: (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                      create: (context) => DashboardBloc(
+                            dataService: DataService(),
+                          )),
+                  BlocProvider(
+                      create: (context) => MoveBookBloc(
+                            dataService: DataService(),
+                          ))
+                ],
                 child: DashboardPage(),
               ));
     case '/currents':
       return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-                create: (context) => CurrentBloc(
-                  dataService: DataService(),
-                ),
+          builder: (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                      create: (context) => CurrentBloc(
+                            dataService: DataService(),
+                          )),
+                  BlocProvider(
+                      create: (context) => MoveBookBloc(
+                            dataService: DataService(),
+                          ))
+                ],
                 child: CurrentsPage(),
               ));
 
     case '/wishlist':
       return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-                create: (context) => WishlistBloc(
-                  dataService: DataService(),
-                ),
+          builder: (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                      create: (context) => WishlistBloc(
+                            dataService: DataService(),
+                          )),
+                  BlocProvider(
+                      create: (context) => MoveBookBloc(
+                            dataService: DataService(),
+                          ))
+                ],
                 child: WishlistPage(),
               ));
     case '/library':
       return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-                create: (context) => LibraryBloc(dataService: DataService()),
+          builder: (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                      create: (context) => LibraryBloc(
+                            dataService: DataService(),
+                          )),
+                  BlocProvider(
+                      create: (context) => MoveBookBloc(
+                            dataService: DataService(),
+                          ))
+                ],
                 child: LibraryPage(),
               ));
     case '/addbook':
