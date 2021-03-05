@@ -4,6 +4,8 @@ import 'package:bookref/blocs/currents/currents_event.dart';
 import 'package:bookref/blocs/currents/currents_state.dart';
 import 'package:bookref/blocs/move_book.dart/move_book_bloc.dart';
 import 'package:bookref/blocs/move_book.dart/move_book_state.dart';
+import 'package:bookref/blocs/notification/notification_bloc.dart';
+import 'package:bookref/blocs/notification/notification_event.dart';
 import 'package:bookref/widgets/moveBookDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

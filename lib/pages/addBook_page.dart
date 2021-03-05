@@ -1,4 +1,6 @@
 import 'package:bookref/blocs/add_book/add_book.dart';
+import 'package:bookref/blocs/notification/notification_bloc.dart';
+import 'package:bookref/blocs/notification/notification_event.dart';
 import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -163,13 +165,21 @@ class __AddBookPageState extends State<AddBookPage> {
                                             author:
                                                 authorInputController.text));
 
-                                    _showSuccess("Book added!");
+                                    BlocProvider.of<NotificationBloc>(context)
+                                        .add(PushNotification(
+                                            status: Colors.green,
+                                            title: "Success",
+                                            message: "Book was created!"));
 
-                                    // Navigator.pushReplacementNamed(
-                                    //     context, "/dashboard");
+                                    Navigator.pushReplacementNamed(
+                                        context, "/dashboard");
                                   } catch (err) {
-                                    _showError(err.message ??
-                                        "Some fields are required!");
+                                    BlocProvider.of<NotificationBloc>(context)
+                                        .add(PushNotification(
+                                            status: Colors.red,
+                                            title: "Error",
+                                            message: err.message ??
+                                                "Some fields are required!"));
                                   }
 
                                   identifierInputController.clear();
@@ -196,29 +206,5 @@ class __AddBookPageState extends State<AddBookPage> {
 
       return Text("Error");
     });
-  }
-
-  void _showError(String error) {
-    Flushbar(
-      title: "Error!",
-      message: error,
-      duration: Duration(seconds: 2),
-      backgroundColor: Colors.red,
-      margin: EdgeInsets.all(8),
-      borderRadius: 8,
-      flushbarPosition: FlushbarPosition.TOP,
-    )..show(context);
-  }
-
-  void _showSuccess(String message) {
-    Flushbar(
-      title: "Success!",
-      message: message,
-      duration: Duration(seconds: 2),
-      backgroundColor: Colors.green,
-      margin: EdgeInsets.all(8),
-      borderRadius: 8,
-      flushbarPosition: FlushbarPosition.TOP,
-    )..show(context);
   }
 }

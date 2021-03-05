@@ -5,6 +5,8 @@ import 'package:bookref/blocs/currents/currents_bloc.dart';
 import 'package:bookref/blocs/dashboard/dashboard_bloc.dart';
 import 'package:bookref/blocs/library/library_bloc.dart';
 import 'package:bookref/blocs/move_book.dart/move_book_bloc.dart';
+import 'package:bookref/blocs/notification/notification_bloc.dart';
+import 'package:bookref/blocs/notification/notification_state.dart';
 import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
 import 'package:bookref/pages/addBook_page.dart';
 import 'package:bookref/pages/addRecommendation_page.dart';
@@ -16,6 +18,7 @@ import 'package:bookref/pages/wishlist_page.dart';
 import 'package:bookref/repositories/repositories.dart';
 import 'package:bookref/widgets/bottomNav.dart';
 import 'package:bookref/widgets/navDrawer.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,24 +43,26 @@ void main() async {
   runApp(
       // Injects the Authentication service
       MultiRepositoryProvider(
-    providers: [
-      RepositoryProvider<AuthenticationService>(create: (context) {
-        return AuthenticationService();
-      }),
-      RepositoryProvider<BookrefRepository>(create: (context) {
-        return BookrefRepository();
-      }),
-    ],
-    child: BlocProvider<AuthenticationBloc>(
-      create: (context) {
-        final authService =
-            RepositoryProvider.of<AuthenticationService>(context);
-        //final bookrefService = RepositoryProvider.of<BookrefService>(context);
-        return AuthenticationBloc(authService)..add(AppLoaded());
-      },
-      child: MyApp(),
-    ),
-  ));
+          providers: [
+        RepositoryProvider<AuthenticationService>(create: (context) {
+          return AuthenticationService();
+        }),
+        RepositoryProvider<BookrefRepository>(create: (context) {
+          return BookrefRepository();
+        }),
+      ],
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<AuthenticationBloc>(create: (context) {
+                final authService =
+                    RepositoryProvider.of<AuthenticationService>(context);
+                //final bookrefService = RepositoryProvider.of<BookrefService>(context);
+                return AuthenticationBloc(authService)..add(AppLoaded());
+              }),
+              BlocProvider(create: (context) => NotificationBloc())
+            ],
+            child: MyApp(),
+          )));
 }
 
 class MyApp extends StatelessWidget {
@@ -88,12 +93,44 @@ class MyApp extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
                   )),
-              body: Navigator(
-                initialRoute: "/dashboard",
-                onGenerateRoute: (settings) {
-                  return generateRoute(settings);
+              body: BlocListener<NotificationBloc, NotificationState>(
+                listener: (context, state) {
+                  if (state is NotificationPushed) {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      backgroundColor: state.status,
+                      content: Container(
+                        height: 50.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Text(
+                                state.title,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Text(
+                              state.message,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      duration: Duration(seconds: 2),
+                    ));
+                  }
                 },
-                key: _navigatorKey,
+                child: Navigator(
+                  initialRoute: "/dashboard",
+                  onGenerateRoute: (settings) {
+                    return generateRoute(settings);
+                  },
+                  key: _navigatorKey,
+                ),
               ),
               bottomNavigationBar: BottomNav(navCallback: (String namedRoute) {
                 print("Navigating to $namedRoute");
@@ -107,6 +144,18 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void _showSuccess(BuildContext context, String message) {
+    Flushbar(
+      title: "Success!",
+      message: message,
+      duration: Duration(seconds: 2),
+      backgroundColor: Colors.green,
+      margin: EdgeInsets.all(8),
+      borderRadius: 8,
+      flushbarPosition: FlushbarPosition.TOP,
+    )..show(context);
   }
 }
 
