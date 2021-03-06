@@ -2,7 +2,6 @@ import 'package:bookref/blocs/add_book/add_book.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_event.dart';
 import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

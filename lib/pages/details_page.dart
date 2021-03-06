@@ -3,6 +3,8 @@ import 'package:bookref/Models/testbook.dart';
 import 'package:bookref/blocs/book_details/book_details_bloc.dart';
 import 'package:bookref/blocs/book_details/book_details_event.dart';
 import 'package:bookref/blocs/book_details/book_details_state.dart';
+import 'package:bookref/blocs/navigation/navigation_bloc.dart';
+import 'package:bookref/blocs/navigation/navigation_event.dart';
 import 'package:bookref/widgets/customListTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,21 +40,32 @@ class BookDetailsPage extends StatelessWidget {
 
         print(state.bookRecommendation.length);
 
-        return SafeArea(
-            child: DefaultTabController(
+        return DefaultTabController(
           length: 3,
           child: Scaffold(
             appBar: AppBar(
-              bottom: TabBar(
-                tabs: [
-                  Tab(text: "Info"),
-                  Tab(text: "Book Rec."),
-                  Tab(text: "Person Rec."),
-                ],
-              ),
-              title: Text('Book Details'),
-              backgroundColor: Colors.grey[850],
-            ),
+                toolbarHeight: 100.0,
+                backgroundColor: Colors.grey[900],
+                titleSpacing: 25,
+                bottom: TabBar(
+                  tabs: [
+                    Tab(text: "Info"),
+                    Tab(text: "Book Rec."),
+                    Tab(text: "Person Rec."),
+                  ],
+                ),
+                leading: new IconButton(
+                  icon: new Icon(Icons.arrow_back),
+                  onPressed: () {
+                    BlocProvider.of<NavigationBloc>(context)
+                        .add(ChangeNavigationOnMain());
+                    Navigator.of(context).pop();
+                  },
+                ),
+                title: Text(
+                  "BOOK DETAILS",
+                  style: TextStyle(fontSize: 25.0, color: Colors.white),
+                )),
             body: TabBarView(
               children: [
                 Container(
@@ -110,7 +123,7 @@ class BookDetailsPage extends StatelessWidget {
               ],
             ),
           ),
-        ));
+        );
       }
 
       if (state is BookDetailsFailure) {

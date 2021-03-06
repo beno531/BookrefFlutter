@@ -39,7 +39,6 @@ dependencies:
   flutter_secure_storage: ^3.3.5
   convex_bottom_bar: ^2.6.0
   flutter_typeahead: ^2.0.0
-  flushbar: ^1.10.4
   custom_radio_grouped_button: any
 
 

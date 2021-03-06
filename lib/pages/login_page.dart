@@ -1,4 +1,3 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/blocs.dart';
@@ -179,7 +178,7 @@ class __SignInFormState extends State<_SignInForm> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
-          _showError(state.error);
+          //_showError(state.error);
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -265,18 +264,6 @@ class __SignInFormState extends State<_SignInForm> {
       ),
     );
   }
-
-  void _showError(String error) {
-    Flushbar(
-      title: "Error!",
-      message: error,
-      duration: Duration(seconds: 2),
-      backgroundColor: Colors.red,
-      margin: EdgeInsets.all(8),
-      borderRadius: 8,
-      flushbarPosition: FlushbarPosition.TOP,
-    )..show(context);
-  }
 }
 
 class _SignUpForm extends StatefulWidget {
@@ -311,7 +298,7 @@ class __SignUpFormState extends State<_SignUpForm> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
-          _showError(state.error);
+          //_showError(state.error);
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -421,17 +408,5 @@ class __SignUpFormState extends State<_SignUpForm> {
         },
       ),
     );
-  }
-
-  void _showError(String error) {
-    Flushbar(
-      title: "Error!",
-      message: error,
-      duration: Duration(seconds: 2),
-      backgroundColor: Colors.red,
-      margin: EdgeInsets.all(8),
-      borderRadius: 8,
-      flushbarPosition: FlushbarPosition.TOP,
-    )..show(context);
   }
 }

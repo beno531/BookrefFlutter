@@ -5,6 +5,9 @@ import 'package:bookref/blocs/currents/currents_bloc.dart';
 import 'package:bookref/blocs/dashboard/dashboard_bloc.dart';
 import 'package:bookref/blocs/library/library_bloc.dart';
 import 'package:bookref/blocs/move_book.dart/move_book_bloc.dart';
+import 'package:bookref/blocs/navigation/navigation_bloc.dart';
+import 'package:bookref/blocs/navigation/navigation_event.dart';
+import 'package:bookref/blocs/navigation/navigation_state.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_state.dart';
 import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
@@ -18,7 +21,6 @@ import 'package:bookref/pages/wishlist_page.dart';
 import 'package:bookref/repositories/repositories.dart';
 import 'package:bookref/widgets/bottomNav.dart';
 import 'package:bookref/widgets/navDrawer.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,14 +61,25 @@ void main() async {
                 //final bookrefService = RepositoryProvider.of<BookrefService>(context);
                 return AuthenticationBloc(authService)..add(AppLoaded());
               }),
-              BlocProvider(create: (context) => NotificationBloc())
+              BlocProvider(create: (context) => NotificationBloc()),
+              BlocProvider(create: (context) => NavigationBloc())
             ],
             child: MyApp(),
           )));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  MyApp({Key key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final _navigatorKey = new GlobalKey<NavigatorState>();
+  bool _visible = true;
+  AnimationController _controller;
+  bool showAppbar = true;
 
   @override
   Widget build(BuildContext context) {
@@ -78,66 +91,92 @@ class MyApp extends StatelessWidget {
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           if (state is AuthenticationAuthenticated) {
-            return Scaffold(
-              drawer: NavDrawer(
-                user: state.user,
-              ),
-              appBar: AppBar(
-                  toolbarHeight: 75.0,
-                  backgroundColor: Colors.grey[900],
-                  titleSpacing: 25,
-                  title: const Text(
-                    "BOOKREF.",
-                    style: TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  )),
-              body: BlocListener<NotificationBloc, NotificationState>(
+            return BlocListener<NavigationBloc, NavigationState>(
                 listener: (context, state) {
-                  if (state is NotificationPushed) {
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      backgroundColor: state.status,
-                      content: Container(
-                        height: 50.0,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 5),
-                              child: Text(
-                                state.title,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Text(
-                              state.message,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                      duration: Duration(seconds: 2),
-                    ));
+                  if (state is NavigationOnMain) {
+                    print("NavigationOnMain");
+                    setState(() {
+                      this.showAppbar = true;
+                    });
+                  } else {
+                    print("OnSub");
+                    setState(() {
+                      this.showAppbar = false;
+                    });
                   }
                 },
-                child: Navigator(
-                  initialRoute: "/dashboard",
-                  onGenerateRoute: (settings) {
-                    return generateRoute(settings);
-                  },
-                  key: _navigatorKey,
-                ),
-              ),
-              bottomNavigationBar: BottomNav(navCallback: (String namedRoute) {
-                print("Navigating to $namedRoute");
-                _navigatorKey.currentState
-                    .pushNamedAndRemoveUntil(namedRoute, (r) => false);
-              }),
-            );
+                child: Scaffold(
+                  drawer: NavDrawer(
+                    user: state.user,
+                  ),
+                  // floatingActionButton: FloatingActionButton.extended(
+                  //   label: Text(_visible ? 'Hide' : 'Show'),
+                  //   onPressed: () => setState(() => _visible = !_visible),
+                  // ),
+                  // appBar: SlidingAppBar(
+                  //   controller: _controller,
+                  //   visible: _visible,
+                  //   child: AppBar(title: Text('AppBar')),
+                  // ),
+                  appBar: showAppbar
+                      ? AppBar(
+                          toolbarHeight: 75.0,
+                          backgroundColor: Colors.grey[900],
+                          titleSpacing: 25,
+                          title: Text(
+                            "BOOKREF.",
+                            style: TextStyle(
+                                fontSize: 30.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ))
+                      : null,
+                  body: BlocListener<NotificationBloc, NotificationState>(
+                    listener: (context, state) {
+                      if (state is NotificationPushed) {
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                          backgroundColor: state.status,
+                          content: Container(
+                            height: 50.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 5),
+                                  child: Text(
+                                    state.title,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Text(
+                                  state.message,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                          duration: Duration(seconds: 2),
+                        ));
+                      }
+                    },
+                    child: Navigator(
+                      initialRoute: "/dashboard",
+                      onGenerateRoute: (settings) {
+                        return generateRoute(settings, context);
+                      },
+                      key: _navigatorKey,
+                    ),
+                  ),
+                  bottomNavigationBar:
+                      BottomNav(navCallback: (String namedRoute) {
+                    print("Navigating to $namedRoute");
+                    _navigatorKey.currentState
+                        .pushNamedAndRemoveUntil(namedRoute, (r) => false);
+                  }),
+                ));
           }
           // otherwise show login page
           return LoginPage();
@@ -145,23 +184,12 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-
-  void _showSuccess(BuildContext context, String message) {
-    Flushbar(
-      title: "Success!",
-      message: message,
-      duration: Duration(seconds: 2),
-      backgroundColor: Colors.green,
-      margin: EdgeInsets.all(8),
-      borderRadius: 8,
-      flushbarPosition: FlushbarPosition.TOP,
-    )..show(context);
-  }
 }
 
-Route<dynamic> generateRoute(RouteSettings settings) {
+Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
   switch (settings.name) {
     case '/dashboard':
+      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnMain());
       return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
                 providers: [
@@ -177,6 +205,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
                 child: DashboardPage(),
               ));
     case '/currents':
+      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnMain());
       return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
                 providers: [
@@ -193,6 +222,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
               ));
 
     case '/wishlist':
+      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnMain());
       return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
                 providers: [
@@ -208,6 +238,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
                 child: WishlistPage(),
               ));
     case '/library':
+      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnMain());
       return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
                 providers: [
@@ -223,12 +254,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
                 child: LibraryPage(),
               ));
     case '/addbook':
+      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnMain());
       return MaterialPageRoute(
           builder: (_) => BlocProvider(
                 create: (context) => AddBookBloc(dataService: DataService()),
                 child: AddBookPage(),
               ));
     case '/addRecommendation':
+      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnSub());
       return MaterialPageRoute(
           builder: (_) => BlocProvider(
                 create: (context) => AddRecommendationBloc(
@@ -236,6 +269,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
                 child: AddRecommendationPage(),
               ));
     case '/bookDetails':
+      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnSub());
       return MaterialPageRoute(
           builder: (_) => BlocProvider(
                 create: (context) =>
@@ -243,6 +277,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
                 child: BookDetailsPage(bookRef: settings.arguments),
               ));
     default:
+      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnMain());
       return MaterialPageRoute(
           builder: (_) => Scaffold(
                 body: Center(

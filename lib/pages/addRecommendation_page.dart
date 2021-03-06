@@ -1,5 +1,6 @@
 import 'package:bookref/blocs/add_recommendation.dart/add_recommendation.dart';
-import 'package:flushbar/flushbar.dart';
+import 'package:bookref/blocs/notification/notification_bloc.dart';
+import 'package:bookref/blocs/notification/notification_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -170,16 +171,29 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                                                               bookNotesInputController
                                                                   .text));
 
-                                                  _showSuccess(
-                                                      "Recommendation added!");
+                                                  BlocProvider.of<
+                                                              NotificationBloc>(
+                                                          context)
+                                                      .add(PushNotification(
+                                                          status: Colors.green,
+                                                          title: "Success",
+                                                          message:
+                                                              "Recommendation was created!"));
 
                                                   Navigator
                                                       .pushReplacementNamed(
                                                           context,
                                                           "/dashboard");
                                                 } catch (err) {
-                                                  _showError(err.message ??
-                                                      "Some fields are required!");
+                                                  BlocProvider.of<
+                                                              NotificationBloc>(
+                                                          context)
+                                                      .add(PushNotification(
+                                                          status: Colors.red,
+                                                          title: "Error",
+                                                          message: err
+                                                                  .message ??
+                                                              "Some fields are required!"));
                                                 }
 
                                                 identifierInputController
@@ -285,15 +299,28 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                                                               personNotesInputController
                                                                   .text));
 
-                                                  _showSuccess(
-                                                      "Recommendation added!");
+                                                  BlocProvider.of<
+                                                              NotificationBloc>(
+                                                          context)
+                                                      .add(PushNotification(
+                                                          status: Colors.green,
+                                                          title: "Success",
+                                                          message:
+                                                              "Recommendation was created!"));
                                                   Navigator
                                                       .pushReplacementNamed(
                                                           context,
                                                           "/dashboard");
                                                 } catch (err) {
-                                                  _showError(err.message ??
-                                                      "Some fields are required!");
+                                                  BlocProvider.of<
+                                                              NotificationBloc>(
+                                                          context)
+                                                      .add(PushNotification(
+                                                          status: Colors.red,
+                                                          title: "Error",
+                                                          message: err
+                                                                  .message ??
+                                                              "Some fields are required!"));
                                                 }
 
                                                 personInputController.clear();
@@ -360,29 +387,5 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
         ),
       );
     });
-  }
-
-  void _showError(String error) {
-    Flushbar(
-      title: "Error!",
-      message: error,
-      duration: Duration(seconds: 2),
-      backgroundColor: Colors.red,
-      margin: EdgeInsets.all(8),
-      borderRadius: 8,
-      flushbarPosition: FlushbarPosition.TOP,
-    )..show(context);
-  }
-
-  void _showSuccess(String message) {
-    Flushbar(
-      title: "Success!",
-      message: message,
-      duration: Duration(seconds: 2),
-      backgroundColor: Colors.green,
-      margin: EdgeInsets.all(8),
-      borderRadius: 8,
-      flushbarPosition: FlushbarPosition.TOP,
-    )..show(context);
   }
 }

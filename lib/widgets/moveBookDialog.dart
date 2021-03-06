@@ -1,8 +1,9 @@
 import 'package:bookref/Models/book.dart';
 import 'package:bookref/blocs/move_book.dart/move_book_bloc.dart';
 import 'package:bookref/blocs/move_book.dart/move_book_event.dart';
+import 'package:bookref/blocs/notification/notification_bloc.dart';
+import 'package:bookref/blocs/notification/notification_event.dart';
 import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -102,25 +103,17 @@ class MoveBookDialog {
                                     personalBookId: book.getId(),
                                     newStatus: statusValue)));
 
-                              Flushbar(
-                                title: "Success!",
-                                message: "Book was moved!",
-                                duration: Duration(seconds: 2),
-                                backgroundColor: Colors.green,
-                                margin: EdgeInsets.all(8),
-                                borderRadius: 8,
-                                flushbarPosition: FlushbarPosition.TOP,
-                              )..show(context);
+                              BlocProvider.of<NotificationBloc>(context).add(
+                                  PushNotification(
+                                      status: Colors.green,
+                                      title: "Success",
+                                      message: "Book was moved!"));
                             } catch (err) {
-                              Flushbar(
-                                title: "Error!",
-                                message: "Invalid input!",
-                                duration: Duration(seconds: 2),
-                                backgroundColor: Colors.red,
-                                margin: EdgeInsets.all(8),
-                                borderRadius: 8,
-                                flushbarPosition: FlushbarPosition.TOP,
-                              )..show(context);
+                              BlocProvider.of<NotificationBloc>(context).add(
+                                  PushNotification(
+                                      status: Colors.red,
+                                      title: "Error",
+                                      message: "Invalid action!"));
                             }
 
                             Navigator.of(context, rootNavigator: true).pop();
