@@ -1,4 +1,3 @@
-import 'package:bookref/Models/book.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
@@ -8,6 +7,11 @@ abstract class NavigationState extends Equatable {
   List<Object> get props => [];
 }
 
-class NavigationOnMain extends NavigationState {}
+class NavigationOnMain extends NavigationState {
+  String route;
+  NavigationOnMain({@required this.route});
+}
 
 class NavigationOnSub extends NavigationState {}
+
+class NavigationReset extends NavigationState {}

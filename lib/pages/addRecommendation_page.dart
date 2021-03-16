@@ -1,8 +1,11 @@
+import 'package:bookref/Models/testbook.dart';
 import 'package:bookref/blocs/add_recommendation.dart/add_recommendation.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_event.dart';
+import 'package:bookref/services/data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class AddRecommendationPage extends StatefulWidget {
   @override
@@ -10,6 +13,14 @@ class AddRecommendationPage extends StatefulWidget {
 }
 
 class __AddRecommendationPageState extends State<AddRecommendationPage> {
+  DataService dataService;
+
+  @override
+  void initState() {
+    dataService = new DataService();
+    super.initState();
+  }
+
   final titleInputController = TextEditingController();
   final identifierInputController = TextEditingController();
   final bookNotesInputController = TextEditingController();
@@ -76,30 +87,98 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                                               color: Colors.white),
                                         ),
                                         SizedBox(height: 35),
-                                        TextField(
-                                          controller: titleInputController,
-                                          onEditingComplete: () =>
-                                              node.nextFocus(),
-                                          style: TextStyle(color: Colors.white),
-                                          decoration: InputDecoration(
-                                            hintText: 'The Wind in the Willows',
-                                            hintStyle: TextStyle(
-                                                color: Colors.grey[700]),
-                                            labelText: "Title",
-                                            labelStyle:
-                                                TextStyle(color: Colors.white),
-                                            floatingLabelBehavior:
-                                                FloatingLabelBehavior.always,
-                                            border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(5.0)),
-                                            ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.lightBlueAccent,
-                                                  width: 1.0),
-                                            ),
-                                          ),
+                                        // TextField(
+                                        //   controller: titleInputController,
+                                        //   onEditingComplete: () =>
+                                        //       node.nextFocus(),
+                                        //   style: TextStyle(color: Colors.white),
+                                        //   decoration: InputDecoration(
+                                        //     hintText: 'The Wind in the Willows',
+                                        //     hintStyle: TextStyle(
+                                        //         color: Colors.grey[700]),
+                                        //     labelText: "Title",
+                                        //     labelStyle:
+                                        //         TextStyle(color: Colors.white),
+                                        //     floatingLabelBehavior:
+                                        //         FloatingLabelBehavior.always,
+                                        //     border: OutlineInputBorder(
+                                        //       borderRadius: BorderRadius.all(
+                                        //           Radius.circular(5.0)),
+                                        //     ),
+                                        //     enabledBorder: OutlineInputBorder(
+                                        //       borderSide: BorderSide(
+                                        //           color: Colors.lightBlueAccent,
+                                        //           width: 1.0),
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                        // SizedBox(height: 15),
+                                        TypeAheadFormField(
+                                          textFieldConfiguration:
+                                              TextFieldConfiguration(
+                                                  autofocus: false,
+                                                  style: DefaultTextStyle.of(
+                                                          context)
+                                                      .style
+                                                      .copyWith(
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          color: Colors.white),
+                                                  decoration: InputDecoration(
+                                                      border:
+                                                          OutlineInputBorder())),
+                                          suggestionsCallback: (pattern) async {
+                                            //return await backendService.getSuggestions(pattern);
+                                            return await dataService
+                                                .getBooksByName(pattern);
+                                          },
+                                          itemBuilder: (context,
+                                              DetailsBook suggestion) {
+                                            return ListTile(
+                                              tileColor: Colors.grey[600],
+                                              leading: Icon(
+                                                Icons.book,
+                                                color: Colors.white,
+                                              ),
+                                              title: Text(
+                                                suggestion.getBookTitle(),
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              subtitle: Text(
+                                                suggestion.getAuthor() ??
+                                                    "None",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            );
+                                          },
+                                          onSuggestionSelected:
+                                              (DetailsBook suggestion) {
+                                            // PopUp
+                                            BlocProvider.of<NotificationBloc>(
+                                                    context)
+                                                .add(PushNotification(
+                                                    status: Colors.green,
+                                                    title: "Success",
+                                                    message: suggestion
+                                                        .getBookTitle()));
+                                          },
+                                          validator: (value) => value.isEmpty
+                                              ? 'Please select a book'
+                                              : null,
+                                          noItemsFoundBuilder: (context) {
+                                            return ListTile(
+                                              subtitle: FlatButton(
+                                                onPressed: () => {
+                                                  // Mach was hier!!!
+                                                  Navigator.pushNamed(
+                                                      context, "/addbook")
+                                                },
+                                                child: Text("Create new book!"),
+                                              ),
+                                            );
+                                          },
                                         ),
                                         SizedBox(height: 15),
                                         TextField(

@@ -82,6 +82,16 @@ class DataService {
     return DetailsBook(book.data['bookById']);
   }
 
+  FutureOr<Iterable<DetailsBook>> getBooksByName(String bookName) async {
+    final books = await _bookrefRepository.getBooksByName(bookName);
+
+    var nn = books.data.toString();
+
+    var res = await convertBookSerToList(books);
+
+    return res;
+  }
+
   Future<List<RecommendedPerson>> getPeopleRecommendationsForBook(
       String bookId) async {
     final personrec =
@@ -192,6 +202,24 @@ class DataService {
     try {
       return queryResult.data['allBooks']['edges'][0]['node']['id'];
     } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<DetailsBook>> convertBookSerToList(
+      QueryResult queryResult) async {
+    try {
+      var listBooks = List<DetailsBook>();
+
+      for (var i = 0; i < queryResult.data['allBooks']['nodes'].length; i++) {
+        listBooks.add(DetailsBook(queryResult.data['allBooks']['nodes'][i]));
+      }
+
+      print(listBooks);
+
+      return listBooks;
+    } catch (e) {
+      print(e.toString());
       return null;
     }
   }

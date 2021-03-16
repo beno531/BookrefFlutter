@@ -6,6 +6,10 @@ abstract class NavigationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ChangeNavigationOnMain extends NavigationEvent {}
+class ChangeNavigationOnMain extends NavigationEvent {
+  String route;
+
+  ChangeNavigationOnMain({@required this.route});
+}
 
 class ChangeNavigationOnSub extends NavigationEvent {}

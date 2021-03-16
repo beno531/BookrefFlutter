@@ -58,7 +58,7 @@ class BookDetailsPage extends StatelessWidget {
                   icon: new Icon(Icons.arrow_back),
                   onPressed: () {
                     BlocProvider.of<NavigationBloc>(context)
-                        .add(ChangeNavigationOnMain());
+                        .add(ChangeNavigationOnMain(route: "/dashboard"));
                     Navigator.of(context).pop();
                   },
                 ),

@@ -12,9 +12,6 @@ class LoginInWithEmailButtonPressed extends LoginEvent {
 
   LoginInWithEmailButtonPressed(
       {@required this.username, @required this.password});
-
-  @override
-  List<Object> get props => [username, password];
 }
 
 class RegisterWithEmailButtonPressed extends LoginEvent {

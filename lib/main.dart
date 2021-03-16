@@ -10,6 +10,7 @@ import 'package:bookref/blocs/navigation/navigation_event.dart';
 import 'package:bookref/blocs/navigation/navigation_state.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_state.dart';
+import 'package:bookref/blocs/test/test_bloc.dart';
 import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
 import 'package:bookref/pages/addBook_page.dart';
 import 'package:bookref/pages/addRecommendation_page.dart';
@@ -17,6 +18,7 @@ import 'package:bookref/pages/currents_page.dart';
 import 'package:bookref/pages/dashboard_page.dart';
 import 'package:bookref/pages/details_page.dart';
 import 'package:bookref/pages/library_page.dart';
+import 'package:bookref/pages/test_page.dart';
 import 'package:bookref/pages/wishlist_page.dart';
 import 'package:bookref/repositories/repositories.dart';
 import 'package:bookref/widgets/bottomNav.dart';
@@ -86,7 +88,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Bookref',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
       ),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
@@ -129,7 +131,21 @@ class _MyAppState extends State<MyApp> {
                                 fontSize: 30.0,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
-                          ))
+                          ),
+                          actions: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: IconButton(
+                                icon: const Icon(
+                                    Icons.add_circle_outline_rounded),
+                                onPressed: () {
+                                  _navigatorKey.currentState
+                                      .pushNamed("/addbook");
+                                },
+                              ),
+                            ),
+                          ],
+                        )
                       : null,
                   body: BlocListener<NotificationBloc, NotificationState>(
                     listener: (context, state) {
@@ -179,7 +195,40 @@ class _MyAppState extends State<MyApp> {
                 ));
           }
           // otherwise show login page
-          return LoginPage();
+          return Scaffold(
+            body: BlocListener<NotificationBloc, NotificationState>(
+                listener: (context, state) {
+                  if (state is NotificationPushed) {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      backgroundColor: state.status,
+                      content: Container(
+                        height: 50.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Text(
+                                state.title,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Text(
+                              state.message,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      duration: Duration(seconds: 2),
+                    ));
+                  }
+                },
+                child: LoginPage()),
+          );
         },
       ),
     );
@@ -189,7 +238,8 @@ class _MyAppState extends State<MyApp> {
 Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
   switch (settings.name) {
     case '/dashboard':
-      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnMain());
+      BlocProvider.of<NavigationBloc>(context)
+          .add(ChangeNavigationOnMain(route: settings.name));
       return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
                 providers: [
@@ -205,7 +255,8 @@ Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
                 child: DashboardPage(),
               ));
     case '/currents':
-      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnMain());
+      BlocProvider.of<NavigationBloc>(context)
+          .add(ChangeNavigationOnMain(route: settings.name));
       return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
                 providers: [
@@ -222,7 +273,8 @@ Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
               ));
 
     case '/wishlist':
-      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnMain());
+      BlocProvider.of<NavigationBloc>(context)
+          .add(ChangeNavigationOnMain(route: settings.name));
       return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
                 providers: [
@@ -238,7 +290,8 @@ Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
                 child: WishlistPage(),
               ));
     case '/library':
-      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnMain());
+      BlocProvider.of<NavigationBloc>(context)
+          .add(ChangeNavigationOnMain(route: settings.name));
       return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
                 providers: [
@@ -254,7 +307,7 @@ Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
                 child: LibraryPage(),
               ));
     case '/addbook':
-      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnMain());
+      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnSub());
       return MaterialPageRoute(
           builder: (_) => BlocProvider(
                 create: (context) => AddBookBloc(dataService: DataService()),
@@ -276,8 +329,17 @@ Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
                     BookDetailsBloc(dataService: DataService()),
                 child: BookDetailsPage(bookRef: settings.arguments),
               ));
+    case '/test':
+      BlocProvider.of<NavigationBloc>(context)
+          .add(ChangeNavigationOnMain(route: settings.name));
+      return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+                create: (context) => TestBloc(dataService: DataService()),
+                child: TestPage(),
+              ));
     default:
-      BlocProvider.of<NavigationBloc>(context).add(ChangeNavigationOnMain());
+      BlocProvider.of<NavigationBloc>(context)
+          .add(ChangeNavigationOnMain(route: settings.name));
       return MaterialPageRoute(
           builder: (_) => Scaffold(
                 body: Center(

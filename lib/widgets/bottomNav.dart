@@ -1,6 +1,8 @@
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:bookref/blocs/navigation/navigation_bloc.dart';
+import 'package:bookref/blocs/navigation/navigation_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BottomNav extends StatefulWidget {
   final String initialRoute;
@@ -18,54 +20,76 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   String _currentRoute;
+  int _initialActiveIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _currentRoute = widget.initialRoute;
+    //_currentRoute = widget.initialRoute;
   }
 
   @override
   Widget build(BuildContext context) {
-    return ConvexAppBar(
-        backgroundColor: Colors.grey[900],
-        style: TabStyle.fixedCircle,
-        items: [
-          TabItem(icon: Icons.dashboard, title: 'Home'),
-          TabItem(icon: Icons.local_library, title: 'Currents'),
-          TabItem(icon: Icons.add, title: 'Add'),
-          TabItem(icon: Icons.emoji_objects, title: 'Wishlist'),
-          TabItem(icon: Icons.library_books, title: 'Library'),
+    return BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+            backgroundColor: Colors.grey.shade900,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.local_library),
+            label: 'Currents',
+            backgroundColor: Colors.grey.shade900,
+          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.add_circle_outline),
+          //   label: 'Add',
+          //   backgroundColor: Colors.grey.shade900,
+          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.emoji_objects),
+            label: 'Wishlist',
+            backgroundColor: Colors.grey.shade900,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_books),
+            label: 'Library',
+            backgroundColor: Colors.grey.shade900,
+          ),
         ],
-        initialActiveIndex: 0,
+        currentIndex: _initialActiveIndex,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
         onTap: (int i) => {buildRoute(i)});
   }
 
   buildRoute(int i) {
     switch (i) {
       case 0:
-        onButtonTap("/dashboard");
+        onButtonTap("/dashboard", i);
         break;
       case 1:
-        onButtonTap("/currents");
+        onButtonTap("/currents", i);
         break;
+      // case 2:
+      //   onButtonTap("/addbook", i);
+      //   break;
       case 2:
-        onButtonTap("/addbook");
+        onButtonTap("/wishlist", i);
         break;
       case 3:
-        onButtonTap("/wishlist");
-        break;
-      case 4:
-        onButtonTap("/library");
+        onButtonTap("/library", i);
         break;
       default:
     }
   }
 
-  onButtonTap(String namedRoute) {
+  onButtonTap(String namedRoute, int index) {
     setState(() {
-        _currentRoute = namedRoute;
-      });
-      widget.navCallback(_currentRoute);
+      _currentRoute = namedRoute;
+      _initialActiveIndex = index;
+    });
+    widget.navCallback(_currentRoute);
   }
 }

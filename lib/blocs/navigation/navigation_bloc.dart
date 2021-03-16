@@ -3,7 +3,7 @@ import 'package:bookref/blocs/navigation/navigation_event.dart';
 import 'package:bookref/blocs/navigation/navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc() : super(NavigationOnMain());
+  NavigationBloc() : super(NavigationReset());
 
   @override
   Stream<NavigationState> mapEventToState(NavigationEvent event) async* {
@@ -18,11 +18,13 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
 
   Stream<NavigationState> _mapChangeNavigationOnMainToState(
       ChangeNavigationOnMain event) async* {
-    yield NavigationOnMain();
+    yield NavigationReset();
+    yield NavigationOnMain(route: event.route);
   }
 
   Stream<NavigationState> _mapChangeNavigationOnSubToState(
       ChangeNavigationOnSub event) async* {
+    yield NavigationReset();
     yield NavigationOnSub();
   }
 }

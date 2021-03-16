@@ -1,3 +1,4 @@
+import 'package:bookref/pages/test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,6 +47,16 @@ class NavDrawer extends StatelessWidget {
           //   title: Text('Settings'),
           //   onTap: () => {Navigator.of(context).pop()},
           // ),
+          ListTile(
+            leading: Icon(Icons.info),
+            title: Text('Test'),
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TestPage()),
+              )
+            },
+          ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
