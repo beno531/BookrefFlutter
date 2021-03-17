@@ -7,13 +7,20 @@ abstract class AddRecommendationEvent extends Equatable {
 }
 
 class AddBookRecommendationButtonPressed extends AddRecommendationEvent {
+  final String id;
   final String identifier;
   final String title;
+  final String subtitle;
+  final String author;
   final String notes;
 
   AddBookRecommendationButtonPressed(
-      {@required this.identifier, @required this.title, this.notes})
-      : assert(identifier.isEmpty == false && title.isEmpty == false);
+      {this.id,
+      this.identifier,
+      this.title,
+      this.subtitle,
+      this.author,
+      this.notes});
 }
 
 class AddPersonRecommendationButtonPressed extends AddRecommendationEvent {

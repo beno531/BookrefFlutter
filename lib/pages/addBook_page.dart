@@ -138,7 +138,7 @@ class __AddBookPageState extends State<AddBookPage> {
                                           TextStyle(color: Colors.white),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.white, width: 1.0),
+                                            color: Colors.amber, width: 1.0),
                                       ),
                                     ),
                                   ),

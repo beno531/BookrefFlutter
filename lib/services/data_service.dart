@@ -97,6 +97,8 @@ class DataService {
     final personrec =
         await _bookrefRepository.getPeopleRecommendationsForBook(bookId);
 
+    print(personrec.data.toString());
+
     return convertRecommendedPersonQueryToList(personrec);
   }
 
@@ -118,25 +120,46 @@ class DataService {
       person = await _bookrefRepository.addPerson(personName);
 
       final result = await _bookrefRepository.addPersonRecommendation(
-          bookId, await person.data['addPerson']['data']['id'], personName);
+          bookId, await person.data['addPerson']['data']['id'], notes);
     } else {
       final result = await _bookrefRepository.addPersonRecommendation(
-          bookId, await extractPersonsId(person), personName);
+          bookId, await extractPersonsId(person), notes);
     }
   }
 
   Future addBookRecommendation(
-      String bookId, String identifier, String title, String notes) async {
-    QueryResult book = await _bookrefRepository.getBookByTitle(title);
-
-    if (await extractExternalBookId(book) == null) {
-      book = await _bookrefRepository.addBook(identifier, title, "Placeholder");
-
-      final result = _bookrefRepository.addBookRecommendation(
-          bookId, book.data['addBook']['data']['id'], notes);
+      String bookId,
+      String recBookId,
+      String identifier,
+      String title,
+      String subtitle,
+      String author,
+      String notes) async {
+    if (recBookId != null) {
+      final result =
+          _bookrefRepository.addBookRecommendation(bookId, recBookId, notes);
     } else {
-      final result = _bookrefRepository.addBookRecommendation(
-          bookId, await extractExternalBookId(book), notes);
+      QueryResult book = await _bookrefRepository.getBookByTitle(title);
+
+      if (await extractExternalBookId(book) == null) {
+        final addBookResult = await addBook(identifier, title, subtitle);
+
+        final authorResult = await checkAuthorName(author);
+
+        if (authorResult != null) {
+          // Setze Referenz zu bestehendem Autor
+          await addAuthor(addBookResult.getBookDataId(), authorResult['id']);
+        } else {
+          // Erstelle neuen Autor mit Referenz
+          await addNewAuthor(addBookResult.getBookDataId(), authorResult);
+        }
+
+        final result = _bookrefRepository.addBookRecommendation(
+            bookId, addBookResult.getBookDataId(), notes);
+      } else {
+        final result = _bookrefRepository.addBookRecommendation(
+            bookId, await extractExternalBookId(book), notes);
+      }
     }
   }
 

@@ -34,12 +34,7 @@ import 'pages/pages.dart';
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.grey[900], // navigation bar color
-    statusBarColor: Colors.grey[900], // status bar color
-    statusBarBrightness: Brightness.dark, //status bar brigtness
-    statusBarIconBrightness: Brightness.dark, //status barIcon Brightness
-    systemNavigationBarDividerColor:
-        Colors.greenAccent, //Navigation bar divider color
-    systemNavigationBarIconBrightness: Brightness.light, //navigation bar icon
+    statusBarColor: Colors.grey[900], //navigation bar icon
   ));
 
   await initHiveForFlutter();

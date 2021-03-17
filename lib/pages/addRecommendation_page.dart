@@ -24,9 +24,16 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
   final titleInputController = TextEditingController();
   final identifierInputController = TextEditingController();
   final bookNotesInputController = TextEditingController();
+  final subtitleInputController = TextEditingController();
+  final authorInputController = TextEditingController();
 
   final personInputController = TextEditingController();
   final personNotesInputController = TextEditingController();
+
+  bool isExisting = true;
+  final TextEditingController _typeAheadController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String slectedBookId;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +79,8 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                               SingleChildScrollView(
                                 child: Container(
                                   child: Padding(
-                                    padding: const EdgeInsets.all(20.0),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 35, 20, 0),
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -86,36 +94,13 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                                               fontWeight: FontWeight.w700,
                                               color: Colors.white),
                                         ),
-                                        SizedBox(height: 35),
-                                        // TextField(
-                                        //   controller: titleInputController,
-                                        //   onEditingComplete: () =>
-                                        //       node.nextFocus(),
-                                        //   style: TextStyle(color: Colors.white),
-                                        //   decoration: InputDecoration(
-                                        //     hintText: 'The Wind in the Willows',
-                                        //     hintStyle: TextStyle(
-                                        //         color: Colors.grey[700]),
-                                        //     labelText: "Title",
-                                        //     labelStyle:
-                                        //         TextStyle(color: Colors.white),
-                                        //     floatingLabelBehavior:
-                                        //         FloatingLabelBehavior.always,
-                                        //     border: OutlineInputBorder(
-                                        //       borderRadius: BorderRadius.all(
-                                        //           Radius.circular(5.0)),
-                                        //     ),
-                                        //     enabledBorder: OutlineInputBorder(
-                                        //       borderSide: BorderSide(
-                                        //           color: Colors.lightBlueAccent,
-                                        //           width: 1.0),
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                        // SizedBox(height: 15),
-                                        TypeAheadFormField(
-                                          textFieldConfiguration:
-                                              TextFieldConfiguration(
+                                        SizedBox(height: 25),
+                                        isExisting
+                                            ? TypeAheadFormField(
+                                                textFieldConfiguration:
+                                                    TextFieldConfiguration(
+                                                  controller:
+                                                      this._typeAheadController,
                                                   autofocus: false,
                                                   style: DefaultTextStyle.of(
                                                           context)
@@ -125,88 +110,241 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                                                               FontStyle.italic,
                                                           color: Colors.white),
                                                   decoration: InputDecoration(
-                                                      border:
-                                                          OutlineInputBorder())),
-                                          suggestionsCallback: (pattern) async {
-                                            //return await backendService.getSuggestions(pattern);
-                                            return await dataService
-                                                .getBooksByName(pattern);
-                                          },
-                                          itemBuilder: (context,
-                                              DetailsBook suggestion) {
-                                            return ListTile(
-                                              tileColor: Colors.grey[600],
-                                              leading: Icon(
-                                                Icons.book,
-                                                color: Colors.white,
-                                              ),
-                                              title: Text(
-                                                suggestion.getBookTitle(),
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                              subtitle: Text(
-                                                suggestion.getAuthor() ??
-                                                    "None",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            );
-                                          },
-                                          onSuggestionSelected:
-                                              (DetailsBook suggestion) {
-                                            // PopUp
-                                            BlocProvider.of<NotificationBloc>(
-                                                    context)
-                                                .add(PushNotification(
-                                                    status: Colors.green,
-                                                    title: "Success",
-                                                    message: suggestion
-                                                        .getBookTitle()));
-                                          },
-                                          validator: (value) => value.isEmpty
-                                              ? 'Please select a book'
-                                              : null,
-                                          noItemsFoundBuilder: (context) {
-                                            return ListTile(
-                                              subtitle: FlatButton(
-                                                onPressed: () => {
-                                                  // Mach was hier!!!
-                                                  Navigator.pushNamed(
-                                                      context, "/addbook")
+                                                    border: OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.white,
+                                                          width: 1.0),
+                                                    ),
+                                                    labelText: 'Select book',
+                                                    labelStyle: TextStyle(
+                                                        color: Colors.white),
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.amber,
+                                                          width: 1.0),
+                                                    ),
+                                                  ),
+                                                ),
+                                                suggestionsCallback:
+                                                    (pattern) async {
+                                                  return await dataService
+                                                      .getBooksByName(pattern);
                                                 },
-                                                child: Text("Create new book!"),
+                                                itemBuilder: (context,
+                                                    DetailsBook suggestion) {
+                                                  return ListTile(
+                                                    tileColor: Colors.grey[600],
+                                                    leading: Icon(
+                                                      Icons.book,
+                                                      color: Colors.white,
+                                                    ),
+                                                    title: Text(
+                                                      suggestion.getBookTitle(),
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                    subtitle: Text(
+                                                      suggestion.getAuthor() ??
+                                                          "None",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  );
+                                                },
+                                                onSuggestionSelected:
+                                                    (DetailsBook suggestion) {
+                                                  // PopUp
+                                                  this
+                                                          ._typeAheadController
+                                                          .text =
+                                                      suggestion.getBookTitle();
+                                                  setState(() {
+                                                    this.slectedBookId =
+                                                        suggestion.getId();
+                                                  });
+                                                },
+                                                validator: (value) =>
+                                                    value.isEmpty
+                                                        ? 'Please select a book'
+                                                        : null,
+                                                noItemsFoundBuilder: (context) {
+                                                  return ListTile(
+                                                    subtitle: FlatButton(
+                                                      onPressed: () {
+                                                        isExisting = false;
+                                                        setState(() {
+                                                          this
+                                                                  .titleInputController
+                                                                  .text =
+                                                              this
+                                                                  ._typeAheadController
+                                                                  .text;
+                                                          this.isExisting =
+                                                              false;
+                                                        });
+                                                      },
+                                                      child: Text(
+                                                          "Create new book!"),
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                            : Column(
+                                                children: [
+                                                  TextFormField(
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                    controller:
+                                                        identifierInputController,
+                                                    onEditingComplete: () =>
+                                                        node.nextFocus(),
+                                                    decoration: InputDecoration(
+                                                      hintText:
+                                                          '978-3-7657-1111-4',
+                                                      hintStyle: TextStyle(
+                                                          color:
+                                                              Colors.grey[500]),
+                                                      labelText:
+                                                          "Identifier/ ISBN",
+                                                      labelStyle: TextStyle(
+                                                          color: Colors.white),
+                                                      floatingLabelBehavior:
+                                                          FloatingLabelBehavior
+                                                              .always,
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    5.0)),
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Colors.amber,
+                                                            width: 1.0),
+                                                      ),
+                                                    ),
+                                                    validator: (value) => value
+                                                            .isEmpty
+                                                        ? 'Identifier/ ISBN is required'
+                                                        : null,
+                                                  ),
+                                                  SizedBox(height: 25),
+                                                  TextFormField(
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                    controller:
+                                                        titleInputController,
+                                                    onEditingComplete: () =>
+                                                        node.nextFocus(),
+                                                    decoration: InputDecoration(
+                                                      hintText:
+                                                          'Protect the Planet',
+                                                      hintStyle: TextStyle(
+                                                          color:
+                                                              Colors.grey[500]),
+                                                      labelText: "Title",
+                                                      labelStyle: TextStyle(
+                                                          color: Colors.white),
+                                                      floatingLabelBehavior:
+                                                          FloatingLabelBehavior
+                                                              .always,
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    5.0)),
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Colors.amber,
+                                                            width: 1.0),
+                                                      ),
+                                                    ),
+                                                    validator: (value) => value
+                                                            .isEmpty
+                                                        ? 'Title is required'
+                                                        : null,
+                                                  ),
+                                                  SizedBox(height: 25),
+                                                  TextField(
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                    controller:
+                                                        subtitleInputController,
+                                                    onEditingComplete: () =>
+                                                        node.nextFocus(),
+                                                    decoration: InputDecoration(
+                                                      hintText: 'World Book',
+                                                      hintStyle: TextStyle(
+                                                          color:
+                                                              Colors.grey[500]),
+                                                      labelText: "Subtitle",
+                                                      labelStyle: TextStyle(
+                                                          color: Colors.white),
+                                                      floatingLabelBehavior:
+                                                          FloatingLabelBehavior
+                                                              .always,
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    5.0)),
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Colors.amber,
+                                                            width: 1.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 25),
+                                                  TextFormField(
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                    controller:
+                                                        authorInputController,
+                                                    onEditingComplete: () =>
+                                                        node.unfocus(),
+                                                    decoration: InputDecoration(
+                                                      hintText: 'Jess French',
+                                                      hintStyle: TextStyle(
+                                                          color:
+                                                              Colors.grey[500]),
+                                                      labelText: "Author",
+                                                      labelStyle: TextStyle(
+                                                          color: Colors.white),
+                                                      floatingLabelBehavior:
+                                                          FloatingLabelBehavior
+                                                              .always,
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    5.0)),
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Colors.amber,
+                                                            width: 1.0),
+                                                      ),
+                                                    ),
+                                                    validator: (value) => value
+                                                            .isEmpty
+                                                        ? 'Author is required'
+                                                        : null,
+                                                  )
+                                                ],
                                               ),
-                                            );
-                                          },
-                                        ),
-                                        SizedBox(height: 15),
-                                        TextField(
-                                          controller: identifierInputController,
-                                          onEditingComplete: () =>
-                                              node.unfocus(),
-                                          style: TextStyle(color: Colors.white),
-                                          decoration: InputDecoration(
-                                            hintText: 'ISBN 978-3-7657-1111-4',
-                                            hintStyle: TextStyle(
-                                                color: Colors.grey[700]),
-                                            labelText: "Identifier/ ISBN",
-                                            labelStyle:
-                                                TextStyle(color: Colors.white),
-                                            floatingLabelBehavior:
-                                                FloatingLabelBehavior.always,
-                                            border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(5.0)),
-                                            ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.lightBlueAccent,
-                                                  width: 1.0),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 15),
+                                        SizedBox(height: 25),
                                         TextField(
                                           controller: bookNotesInputController,
                                           maxLines: 5,
@@ -226,12 +364,11 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                                             ),
                                             enabledBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
-                                                  color: Colors.lightBlueAccent,
+                                                  color: Colors.amber,
                                                   width: 1.0),
                                             ),
                                           ),
                                         ),
-                                        SizedBox(height: 15),
                                         SizedBox(height: 20.0),
                                         SizedBox(
                                           width: double.infinity,
@@ -240,11 +377,19 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                                                 try {
                                                   recommendationBloc.add(
                                                       AddBookRecommendationButtonPressed(
+                                                          id: this
+                                                              .slectedBookId,
                                                           identifier:
                                                               identifierInputController
                                                                   .text,
                                                           title:
                                                               titleInputController
+                                                                  .text,
+                                                          subtitle:
+                                                              subtitleInputController
+                                                                  .text,
+                                                          author:
+                                                              authorInputController
                                                                   .text,
                                                           notes:
                                                               bookNotesInputController
@@ -281,7 +426,7 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                                                 bookNotesInputController
                                                     .clear();
                                               },
-                                              color: Colors.blue,
+                                              color: Colors.green,
                                               child: Text(
                                                 'Confirm',
                                                 style: TextStyle(
@@ -331,7 +476,7 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                                             ),
                                             enabledBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
-                                                  color: Colors.lightBlueAccent,
+                                                  color: Colors.amber,
                                                   width: 1.0),
                                             ),
                                           ),
@@ -357,7 +502,7 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                                             ),
                                             enabledBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
-                                                  color: Colors.lightBlueAccent,
+                                                  color: Colors.amber,
                                                   width: 1.0),
                                             ),
                                           ),
@@ -406,7 +551,7 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                                                 personNotesInputController
                                                     .clear();
                                               },
-                                              color: Colors.blue,
+                                              color: Colors.green,
                                               child: Text(
                                                 'Confirm',
                                                 style: TextStyle(

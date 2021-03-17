@@ -27,8 +27,8 @@ class AddRecommendationBloc
       AddBookRecommendationButtonPressed event) async* {
     yield AddRecommendationLoading();
     try {
-      dataService.addBookRecommendation(
-          bookId, event.identifier, event.title, event.notes);
+      dataService.addBookRecommendation(bookId, event.id, event.identifier,
+          event.title, event.subtitle, event.author, event.notes);
 
       //yield AddBookSuccess();
       yield AddRecommendationInitial();
