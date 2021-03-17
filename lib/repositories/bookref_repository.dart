@@ -530,6 +530,7 @@ query ($input: ID!){
 query($input: String!){
   allBooks(where: {title: {contains: $input}}){
     nodes{
+      id
       title
       authors{
         name
