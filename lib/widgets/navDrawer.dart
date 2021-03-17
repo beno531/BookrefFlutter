@@ -38,25 +38,15 @@ class NavDrawer extends StatelessWidget {
             ),
           ),
           // ListTile(
-          //   leading: Icon(Icons.verified_user),
-          //   title: Text('Profile'),
-          //   onTap: () => {Navigator.of(context).pop()},
+          //   leading: Icon(Icons.info),
+          //   title: Text('Test'),
+          //   onTap: () => {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => TestPage()),
+          //     )
+          //   },
           // ),
-          // ListTile(
-          //   leading: Icon(Icons.settings),
-          //   title: Text('Settings'),
-          //   onTap: () => {Navigator.of(context).pop()},
-          // ),
-          ListTile(
-            leading: Icon(Icons.info),
-            title: Text('Test'),
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TestPage()),
-              )
-            },
-          ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
