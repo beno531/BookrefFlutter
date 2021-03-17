@@ -25,7 +25,8 @@ class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
     print("Load Book Details");
     try {
       // Full Book
-      TestBook book = await dataService.getFullBookById(event.book.getBookId());
+      DetailsBook book =
+          await dataService.getFullBookById(event.book.getBookId());
       // Buch Recommandations
       List<RecommendedBook> bookRec = await dataService
           .getBookRecommendationsForBook(event.book.getBookId());
@@ -33,7 +34,10 @@ class BookDetailsBloc extends Bloc<BookDetailsEvent, BookDetailsState> {
       List<RecommendedPerson> personRec = await dataService
           .getPeopleRecommendationsForBook(event.book.getBookId());
 
-      yield BookDetailsFinished(book: book, bookRecommendation: bookRec, personRecommendation: personRec);
+      yield BookDetailsFinished(
+          book: book,
+          bookRecommendation: bookRec,
+          personRecommendation: personRec);
     } catch (err) {
       yield BookDetailsFailure(
           message: err.message ?? 'An unknown error occured');

@@ -269,6 +269,18 @@ class BookrefRepository {
 
     return await _client.query(_options);
   }
+
+  Future<QueryResult> getBooksByName(String bookName) async {
+    final _client = await _connectionService.client();
+    final WatchQueryOptions _options = WatchQueryOptions(
+      document: parseString(_bookrefProvider.getBooksByName),
+      variables: {'input': bookName},
+      pollInterval: Duration(seconds: 4),
+      fetchResults: true,
+    );
+
+    return await _client.query(_options);
+  }
 }
 
 class BookrefProvider {
@@ -509,6 +521,20 @@ query ($input: ID!){
     subtitle
     authors{
       name
+    }
+  }
+}
+''';
+
+  String getBooksByName = r'''
+query($input: String!){
+  allBooks(where: {title: {contains: $input}}){
+    nodes{
+      id
+      title
+      authors{
+        name
+      }
     }
   }
 }

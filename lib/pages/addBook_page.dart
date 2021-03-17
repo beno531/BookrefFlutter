@@ -1,8 +1,14 @@
+import 'package:bookref/Models/testbook.dart';
 import 'package:bookref/blocs/add_book/add_book.dart';
+import 'package:bookref/blocs/navigation/navigation_bloc.dart';
+import 'package:bookref/blocs/navigation/navigation_event.dart';
+import 'package:bookref/blocs/notification/notification_bloc.dart';
+import 'package:bookref/blocs/notification/notification_event.dart';
+import 'package:bookref/services/data_service.dart';
 import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class AddBookPage extends StatefulWidget {
   @override
@@ -10,11 +16,23 @@ class AddBookPage extends StatefulWidget {
 }
 
 class __AddBookPageState extends State<AddBookPage> {
+  DataService dataService;
+
+  @override
+  void initState() {
+    dataService = new DataService();
+    super.initState();
+  }
+
   final identifierInputController = TextEditingController();
   final titleInputController = TextEditingController();
   final subtitleInputController = TextEditingController();
   final authorInputController = TextEditingController();
+  String slectedBookId;
   String statusValue = 'ACTIVE';
+  bool isExisting = true;
+  final TextEditingController _typeAheadController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,25 +61,32 @@ class __AddBookPageState extends State<AddBookPage> {
       }
 
       if (state is AddBookInitial) {
-        return Container(
-          decoration: BoxDecoration(color: Colors.grey[800]),
-          child: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 30.0),
-                    child: Text(
-                      "CREATE A NEW BOOK",
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white),
-                    ),
-                  ),
-                  Container(
+        return Scaffold(
+            appBar: AppBar(
+                toolbarHeight: 80.0,
+                backgroundColor: Colors.grey[900],
+                titleSpacing: 20,
+                leading: new IconButton(
+                  icon: new Icon(Icons.arrow_back),
+                  onPressed: () {
+                    BlocProvider.of<NavigationBloc>(context)
+                        .add(ChangeNavigationOnMain(route: "/dashboard"));
+                    Navigator.of(context).pop();
+                  },
+                ),
+                title: Text(
+                  "ADD NEW BOOK",
+                  style: TextStyle(fontSize: 25.0, color: Colors.white),
+                )),
+            body: Container(
+              decoration: BoxDecoration(color: Colors.grey[800]),
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Container(
+                    height: 950,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(25, 5, 25, 35),
+                      padding: const EdgeInsets.fromLTRB(25, 25, 25, 25),
                       child: Column(
                         children: <Widget>[
                           CustomRadioButton(
@@ -85,101 +110,244 @@ class __AddBookPageState extends State<AddBookPage> {
                             selectedBorderColor: Colors.orange,
                             unSelectedColor: Colors.white,
                             unSelectedBorderColor: Colors.white,
-                            padding: 5,
+                            padding: 0,
                             autoWidth: false,
                             enableButtonWrap: true,
                             wrapAlignment: WrapAlignment.center,
+                            spacing: 27.0,
                           ),
-                          TextField(
-                              style: TextStyle(color: Colors.grey),
-                              controller: identifierInputController,
-                              onEditingComplete: () => node.nextFocus(),
-                              decoration: InputDecoration(
-                                labelText: 'Identifier',
-                                labelStyle: TextStyle(color: Colors.white),
-                                border: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
+                          SizedBox(height: 25),
+                          isExisting
+                              ? TypeAheadFormField(
+                                  textFieldConfiguration:
+                                      TextFieldConfiguration(
+                                    controller: this._typeAheadController,
+                                    autofocus: false,
+                                    style: DefaultTextStyle.of(context)
+                                        .style
+                                        .copyWith(
+                                            fontStyle: FontStyle.italic,
+                                            color: Colors.white),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.white, width: 1.0),
+                                      ),
+                                      labelText: 'Select your book',
+                                      labelStyle:
+                                          TextStyle(color: Colors.white),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.amber, width: 1.0),
+                                      ),
+                                    ),
+                                  ),
+                                  suggestionsCallback: (pattern) async {
+                                    return await dataService
+                                        .getBooksByName(pattern);
+                                  },
+                                  itemBuilder:
+                                      (context, DetailsBook suggestion) {
+                                    return ListTile(
+                                      tileColor: Colors.grey[600],
+                                      leading: Icon(
+                                        Icons.book,
+                                        color: Colors.white,
+                                      ),
+                                      title: Text(
+                                        suggestion.getBookTitle(),
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      subtitle: Text(
+                                        suggestion.getAuthor() ?? "None",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    );
+                                  },
+                                  onSuggestionSelected:
+                                      (DetailsBook suggestion) {
+                                    // PopUp
+                                    this._typeAheadController.text =
+                                        suggestion.getBookTitle();
+                                    setState(() {
+                                      this.slectedBookId = suggestion.getId();
+                                    });
+                                  },
+                                  validator: (value) => value.isEmpty
+                                      ? 'Please select a book'
+                                      : null,
+                                  noItemsFoundBuilder: (context) {
+                                    return ListTile(
+                                      subtitle: FlatButton(
+                                        onPressed: () {
+                                          isExisting = false;
+                                          setState(() {
+                                            this.titleInputController.text =
+                                                this._typeAheadController.text;
+                                            this.isExisting = false;
+                                          });
+                                        },
+                                        child: Text("Create new book!"),
+                                      ),
+                                    );
+                                  },
+                                )
+                              : Column(
+                                  children: [
+                                    TextFormField(
+                                      style: TextStyle(color: Colors.white),
+                                      controller: identifierInputController,
+                                      onEditingComplete: () => node.nextFocus(),
+                                      decoration: InputDecoration(
+                                        hintText: '978-3-7657-1111-4',
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey[500]),
+                                        labelText: "Identifier/ ISBN",
+                                        labelStyle:
+                                            TextStyle(color: Colors.white),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5.0)),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.amber, width: 1.0),
+                                        ),
+                                      ),
+                                      validator: (value) => value.isEmpty
+                                          ? 'Identifier/ ISBN is required'
+                                          : null,
+                                    ),
+                                    SizedBox(height: 25),
+                                    TextFormField(
+                                      style: TextStyle(color: Colors.white),
+                                      controller: titleInputController,
+                                      onEditingComplete: () => node.nextFocus(),
+                                      decoration: InputDecoration(
+                                        hintText: 'Protect the Planet',
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey[500]),
+                                        labelText: "Title",
+                                        labelStyle:
+                                            TextStyle(color: Colors.white),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5.0)),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.amber, width: 1.0),
+                                        ),
+                                      ),
+                                      validator: (value) => value.isEmpty
+                                          ? 'Title is required'
+                                          : null,
+                                    ),
+                                    SizedBox(height: 25),
+                                    TextField(
+                                      style: TextStyle(color: Colors.white),
+                                      controller: subtitleInputController,
+                                      onEditingComplete: () => node.nextFocus(),
+                                      decoration: InputDecoration(
+                                        hintText: 'World Book',
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey[500]),
+                                        labelText: "Subtitle",
+                                        labelStyle:
+                                            TextStyle(color: Colors.white),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5.0)),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.amber, width: 1.0),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 25),
+                                    TextFormField(
+                                      style: TextStyle(color: Colors.white),
+                                      controller: authorInputController,
+                                      onEditingComplete: () => node.unfocus(),
+                                      decoration: InputDecoration(
+                                        hintText: 'Jess French',
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey[500]),
+                                        labelText: "Author",
+                                        labelStyle:
+                                            TextStyle(color: Colors.white),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5.0)),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.amber, width: 1.0),
+                                        ),
+                                      ),
+                                      validator: (value) => value.isEmpty
+                                          ? 'Author is required'
+                                          : null,
+                                    )
+                                  ],
                                 ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                              )),
-                          TextField(
-                              style: TextStyle(color: Colors.grey),
-                              controller: titleInputController,
-                              onEditingComplete: () => node.nextFocus(),
-                              decoration: InputDecoration(
-                                labelText: 'Title',
-                                labelStyle: TextStyle(color: Colors.white),
-                                border: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                              )),
-                          TextField(
-                              style: TextStyle(color: Colors.grey),
-                              controller: subtitleInputController,
-                              onEditingComplete: () => node.nextFocus(),
-                              decoration: InputDecoration(
-                                labelText: 'Subtitle',
-                                labelStyle: TextStyle(color: Colors.white),
-                                border: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                              )),
-                          TextField(
-                              style: TextStyle(color: Colors.grey),
-                              controller: authorInputController,
-                              onEditingComplete: () => node.unfocus(),
-                              decoration: InputDecoration(
-                                labelText: 'Author',
-                                labelStyle: TextStyle(color: Colors.white),
-                                border: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                              )),
                           SizedBox(height: 20),
                           SizedBox(
                             width: double.infinity,
                             child: FlatButton(
                                 onPressed: () {
-                                  try {
-                                    BlocProvider.of<AddBookBloc>(context).add(
-                                        AddBookButtonPressed(
-                                            status: statusValue,
-                                            identifier:
-                                                identifierInputController.text,
-                                            title: titleInputController.text,
-                                            subtitle:
-                                                subtitleInputController.text,
-                                            author:
-                                                authorInputController.text));
+                                  if (_formKey.currentState.validate()) {
+                                    try {
+                                      BlocProvider.of<AddBookBloc>(context).add(
+                                          AddBookButtonPressed(
+                                              status: statusValue,
+                                              id: slectedBookId,
+                                              identifier:
+                                                  identifierInputController
+                                                      .text,
+                                              title: titleInputController.text,
+                                              subtitle:
+                                                  subtitleInputController.text,
+                                              author:
+                                                  authorInputController.text));
 
-                                    _showSuccess("Book added!");
+                                      BlocProvider.of<NotificationBloc>(context)
+                                          .add(PushNotification(
+                                              status: Colors.green,
+                                              title: "Success",
+                                              message: "Book was created!"));
 
-                                    // Navigator.pushReplacementNamed(
-                                    //     context, "/dashboard");
-                                  } catch (err) {
-                                    _showError(err.message ??
-                                        "Some fields are required!");
+                                      BlocProvider.of<NavigationBloc>(context)
+                                          .add(ChangeNavigationOnMain(
+                                              route: "/dashboard"));
+
+                                      Navigator.of(context).pop();
+                                    } catch (err) {
+                                      BlocProvider.of<NotificationBloc>(context)
+                                          .add(PushNotification(
+                                              status: Colors.red,
+                                              title: "Error",
+                                              message:
+                                                  "Some fields are required!"));
+                                    }
+                                    identifierInputController.clear();
+                                    titleInputController.clear();
+                                    subtitleInputController.clear();
+                                    authorInputController.clear();
                                   }
-
-                                  identifierInputController.clear();
-                                  titleInputController.clear();
-                                  subtitleInputController.clear();
-                                  authorInputController.clear();
                                 },
                                 color: Colors.orange,
                                 child: Text(
-                                  'CREATE',
+                                  'ADD',
                                   style: TextStyle(color: Colors.white),
                                 )),
                           )
@@ -187,38 +355,12 @@ class __AddBookPageState extends State<AddBookPage> {
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        );
+            ));
       }
 
       return Text("Error");
     });
-  }
-
-  void _showError(String error) {
-    Flushbar(
-      title: "Error!",
-      message: error,
-      duration: Duration(seconds: 2),
-      backgroundColor: Colors.red,
-      margin: EdgeInsets.all(8),
-      borderRadius: 8,
-      flushbarPosition: FlushbarPosition.TOP,
-    )..show(context);
-  }
-
-  void _showSuccess(String message) {
-    Flushbar(
-      title: "Success!",
-      message: message,
-      duration: Duration(seconds: 2),
-      backgroundColor: Colors.green,
-      margin: EdgeInsets.all(8),
-      borderRadius: 8,
-      flushbarPosition: FlushbarPosition.TOP,
-    )..show(context);
   }
 }

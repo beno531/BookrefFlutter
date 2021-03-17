@@ -76,16 +76,28 @@ class DataService {
     return await _bookrefRepository.changeBookStatus(personalBookId, newStatus);
   }
 
-  Future<TestBook> getFullBookById(String bookId) async {
+  Future<DetailsBook> getFullBookById(String bookId) async {
     final book = await _bookrefRepository.getFullBookById(bookId);
 
-    return TestBook(book.data['bookById']);
+    return DetailsBook(book.data['bookById']);
+  }
+
+  FutureOr<Iterable<DetailsBook>> getBooksByName(String bookName) async {
+    final books = await _bookrefRepository.getBooksByName(bookName);
+
+    var nn = books.data.toString();
+
+    var res = await convertBookSerToList(books);
+
+    return res;
   }
 
   Future<List<RecommendedPerson>> getPeopleRecommendationsForBook(
       String bookId) async {
     final personrec =
         await _bookrefRepository.getPeopleRecommendationsForBook(bookId);
+
+    print(personrec.data.toString());
 
     return convertRecommendedPersonQueryToList(personrec);
   }
@@ -108,25 +120,46 @@ class DataService {
       person = await _bookrefRepository.addPerson(personName);
 
       final result = await _bookrefRepository.addPersonRecommendation(
-          bookId, await person.data['addPerson']['data']['id'], personName);
+          bookId, await person.data['addPerson']['data']['id'], notes);
     } else {
       final result = await _bookrefRepository.addPersonRecommendation(
-          bookId, await extractPersonsId(person), personName);
+          bookId, await extractPersonsId(person), notes);
     }
   }
 
   Future addBookRecommendation(
-      String bookId, String identifier, String title, String notes) async {
-    QueryResult book = await _bookrefRepository.getBookByTitle(title);
-
-    if (await extractExternalBookId(book) == null) {
-      book = await _bookrefRepository.addBook(identifier, title, "Placeholder");
-
-      final result = _bookrefRepository.addBookRecommendation(
-          bookId, book.data['addBook']['data']['id'], notes);
+      String bookId,
+      String recBookId,
+      String identifier,
+      String title,
+      String subtitle,
+      String author,
+      String notes) async {
+    if (recBookId != null) {
+      final result =
+          _bookrefRepository.addBookRecommendation(bookId, recBookId, notes);
     } else {
-      final result = _bookrefRepository.addBookRecommendation(
-          bookId, await extractExternalBookId(book), notes);
+      QueryResult book = await _bookrefRepository.getBookByTitle(title);
+
+      if (await extractExternalBookId(book) == null) {
+        final addBookResult = await addBook(identifier, title, subtitle);
+
+        final authorResult = await checkAuthorName(author);
+
+        if (authorResult != null) {
+          // Setze Referenz zu bestehendem Autor
+          await addAuthor(addBookResult.getBookDataId(), authorResult['id']);
+        } else {
+          // Erstelle neuen Autor mit Referenz
+          await addNewAuthor(addBookResult.getBookDataId(), authorResult);
+        }
+
+        final result = _bookrefRepository.addBookRecommendation(
+            bookId, addBookResult.getBookDataId(), notes);
+      } else {
+        final result = _bookrefRepository.addBookRecommendation(
+            bookId, await extractExternalBookId(book), notes);
+      }
     }
   }
 
@@ -192,6 +225,24 @@ class DataService {
     try {
       return queryResult.data['allBooks']['edges'][0]['node']['id'];
     } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<DetailsBook>> convertBookSerToList(
+      QueryResult queryResult) async {
+    try {
+      var listBooks = List<DetailsBook>();
+
+      for (var i = 0; i < queryResult.data['allBooks']['nodes'].length; i++) {
+        listBooks.add(DetailsBook(queryResult.data['allBooks']['nodes'][i]));
+      }
+
+      print(listBooks);
+
+      return listBooks;
+    } catch (e) {
+      print(e.toString());
       return null;
     }
   }

@@ -1,8 +1,10 @@
-import 'package:flushbar/flushbar.dart';
+import 'package:bookref/blocs/notification/notification_bloc.dart';
+import 'package:bookref/blocs/notification/notification_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/blocs.dart';
 import '../services/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -19,22 +21,31 @@ class LoginPage extends StatelessWidget {
               builder: (context, state) {
                 final authBloc = BlocProvider.of<AuthenticationBloc>(context);
                 if (state is AuthenticationNotAuthenticated) {
-                  //return TabController(length: 2, child: _AuthForm());
                   return SafeArea(
                     child: Center(
                         child: SingleChildScrollView(
-                      child: SizedBox(
-                        height: 355,
-                        child: Container(
-                          decoration: BoxDecoration(color: Colors.grey[900]),
-                          child: DefaultTabController(
-                            length: 2,
-                            child: SizedBox(
-                              height: 150.0,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  TabBar(
+                      child: Container(
+                        decoration: BoxDecoration(color: Colors.grey[900]),
+                        child: DefaultTabController(
+                          length: 2,
+                          child: SizedBox(
+                            height: 690.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                SvgPicture.asset(
+                                  "assets/icon/new_bookref_icon.svg",
+                                  semanticsLabel: 'Bookref Logo',
+                                  height: 128,
+                                  color: Colors.orange.shade400,
+                                ),
+                                SizedBox(
+                                  height: 100.0,
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                  child: TabBar(
                                     tabs: <Widget>[
                                       Tab(
                                         icon: Text('Login',
@@ -52,34 +63,34 @@ class LoginPage extends StatelessWidget {
                                       )
                                     ],
                                   ),
-                                  Expanded(
-                                    child: TabBarView(
-                                      children: <Widget>[
-                                        Container(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(20.0),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [_LoginForm()],
-                                            ),
+                                ),
+                                Expanded(
+                                  child: TabBarView(
+                                    children: <Widget>[
+                                      Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [_LoginForm()],
                                           ),
                                         ),
-                                        Container(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(20.0),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [_RegisterForm()],
-                                            ),
+                                      ),
+                                      Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [_RegisterForm()],
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -155,31 +166,25 @@ class _SignInForm extends StatefulWidget {
 }
 
 class __SignInFormState extends State<_SignInForm> {
-  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
   final _usernameController = TextEditingController();
-  bool _autoValidate = false;
 
   @override
   Widget build(BuildContext context) {
     final _loginBloc = BlocProvider.of<LoginBloc>(context);
 
     _onLoginButtonPressed() {
-      if (_key.currentState.validate()) {
-        _loginBloc.add(LoginInWithEmailButtonPressed(
-            username: _usernameController.text,
-            password: _passwordController.text));
-      } else {
-        setState(() {
-          _autoValidate = true;
-        });
-      }
+      _loginBloc.add(LoginInWithEmailButtonPressed(
+          username: _usernameController.text,
+          password: _passwordController.text));
     }
 
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
-          _showError(state.error);
+          BlocProvider.of<NotificationBloc>(context).add(PushNotification(
+              status: Colors.red, title: "Error", message: state.error));
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -190,10 +195,7 @@ class __SignInFormState extends State<_SignInForm> {
             );
           }
           return Form(
-            key: _key,
-            autovalidateMode: _autoValidate
-                ? AutovalidateMode.always
-                : AutovalidateMode.disabled,
+            key: _formKey,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -210,15 +212,15 @@ class __SignInFormState extends State<_SignInForm> {
                         borderSide: BorderSide(color: Colors.white, width: 1.0),
                       ),
                     ),
-                    controller: _usernameController,
                     keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
                     validator: (value) {
-                      if (value == null) {
-                        return 'Username is required.';
+                      if (value.isEmpty) {
+                        return 'Username is required';
                       }
                       return null;
                     },
+                    controller: _usernameController,
                   ),
                   SizedBox(
                     height: 12,
@@ -236,27 +238,30 @@ class __SignInFormState extends State<_SignInForm> {
                       ),
                     ),
                     obscureText: true,
-                    controller: _passwordController,
+                    autocorrect: false,
                     validator: (value) {
-                      if (value == null) {
-                        return 'Password is required.';
+                      if (value.isEmpty) {
+                        return 'Password is required';
                       }
                       return null;
                     },
+                    controller: _passwordController,
                   ),
                   const SizedBox(
                     height: 16,
                   ),
-                  RaisedButton(
-                    color: Theme.of(context).primaryColor,
-                    textColor: Colors.white,
-                    padding: const EdgeInsets.all(16),
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(2.0)),
-                    child: Text('LOG IN'),
-                    onPressed:
-                        state is LoginLoading ? () {} : _onLoginButtonPressed,
-                  )
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          if (state is! LoginLoading) {
+                            _onLoginButtonPressed();
+                          }
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Text("LOG IN"),
+                      )),
                 ],
               ),
             ),
@@ -264,18 +269,6 @@ class __SignInFormState extends State<_SignInForm> {
         },
       ),
     );
-  }
-
-  void _showError(String error) {
-    Flushbar(
-      title: "Error!",
-      message: error,
-      duration: Duration(seconds: 2),
-      backgroundColor: Colors.red,
-      margin: EdgeInsets.all(8),
-      borderRadius: 8,
-      flushbarPosition: FlushbarPosition.TOP,
-    )..show(context);
   }
 }
 
@@ -285,33 +278,27 @@ class _SignUpForm extends StatefulWidget {
 }
 
 class __SignUpFormState extends State<_SignUpForm> {
-  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
-  bool _autoValidate = false;
 
   @override
   Widget build(BuildContext context) {
     final _loginBloc = BlocProvider.of<LoginBloc>(context);
 
     _onLoginButtonPressed() {
-      if (_key.currentState.validate()) {
-        _loginBloc.add(RegisterWithEmailButtonPressed(
-            email: _emailController.text,
-            username: _usernameController.text,
-            password: _passwordController.text));
-      } else {
-        setState(() {
-          _autoValidate = true;
-        });
-      }
+      _loginBloc.add(RegisterWithEmailButtonPressed(
+          email: _emailController.text,
+          username: _usernameController.text,
+          password: _passwordController.text));
     }
 
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
-          _showError(state.error);
+          BlocProvider.of<NotificationBloc>(context).add(PushNotification(
+              status: Colors.red, title: "Error", message: state.error));
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -322,10 +309,7 @@ class __SignUpFormState extends State<_SignUpForm> {
             );
           }
           return Form(
-            key: _key,
-            autovalidateMode: _autoValidate
-                ? AutovalidateMode.always
-                : AutovalidateMode.disabled,
+            key: _formKey,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -342,15 +326,15 @@ class __SignUpFormState extends State<_SignUpForm> {
                         borderSide: BorderSide(color: Colors.white, width: 1.0),
                       ),
                     ),
-                    controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
                     validator: (value) {
-                      if (value == null) {
-                        return 'Email is required.';
+                      if (value.isEmpty) {
+                        return 'Email is required';
                       }
                       return null;
                     },
+                    controller: _emailController,
                   ),
                   SizedBox(
                     height: 12,
@@ -367,15 +351,15 @@ class __SignUpFormState extends State<_SignUpForm> {
                         borderSide: BorderSide(color: Colors.white, width: 1.0),
                       ),
                     ),
-                    controller: _usernameController,
                     keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
                     validator: (value) {
-                      if (value == null) {
-                        return 'Username is required.';
+                      if (value.isEmpty) {
+                        return 'Username is required';
                       }
                       return null;
                     },
+                    controller: _usernameController,
                   ),
                   SizedBox(
                     height: 12,
@@ -393,27 +377,30 @@ class __SignUpFormState extends State<_SignUpForm> {
                       ),
                     ),
                     obscureText: true,
-                    controller: _passwordController,
+                    autocorrect: false,
                     validator: (value) {
-                      if (value == null) {
-                        return 'Password is required.';
+                      if (value.isEmpty) {
+                        return 'Password is required';
                       }
                       return null;
                     },
+                    controller: _passwordController,
                   ),
                   const SizedBox(
                     height: 16,
                   ),
-                  RaisedButton(
-                    color: Theme.of(context).primaryColor,
-                    textColor: Colors.white,
-                    padding: const EdgeInsets.all(16),
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(2.0)),
-                    child: Text('REGISTER'),
-                    onPressed:
-                        state is LoginLoading ? () {} : _onLoginButtonPressed,
-                  )
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          if (state is! LoginLoading) {
+                            _onLoginButtonPressed();
+                          }
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Text("SIGN UP"),
+                      )),
                 ],
               ),
             ),
@@ -421,17 +408,5 @@ class __SignUpFormState extends State<_SignUpForm> {
         },
       ),
     );
-  }
-
-  void _showError(String error) {
-    Flushbar(
-      title: "Error!",
-      message: error,
-      duration: Duration(seconds: 2),
-      backgroundColor: Colors.red,
-      margin: EdgeInsets.all(8),
-      borderRadius: 8,
-      flushbarPosition: FlushbarPosition.TOP,
-    )..show(context);
   }
 }

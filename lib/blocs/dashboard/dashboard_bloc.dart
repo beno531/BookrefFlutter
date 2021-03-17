@@ -15,15 +15,11 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     if (event is LoadDashboardItems) {
       yield* _mapLoadDashboardItemsToState(event);
     }
-
-    if (event is MoveDashboardBook) {
-      yield* _mapMoveDashboardBookToState(
-          event.personalBookId, event.newStatus);
-    }
   }
 
   Stream<DashboardState> _mapLoadDashboardItemsToState(
       LoadDashboardItems event) async* {
+    yield DashboardItemsLoading();
     print("Load Dashboard Items");
     try {
       DashboardBooks dashboardBooks = await dataService.getDashboardBooks();
@@ -33,18 +29,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         yield DashboardItemsFailure(
             message: 'Something very weird just happened');
       }
-    } catch (err) {
-      yield DashboardItemsFailure(
-          message: err.message ?? 'An unknown error occured');
-    }
-  }
-
-  Stream<DashboardState> _mapMoveDashboardBookToState(
-      String personalBooKId, String newStatus) async* {
-    try {
-      var result =
-          await dataService.changeBookStatus(personalBooKId, newStatus);
-      yield ReloadDashboardItems();
     } catch (err) {
       yield DashboardItemsFailure(
           message: err.message ?? 'An unknown error occured');

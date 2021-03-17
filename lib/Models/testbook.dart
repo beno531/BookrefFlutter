@@ -1,8 +1,7 @@
-class TestBook {
-  TestBook(this.book);
+class DetailsBook {
+  DetailsBook(this.book);
 
   final dynamic book;
-
 
   getId() => this.book["id"];
 
@@ -20,7 +19,19 @@ class TestBook {
 
   getAuthor() {
     var authors = this.book["authors"];
+    String output = "";
 
-    return authors[0]["name"];
+    if (authors.length != 0) {
+      for (var i = 0; i < authors.length; i++) {
+        if (i == authors.length - 1) {
+          output += authors[i]['name'];
+        } else {
+          output += authors[i]['name'] + ", ";
+        }
+      }
+      return output;
+    }
+
+    return "none";
   }
 }
