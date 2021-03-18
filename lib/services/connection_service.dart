@@ -12,15 +12,19 @@ class ConnectionService {
           'Authorization': 'Bearer $token',
         });
 
-    return GraphQLClient(
-        link: _httpLink, cache: GraphQLCache(store: InMemoryStore()));
+    //return GraphQLClient(link: _httpLink, cache: GraphQLCache(store: InMemoryStore()));
 
-    /*return GraphQLClient(
+    return GraphQLClient(
+      defaultPolicies: DefaultPolicies(
+          query: Policies(
+              fetch: FetchPolicy.cacheAndNetwork, error: ErrorPolicy.all),
+          mutate:
+              Policies(fetch: FetchPolicy.networkOnly, error: ErrorPolicy.all)),
       cache: GraphQLCache(
         store: HiveStore(),
       ),
       link: _httpLink,
-    );*/
+    );
   }
 
   Future<String> getToken() async {
