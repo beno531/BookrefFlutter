@@ -12,6 +12,7 @@ import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_state.dart';
 import 'package:bookref/blocs/test/test_bloc.dart';
 import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
+import 'package:bookref/hive_init.dart';
 import 'package:bookref/pages/addBook_page.dart';
 import 'package:bookref/pages/addRecommendation_page.dart';
 import 'package:bookref/pages/currents_page.dart';
@@ -26,7 +27,6 @@ import 'package:bookref/widgets/navDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'blocs/blocs.dart';
 import 'services/services.dart';
 import 'pages/pages.dart';
@@ -37,6 +37,7 @@ void main() async {
     statusBarColor: Colors.grey[900], //navigation bar icon
   ));
 
+  WidgetsFlutterBinding.ensureInitialized();
   await initHiveForFlutter();
 
   runApp(
