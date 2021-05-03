@@ -32,11 +32,11 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
-            backgroundColor: Colors.grey.shade900,
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.dashboard),
+          //   label: 'Dashboard',
+          //   backgroundColor: Colors.grey.shade900,
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.local_library),
             label: 'Currents',
@@ -61,24 +61,25 @@ class _BottomNavState extends State<BottomNav> {
         currentIndex: _initialActiveIndex,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.grey[900],
         onTap: (int i) => {buildRoute(i)});
   }
 
   buildRoute(int i) {
     switch (i) {
+      // case 0:
+      //   onButtonTap("/dashboard", i);
+      //   break;
       case 0:
-        onButtonTap("/dashboard", i);
-        break;
-      case 1:
         onButtonTap("/currents", i);
         break;
       // case 2:
       //   onButtonTap("/addbook", i);
       //   break;
-      case 2:
+      case 1:
         onButtonTap("/wishlist", i);
         break;
-      case 3:
+      case 2:
         onButtonTap("/library", i);
         break;
       default:

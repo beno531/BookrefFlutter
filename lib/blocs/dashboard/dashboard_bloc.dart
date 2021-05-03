@@ -3,7 +3,9 @@ import 'package:bookref/Models/dashboardBooks.dart';
 import 'package:bookref/blocs/dashboard/dashboard_event.dart';
 import 'package:bookref/blocs/dashboard/dashboard_state.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hive/hive.dart';
 import '../../services/services.dart';
+import 'package:connectivity/connectivity.dart';
 
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final DataService dataService;
@@ -22,16 +24,24 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     yield DashboardItemsLoading();
     print("Load Dashboard Items");
     try {
-      DashboardBooks dashboardBooks = await dataService.getDashboardBooks();
-      if (dashboardBooks != null) {
-        yield DashboardItemsFinished(dashboardBooks: dashboardBooks);
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        DashboardBooks dashboardBooks = await dataService.getDashboardBooks();
+        if (dashboardBooks != null) {
+          yield DashboardItemsFinished(dashboardBooks: dashboardBooks);
+        } else {
+          yield DashboardItemsFailure(
+              message: 'Something very weird just happened');
+        }
       } else {
-        yield DashboardItemsFailure(
-            message: 'Something very weird just happened');
+        var box = await Hive.openBox('data');
+        var test = box.get('currents');
+        print(test);
+        yield DashboardItemsFinished(dashboardBooks: test);
       }
     } catch (err) {
-      yield DashboardItemsFailure(
-          message: err.message ?? 'An unknown error occured');
+      yield DashboardItemsFailure(message: err ?? 'An unknown error occured');
     }
   }
 }

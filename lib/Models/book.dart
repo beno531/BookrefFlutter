@@ -1,6 +1,12 @@
+import 'package:hive/hive.dart';
+
+part 'book.g.dart';
+
+@HiveType(typeId: 2)
 class Book {
   Book(this.book);
 
+  @HiveField(0)
   final dynamic book;
 
   getBook() => this.book["book"];

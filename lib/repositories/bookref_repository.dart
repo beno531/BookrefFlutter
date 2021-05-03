@@ -18,7 +18,6 @@ class BookrefRepository {
   Future<QueryResult> getDashboardCurrents() async {
     final _client = await _connectionService.client();
     final WatchQueryOptions _options = WatchQueryOptions(
-      //cacheRereadPolicy: CacheRereadPolicy.ignore,
       document: parseString(_bookrefProvider.readDashboardCurrents),
       pollInterval: Duration(seconds: 4),
       fetchResults: true,

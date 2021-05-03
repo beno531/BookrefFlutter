@@ -8,6 +8,8 @@ import 'package:bookref/repositories/repositories.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'dart:async';
 import 'package:graphql/client.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DataService {
   BookrefRepository _bookrefRepository;
@@ -18,10 +20,25 @@ class DataService {
     _userRepository = UserRepository();
   }
 
+//   Future<String> get _localPath async {
+//   final directory = await getApplicationDocumentsDirectory();
+
+//   return directory.path;
+// }
+
   Future<DashboardBooks> getDashboardBooks() async {
     final currents = await _bookrefRepository.getDashboardCurrents();
     final wishlist = await _bookrefRepository.getDashboardWishlist();
     final libraries = await _bookrefRepository.getDashboardLibary();
+
+    var box = await Hive.openBox("data");
+
+    box.put(
+        'currents',
+        DashboardBooks(
+            convertBookQueryToList(currents),
+            convertBookQueryToList(wishlist),
+            convertBookQueryToList(libraries)));
 
     return DashboardBooks(convertBookQueryToList(currents),
         convertBookQueryToList(wishlist), convertBookQueryToList(libraries));
