@@ -39,6 +39,7 @@ dependencies:
   flutter_svg: ^0.19.3
   path_provider: ^1.6.10
   connectivity: ^2.0.0
+  flutter_barcode_scanner: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
