@@ -62,7 +62,7 @@ class MoveBookDialog {
                 children: <Widget>[
                   Container(
                     width: double.infinity,
-                    height: 250,
+                    height: 330,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
                         color: Colors.grey[800]),
@@ -88,41 +88,76 @@ class MoveBookDialog {
                           enableButtonWrap: true,
                           wrapAlignment: WrapAlignment.center,
                         ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 10, 5, 35),
+                          child: SizedBox(
+                            width: 200,
+                            child: FlatButton(
+                                onPressed: () {
+                                  try {
+                                    BlocProvider.of<MoveBookBloc>(context)
+                                      ..add((MoveBook(
+                                          personalBookId: book.getId(),
+                                          newStatus: statusValue)));
+
+                                    BlocProvider.of<NotificationBloc>(context)
+                                        .add(PushNotification(
+                                            status: Colors.green,
+                                            title: "Success",
+                                            message: "Book was moved!"));
+                                  } catch (err) {
+                                    BlocProvider.of<NotificationBloc>(context)
+                                        .add(PushNotification(
+                                            status: Colors.red,
+                                            title: "Error",
+                                            message: "Invalid action!"));
+                                  }
+
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop();
+                                },
+                                color: Colors.orange,
+                                child: Text(
+                                  'CONFIRM',
+                                  style: TextStyle(color: Colors.white),
+                                )),
+                          ),
+                        ),
+                        Row(children: <Widget>[
+                          Expanded(
+                            child: new Container(
+                                margin: const EdgeInsets.only(
+                                    left: 0.0, right: 20.0),
+                                child: Divider(
+                                  color: Colors.white,
+                                  height: 36,
+                                )),
+                          ),
+                          Text("OR", style: TextStyle(color: Colors.white)),
+                          Expanded(
+                            child: new Container(
+                                margin: const EdgeInsets.only(
+                                    left: 20.0, right: 0.0),
+                                child: Divider(
+                                  color: Colors.white,
+                                  height: 36,
+                                )),
+                          ),
+                        ]),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 5),
+                          child: SizedBox(
+                            width: 200,
+                            child: FlatButton(
+                                onPressed: () {},
+                                color: Colors.red,
+                                child: Text(
+                                  'DELETE',
+                                  style: TextStyle(color: Colors.white),
+                                )),
+                          ),
+                        ),
                       ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
-                    child: SizedBox(
-                      width: 200,
-                      child: FlatButton(
-                          onPressed: () {
-                            try {
-                              BlocProvider.of<MoveBookBloc>(context)
-                                ..add((MoveBook(
-                                    personalBookId: book.getId(),
-                                    newStatus: statusValue)));
-
-                              BlocProvider.of<NotificationBloc>(context).add(
-                                  PushNotification(
-                                      status: Colors.green,
-                                      title: "Success",
-                                      message: "Book was moved!"));
-                            } catch (err) {
-                              BlocProvider.of<NotificationBloc>(context).add(
-                                  PushNotification(
-                                      status: Colors.red,
-                                      title: "Error",
-                                      message: "Invalid action!"));
-                            }
-
-                            Navigator.of(context, rootNavigator: true).pop();
-                          },
-                          color: Colors.orange,
-                          child: Text(
-                            'CONFIRM',
-                            style: TextStyle(color: Colors.white),
-                          )),
                     ),
                   ),
                 ],

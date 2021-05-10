@@ -7,6 +7,8 @@ import 'package:bookref/blocs/notification/notification_event.dart';
 import 'package:bookref/services/data_service.dart';
 import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
@@ -33,6 +35,7 @@ class __AddBookPageState extends State<AddBookPage> {
   bool isExisting = true;
   final TextEditingController _typeAheadController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String barcode = 'Unknown';
 
   @override
   Widget build(BuildContext context) {
@@ -118,80 +121,121 @@ class __AddBookPageState extends State<AddBookPage> {
                           ),
                           SizedBox(height: 25),
                           isExisting
-                              ? TypeAheadFormField(
-                                  textFieldConfiguration:
-                                      TextFieldConfiguration(
-                                    controller: this._typeAheadController,
-                                    autofocus: false,
-                                    style: DefaultTextStyle.of(context)
-                                        .style
-                                        .copyWith(
-                                            fontStyle: FontStyle.italic,
-                                            color: Colors.white),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.white, width: 1.0),
-                                      ),
-                                      labelText: 'Select your book',
-                                      labelStyle:
-                                          TextStyle(color: Colors.white),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.amber, width: 1.0),
+                              ? Column(children: <Widget>[
+                                  TypeAheadFormField(
+                                    textFieldConfiguration:
+                                        TextFieldConfiguration(
+                                      controller: this._typeAheadController,
+                                      autofocus: false,
+                                      style: DefaultTextStyle.of(context)
+                                          .style
+                                          .copyWith(
+                                              fontStyle: FontStyle.italic,
+                                              color: Colors.white),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.white, width: 1.0),
+                                        ),
+                                        labelText: 'Select your book',
+                                        labelStyle:
+                                            TextStyle(color: Colors.white),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.amber, width: 1.0),
+                                        ),
                                       ),
                                     ),
+                                    suggestionsCallback: (pattern) async {
+                                      return await dataService
+                                          .getBooksByName(pattern);
+                                    },
+                                    itemBuilder:
+                                        (context, DetailsBook suggestion) {
+                                      return ListTile(
+                                        tileColor: Colors.grey[600],
+                                        leading: Icon(
+                                          Icons.book,
+                                          color: Colors.white,
+                                        ),
+                                        title: Text(
+                                          suggestion.getBookTitle(),
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        subtitle: Text(
+                                          suggestion.getAuthor() ?? "None",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      );
+                                    },
+                                    onSuggestionSelected:
+                                        (DetailsBook suggestion) {
+                                      // PopUp
+                                      this._typeAheadController.text =
+                                          suggestion.getBookTitle();
+                                      setState(() {
+                                        this.slectedBookId = suggestion.getId();
+                                      });
+                                    },
+                                    validator: (value) => value.isEmpty
+                                        ? 'Please select a book'
+                                        : null,
+                                    noItemsFoundBuilder: (context) {
+                                      return ListTile(
+                                        subtitle: FlatButton(
+                                          onPressed: () {
+                                            isExisting = false;
+                                            setState(() {
+                                              this.titleInputController.text =
+                                                  this
+                                                      ._typeAheadController
+                                                      .text;
+                                              this.isExisting = false;
+                                            });
+                                          },
+                                          child: Text("Create new book!"),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                  suggestionsCallback: (pattern) async {
-                                    return await dataService
-                                        .getBooksByName(pattern);
-                                  },
-                                  itemBuilder:
-                                      (context, DetailsBook suggestion) {
-                                    return ListTile(
-                                      tileColor: Colors.grey[600],
-                                      leading: Icon(
-                                        Icons.book,
-                                        color: Colors.white,
-                                      ),
-                                      title: Text(
-                                        suggestion.getBookTitle(),
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      subtitle: Text(
-                                        suggestion.getAuthor() ?? "None",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    );
-                                  },
-                                  onSuggestionSelected:
-                                      (DetailsBook suggestion) {
-                                    // PopUp
-                                    this._typeAheadController.text =
-                                        suggestion.getBookTitle();
-                                    setState(() {
-                                      this.slectedBookId = suggestion.getId();
-                                    });
-                                  },
-                                  validator: (value) => value.isEmpty
-                                      ? 'Please select a book'
-                                      : null,
-                                  noItemsFoundBuilder: (context) {
-                                    return ListTile(
-                                      subtitle: FlatButton(
+                                  Row(children: <Widget>[
+                                    Expanded(
+                                      child: new Container(
+                                          margin: const EdgeInsets.only(
+                                              left: 0.0, right: 20.0),
+                                          child: Divider(
+                                            color: Colors.white,
+                                            height: 36,
+                                          )),
+                                    ),
+                                    Text("OR",
+                                        style: TextStyle(color: Colors.white)),
+                                    Expanded(
+                                      child: new Container(
+                                          margin: const EdgeInsets.only(
+                                              left: 20.0, right: 0.0),
+                                          child: Divider(
+                                            color: Colors.white,
+                                            height: 36,
+                                          )),
+                                    ),
+                                  ]),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    height: 50.0,
+                                    child: FlatButton(
                                         onPressed: () {
-                                          isExisting = false;
-                                          setState(() {
-                                            this.titleInputController.text =
-                                                this._typeAheadController.text;
-                                            this.isExisting = false;
-                                          });
+                                          scanBarcode();
                                         },
-                                        child: Text("Create new book!"),
-                                      ),
-                                    );
-                                  },
-                                )
+                                        color: Colors.blueGrey,
+                                        child: Text(
+                                          'ISBN Scanner',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 17.0),
+                                        )),
+                                  ),
+                                ])
                               : Column(
                                   children: [
                                     TextFormField(
@@ -362,5 +406,24 @@ class __AddBookPageState extends State<AddBookPage> {
 
       return Text("Error");
     });
+  }
+
+  Future<void> scanBarcode() async {
+    try {
+      final barcode = await FlutterBarcodeScanner.scanBarcode(
+        '#ff6666',
+        'Cancel',
+        true,
+        ScanMode.BARCODE,
+      );
+
+      if (!mounted) return;
+
+      setState(() {
+        this.barcode = barcode;
+      });
+    } on PlatformException {
+      barcode = 'Failed to get platform version.';
+    }
   }
 }
