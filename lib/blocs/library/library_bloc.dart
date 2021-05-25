@@ -22,6 +22,7 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
     yield LibraryItemsLoading();
     print("Load Library Items");
     try {
+      await Future.delayed(Duration(seconds: 1), () {}); // Vorerst gefixt
       List<Book> libraryBooks = await dataService.getLibraryBooks();
       if (libraryBooks != null) {
         yield LibraryItemsFinished(library: libraryBooks);

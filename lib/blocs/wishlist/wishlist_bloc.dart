@@ -22,6 +22,7 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     yield WishlistItemsLoading();
     print("Load Wishlist Items");
     try {
+      await Future.delayed(Duration(seconds: 1), () {}); // Vorerst gefixt
       List<Book> wishlistBooks = await dataService.getWishlistBooks();
       if (wishlistBooks != null) {
         yield WishlistItemsFinished(wishlist: wishlistBooks);
