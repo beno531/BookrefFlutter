@@ -1,7 +1,5 @@
 import 'package:hive/hive.dart';
 
-part 'book.g.dart';
-
 @HiveType(typeId: 2)
 class Book {
   Book(this.book);

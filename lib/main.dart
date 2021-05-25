@@ -12,6 +12,7 @@ import 'package:bookref/blocs/navigation/navigation_event.dart';
 import 'package:bookref/blocs/navigation/navigation_state.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_state.dart';
+import 'package:bookref/blocs/remove_book.dart/remove_book_bloc.dart';
 import 'package:bookref/blocs/test/test_bloc.dart';
 import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
 import 'package:bookref/hive_init.dart';
@@ -45,10 +46,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //await initHiveForFlutter();
   var dir = await getApplicationDocumentsDirectory();
-  Hive
+  /*Hive
     ..init(dir.path)
     ..registerAdapter(DashboardBooksAdapter())
-    ..registerAdapter(BookAdapter());
+    ..registerAdapter(BookAdapter());*/
 
   runApp(
       // Injects the Authentication service
@@ -273,6 +274,14 @@ Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
                   BlocProvider(
                       create: (context) => MoveBookBloc(
                             dataService: DataService(),
+                          )),
+                  BlocProvider(
+                      create: (context) => RemoveBookBloc(
+                            dataService: DataService(),
+                          )),
+                  BlocProvider(
+                      create: (context) => AddBookBloc(
+                            dataService: DataService(),
                           ))
                 ],
                 child: CurrentsPage(),
@@ -291,6 +300,10 @@ Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
                   BlocProvider(
                       create: (context) => MoveBookBloc(
                             dataService: DataService(),
+                          )),
+                  BlocProvider(
+                      create: (context) => RemoveBookBloc(
+                            dataService: DataService(),
                           ))
                 ],
                 child: WishlistPage(),
@@ -307,6 +320,10 @@ Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
                           )),
                   BlocProvider(
                       create: (context) => MoveBookBloc(
+                            dataService: DataService(),
+                          )),
+                  BlocProvider(
+                      create: (context) => RemoveBookBloc(
                             dataService: DataService(),
                           ))
                 ],

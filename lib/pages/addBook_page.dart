@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'dart:io';
 
 class AddBookPage extends StatefulWidget {
   @override
@@ -373,6 +374,8 @@ class __AddBookPageState extends State<AddBookPage> {
                                       BlocProvider.of<NavigationBloc>(context)
                                           .add(ChangeNavigationOnMain(
                                               route: "/dashboard"));
+
+                                      //sleep(Duration(seconds: 3));
 
                                       Navigator.of(context).pop();
                                     } catch (err) {

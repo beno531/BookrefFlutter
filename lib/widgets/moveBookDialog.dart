@@ -3,6 +3,8 @@ import 'package:bookref/blocs/move_book.dart/move_book_bloc.dart';
 import 'package:bookref/blocs/move_book.dart/move_book_event.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_event.dart';
+import 'package:bookref/blocs/remove_book.dart/remove_book_bloc.dart';
+import 'package:bookref/blocs/remove_book.dart/remove_book_event.dart';
 import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -149,7 +151,14 @@ class MoveBookDialog {
                           child: SizedBox(
                             width: 200,
                             child: FlatButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  BlocProvider.of<RemoveBookBloc>(context)
+                                    ..add((RemoveBook(
+                                        personalBookId: book.getId())));
+
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop();
+                                },
                                 color: Colors.red,
                                 child: Text(
                                   'DELETE',

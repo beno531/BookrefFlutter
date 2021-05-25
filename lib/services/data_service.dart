@@ -74,6 +74,10 @@ class DataService {
     await _bookrefRepository.moveBookInLibrary(bookId, statusdata);
   }
 
+  Future<void> removeBook(String personalBookId) async {
+    await _bookrefRepository.removeBook(personalBookId);
+  }
+
   Future<dynamic> checkAuthorName(String author) async {
     final result = await _bookrefRepository.checkAuthorName(author);
 

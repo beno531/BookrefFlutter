@@ -443,7 +443,7 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                                                       Navigator
                                                           .pushReplacementNamed(
                                                               context,
-                                                              "/dashboard");
+                                                              "/currents");
                                                     } catch (err) {
                                                       BlocProvider.of<
                                                                   NotificationBloc>(
@@ -566,8 +566,7 @@ class __AddRecommendationPageState extends State<AddRecommendationPage> {
                                                               "Recommendation was created!"));
                                                   Navigator
                                                       .pushReplacementNamed(
-                                                          context,
-                                                          "/dashboard");
+                                                          context, "/currents");
                                                 } catch (err) {
                                                   BlocProvider.of<
                                                               NotificationBloc>(

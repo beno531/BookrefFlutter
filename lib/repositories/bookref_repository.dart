@@ -281,6 +281,18 @@ class BookrefRepository {
 
     return await _client.query(_options);
   }
+
+  Future<QueryResult> removeBook(String personalBookId) async {
+    final _client = await _connectionService.client();
+    final MutationOptions _options = MutationOptions(
+      document: parseString(_bookrefProvider.removeBook),
+      variables: {
+        'input': {'personalBookId': '$personalBookId'}
+      },
+    );
+
+    return await _client.mutate(_options);
+  }
 }
 
 class BookrefProvider {
@@ -537,6 +549,18 @@ query($input: String!){
       }
     }
   }
+}
+''';
+
+  String removeBook = r'''
+mutation($input: RemoveFromLibraryInput!){
+    remove (input: $input) {
+        errors {
+            code
+            message
+        }
+        data
+    }
 }
 ''';
 }
