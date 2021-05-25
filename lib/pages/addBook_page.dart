@@ -349,7 +349,7 @@ class __AddBookPageState extends State<AddBookPage> {
                           SizedBox(
                             width: double.infinity,
                             child: FlatButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState.validate()) {
                                     try {
                                       BlocProvider.of<AddBookBloc>(context).add(
@@ -374,8 +374,6 @@ class __AddBookPageState extends State<AddBookPage> {
                                       BlocProvider.of<NavigationBloc>(context)
                                           .add(ChangeNavigationOnMain(
                                               route: "/dashboard"));
-
-                                      //sleep(Duration(seconds: 3));
 
                                       Navigator.of(context).pop();
                                     } catch (err) {

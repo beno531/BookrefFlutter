@@ -41,7 +41,7 @@ class AddBookBloc extends Bloc<AddBookEvent, AddBookState> {
         await dataService.moveBookInLibrary(event.id, event.status);
       }
 
-      //yield AddBookSuccess();
+      yield AddBookSuccess();
       yield AddBookInitial();
     } catch (err) {
       yield AddBookFailure(error: err.message ?? 'An unknown error occured');
