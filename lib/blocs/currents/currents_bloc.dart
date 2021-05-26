@@ -20,9 +20,11 @@ class CurrentBloc extends Bloc<CurrentsEvent, CurrentsState> {
   Stream<CurrentsState> _mapLoadCurrentItemsToState(
       LoadCurrentItems event) async* {
     yield CurrentItemsLoading();
-    print("Load Current Items");
     try {
+      await Future.delayed(Duration(seconds: 1), () {}); // Vorerst gefixt
       List<Book> currentBooks = await dataService.getCurrentBooks();
+      print("Load Current Items");
+
       if (currentBooks != null) {
         yield CurrentItemsFinished(currents: currentBooks);
       } else {

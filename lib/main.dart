@@ -1,3 +1,5 @@
+import 'package:bookref/Models/book.dart';
+import 'package:bookref/Models/dashboardBooks.dart';
 import 'package:bookref/blocs/add_book/add_book.dart';
 import 'package:bookref/blocs/add_recommendation.dart/add_recommendation.dart';
 import 'package:bookref/blocs/book_details/book_details_bloc.dart';
@@ -10,6 +12,7 @@ import 'package:bookref/blocs/navigation/navigation_event.dart';
 import 'package:bookref/blocs/navigation/navigation_state.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_state.dart';
+import 'package:bookref/blocs/remove_book.dart/remove_book_bloc.dart';
 import 'package:bookref/blocs/test/test_bloc.dart';
 import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
 import 'package:bookref/hive_init.dart';
@@ -27,6 +30,9 @@ import 'package:bookref/widgets/navDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'blocs/blocs.dart';
 import 'services/services.dart';
 import 'pages/pages.dart';
@@ -38,7 +44,12 @@ void main() async {
   ));
 
   WidgetsFlutterBinding.ensureInitialized();
-  await initHiveForFlutter();
+  //await initHiveForFlutter();
+  var dir = await getApplicationDocumentsDirectory();
+  /*Hive
+    ..init(dir.path)
+    ..registerAdapter(DashboardBooksAdapter())
+    ..registerAdapter(BookAdapter());*/
 
   runApp(
       // Injects the Authentication service
@@ -175,7 +186,7 @@ class _MyAppState extends State<MyApp> {
                       }
                     },
                     child: Navigator(
-                      initialRoute: "/dashboard",
+                      initialRoute: "/currents",
                       onGenerateRoute: (settings) {
                         return generateRoute(settings, context);
                       },
@@ -233,23 +244,23 @@ class _MyAppState extends State<MyApp> {
 
 Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
   switch (settings.name) {
-    case '/dashboard':
-      BlocProvider.of<NavigationBloc>(context)
-          .add(ChangeNavigationOnMain(route: settings.name));
-      return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                      create: (context) => DashboardBloc(
-                            dataService: DataService(),
-                          )),
-                  BlocProvider(
-                      create: (context) => MoveBookBloc(
-                            dataService: DataService(),
-                          ))
-                ],
-                child: DashboardPage(),
-              ));
+    // case '/dashboard':
+    //   BlocProvider.of<NavigationBloc>(context)
+    //       .add(ChangeNavigationOnMain(route: settings.name));
+    //   return MaterialPageRoute(
+    //       builder: (_) => MultiBlocProvider(
+    //             providers: [
+    //               BlocProvider(
+    //                   create: (context) => DashboardBloc(
+    //                         dataService: DataService(),
+    //                       )),
+    //               BlocProvider(
+    //                   create: (context) => MoveBookBloc(
+    //                         dataService: DataService(),
+    //                       ))
+    //             ],
+    //             child: DashboardPage(),
+    //           ));
     case '/currents':
       BlocProvider.of<NavigationBloc>(context)
           .add(ChangeNavigationOnMain(route: settings.name));
@@ -262,6 +273,14 @@ Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
                           )),
                   BlocProvider(
                       create: (context) => MoveBookBloc(
+                            dataService: DataService(),
+                          )),
+                  BlocProvider(
+                      create: (context) => RemoveBookBloc(
+                            dataService: DataService(),
+                          )),
+                  BlocProvider(
+                      create: (context) => AddBookBloc(
                             dataService: DataService(),
                           ))
                 ],
@@ -281,6 +300,10 @@ Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
                   BlocProvider(
                       create: (context) => MoveBookBloc(
                             dataService: DataService(),
+                          )),
+                  BlocProvider(
+                      create: (context) => RemoveBookBloc(
+                            dataService: DataService(),
                           ))
                 ],
                 child: WishlistPage(),
@@ -297,6 +320,10 @@ Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
                           )),
                   BlocProvider(
                       create: (context) => MoveBookBloc(
+                            dataService: DataService(),
+                          )),
+                  BlocProvider(
+                      create: (context) => RemoveBookBloc(
                             dataService: DataService(),
                           ))
                 ],

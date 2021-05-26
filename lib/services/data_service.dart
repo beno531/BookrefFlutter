@@ -1,13 +1,14 @@
 import 'package:bookref/Models/book.dart';
-import 'package:bookref/Models/bookResult.dart';
 import 'package:bookref/Models/dashboardBooks.dart';
 import 'package:bookref/Models/recommendedBook.dart';
 import 'package:bookref/Models/recommendedPerson.dart';
 import 'package:bookref/Models/testbook.dart';
+import 'package:bookref/models/bookResult.dart';
 import 'package:bookref/repositories/repositories.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'dart:async';
 import 'package:graphql/client.dart';
+import 'package:hive/hive.dart';
 
 class DataService {
   BookrefRepository _bookrefRepository;
@@ -18,10 +19,25 @@ class DataService {
     _userRepository = UserRepository();
   }
 
+//   Future<String> get _localPath async {
+//   final directory = await getApplicationDocumentsDirectory();
+
+//   return directory.path;
+// }
+
   Future<DashboardBooks> getDashboardBooks() async {
     final currents = await _bookrefRepository.getDashboardCurrents();
     final wishlist = await _bookrefRepository.getDashboardWishlist();
     final libraries = await _bookrefRepository.getDashboardLibary();
+
+    var box = await Hive.openBox("data");
+
+    box.put(
+        'currents',
+        DashboardBooks(
+            convertBookQueryToList(currents),
+            convertBookQueryToList(wishlist),
+            convertBookQueryToList(libraries)));
 
     return DashboardBooks(convertBookQueryToList(currents),
         convertBookQueryToList(wishlist), convertBookQueryToList(libraries));
@@ -53,8 +69,19 @@ class DataService {
     return BookResult(result.data['addBook']);
   }
 
+  Future<BookResult> addBookByIsbn(String isbn) async {
+    final result = await _bookrefRepository.addBookByIsbn(isbn);
+
+    print("Result: " + result.data.toString());
+    return BookResult(result.data['addBookByIsbn']);
+  }
+
   Future<void> moveBookInLibrary(String bookId, String statusdata) async {
     await _bookrefRepository.moveBookInLibrary(bookId, statusdata);
+  }
+
+  Future<void> removeBook(String personalBookId) async {
+    await _bookrefRepository.removeBook(personalBookId);
   }
 
   Future<dynamic> checkAuthorName(String author) async {
@@ -90,6 +117,12 @@ class DataService {
     var res = await convertBookSerToList(books);
 
     return res;
+  }
+
+  Future<dynamic> findBookByIsbn(String isbn) async {
+    final books = await _bookrefRepository.findBookByIsbn(isbn);
+
+    return books.data['allBooks']['nodes'][0]['id'];
   }
 
   Future<List<RecommendedPerson>> getPeopleRecommendationsForBook(
