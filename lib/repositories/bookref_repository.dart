@@ -94,6 +94,18 @@ class BookrefRepository {
     return await _client.mutate(_options);
   }
 
+  Future<QueryResult> addBookByIsbn(String isbn) async {
+    final _client = await _connectionService.client();
+    final MutationOptions _options = MutationOptions(
+      document: parseString(_bookrefProvider.addBookByIsbn),
+      variables: {
+        'input': {'isbn': '$isbn'}
+      },
+    );
+
+    return await _client.mutate(_options);
+  }
+
   Future<QueryResult> moveBookInLibrary(String bookId, String status) async {
     final _client = await _connectionService.client();
     final MutationOptions _options = MutationOptions(
@@ -135,6 +147,18 @@ class BookrefRepository {
     final WatchQueryOptions _options = WatchQueryOptions(
       document: parseString(_bookrefProvider.checkAuthorName),
       variables: {'input': authorName},
+      pollInterval: Duration(seconds: 4),
+      fetchResults: true,
+    );
+
+    return await _client.query(_options);
+  }
+
+  Future<QueryResult> findBookByIsbn(String isbn) async {
+    final _client = await _connectionService.client();
+    final WatchQueryOptions _options = WatchQueryOptions(
+      document: parseString(_bookrefProvider.findBookByIsbn),
+      variables: {'input': isbn},
       pollInterval: Duration(seconds: 4),
       fetchResults: true,
     );
@@ -298,7 +322,7 @@ class BookrefRepository {
 class BookrefProvider {
   String readDashboardCurrents = r'''
 query {
-    books(where: { status: { eq: ACTIVE } }) {
+    books(where: { status: { eq: ACTIVE } }, order: {lastChanged: DESC}) {
         id
         bookId
         status
@@ -314,7 +338,7 @@ query {
 
   String readDashboardWishlist = r'''
 query {
-    books(where: { status: { eq: WISH } }) {
+    books(where: { status: { eq: WISH }}, order: {lastChanged: DESC}) {
         id
         bookId
         status
@@ -330,7 +354,7 @@ query {
 
   String readDashboardLibrary = r'''
 query {
-    books(where: { status: { eq: DONE } }) {
+    books(where: { status: { eq: DONE }}, order: {lastChanged: DESC}) {
         id
         bookId
         status
@@ -374,6 +398,21 @@ mutation addBook ($input: AddBookInput!){
       errors {
         message
       }
+    }
+}
+''';
+
+  String addBookByIsbn = r'''
+mutation addBook ($input: AddBookByIsbnInput!){
+    addBookByIsbn(input: $input) {
+        errors {
+            message
+            code
+        }
+            data {
+                id
+                title
+        }
     }
 }
 ''';
@@ -422,6 +461,17 @@ query ($input: String!){
     authors(where: { name: { contains: $input } }) {
         id
         name
+    }
+}
+''';
+
+  String findBookByIsbn = r'''
+query($input: String!) {
+    allBooks(where: {identifier:  { eq: $input }}) {
+        nodes{
+          id,
+          title
+        }
     }
 }
 ''';

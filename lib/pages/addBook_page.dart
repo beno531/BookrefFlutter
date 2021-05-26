@@ -225,8 +225,23 @@ class __AddBookPageState extends State<AddBookPage> {
                                     width: double.infinity,
                                     height: 50.0,
                                     child: FlatButton(
-                                        onPressed: () {
-                                          scanBarcode();
+                                        onPressed: () async {
+                                          await scanBarcode();
+
+                                          BlocProvider.of<NotificationBloc>(
+                                                  context)
+                                              .add(PushNotification(
+                                                  status: Colors.green,
+                                                  title: "Success",
+                                                  message:
+                                                      "Book was created!"));
+
+                                          BlocProvider.of<NavigationBloc>(
+                                                  context)
+                                              .add(ChangeNavigationOnMain(
+                                                  route: "/dashboard"));
+
+                                          Navigator.of(context).pop();
                                         },
                                         color: Colors.blueGrey,
                                         child: Text(
@@ -420,9 +435,8 @@ class __AddBookPageState extends State<AddBookPage> {
 
       if (!mounted) return;
 
-      setState(() {
-        this.barcode = barcode;
-      });
+      BlocProvider.of<AddBookBloc>(context).add(AddBookByIsbnButtonPressed(
+          isbn: barcode.toString(), status: statusValue));
     } on PlatformException {
       barcode = 'Failed to get platform version.';
     }

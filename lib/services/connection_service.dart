@@ -29,7 +29,9 @@ class ConnectionService {
   }
 
   Future<String> getToken() async {
-    return await storage.read(key: "token");
+    final token = await storage.read(key: "token");
+    print(token);
+    return token;
   }
 
   Future<String> setToken(String token) async {

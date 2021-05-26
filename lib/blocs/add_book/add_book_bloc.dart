@@ -13,6 +13,8 @@ class AddBookBloc extends Bloc<AddBookEvent, AddBookState> {
   Stream<AddBookState> mapEventToState(AddBookEvent event) async* {
     if (event is AddBookButtonPressed) {
       yield* _mapAddBookToState(event);
+    } else if (event is AddBookByIsbnButtonPressed) {
+      yield* _mapAddBookByIsbnButtonPressed(event);
     }
   }
 
@@ -39,6 +41,28 @@ class AddBookBloc extends Bloc<AddBookEvent, AddBookState> {
         }
       } else {
         await dataService.moveBookInLibrary(event.id, event.status);
+      }
+
+      yield AddBookSuccess();
+      yield AddBookInitial();
+    } catch (err) {
+      yield AddBookFailure(error: err.message ?? 'An unknown error occured');
+    }
+  }
+
+  Stream<AddBookState> _mapAddBookByIsbnButtonPressed(
+      AddBookByIsbnButtonPressed event) async* {
+    yield AddBookLoading();
+    try {
+      try {
+        final addBookByIsbnResult = await dataService.addBookByIsbn(event.isbn);
+
+        await dataService.moveBookInLibrary(
+            addBookByIsbnResult.getBookDataId(), event.status);
+      } catch (e) {
+        final findBookResult = await dataService.findBookByIsbn(event.isbn);
+
+        await dataService.moveBookInLibrary(findBookResult, event.status);
       }
 
       yield AddBookSuccess();

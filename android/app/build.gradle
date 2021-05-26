@@ -42,6 +42,7 @@ android {
         applicationId "com.example.bookref"
         minSdkVersion 18
         targetSdkVersion 29
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
