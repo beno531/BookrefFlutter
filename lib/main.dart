@@ -22,6 +22,7 @@ import 'package:bookref/pages/currents_page.dart';
 import 'package:bookref/pages/dashboard_page.dart';
 import 'package:bookref/pages/details_page.dart';
 import 'package:bookref/pages/library_page.dart';
+import 'package:bookref/pages/register_page.dart';
 import 'package:bookref/pages/test_page.dart';
 import 'package:bookref/pages/wishlist_page.dart';
 import 'package:bookref/repositories/repositories.dart';
@@ -188,7 +189,7 @@ class _MyAppState extends State<MyApp> {
                     child: Navigator(
                       initialRoute: "/currents",
                       onGenerateRoute: (settings) {
-                        return generateRoute(settings, context);
+                        return generateAuthRoute(settings, context);
                       },
                       key: _navigatorKey,
                     ),
@@ -204,37 +205,44 @@ class _MyAppState extends State<MyApp> {
           // otherwise show login page
           return Scaffold(
             body: BlocListener<NotificationBloc, NotificationState>(
-                listener: (context, state) {
-                  if (state is NotificationPushed) {
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      backgroundColor: state.status,
-                      content: Container(
-                        height: 50.0,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 5),
-                              child: Text(
-                                state.title,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
+              listener: (context, state) {
+                if (state is NotificationPushed) {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    backgroundColor: state.status,
+                    content: Container(
+                      height: 50.0,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Text(
+                              state.title,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
                             ),
-                            Text(
-                              state.message,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
+                          ),
+                          Text(
+                            state.message,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
                       ),
-                      duration: Duration(seconds: 2),
-                    ));
-                  }
+                    ),
+                    duration: Duration(seconds: 2),
+                  ));
+                }
+              },
+              child: Navigator(
+                initialRoute: "/login",
+                onGenerateRoute: (settings) {
+                  return generateRoute(settings, context);
                 },
-                child: LoginPage()),
+                key: _navigatorKey,
+              ),
+            ),
           );
         },
       ),
@@ -242,7 +250,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
+Route<dynamic> generateAuthRoute(RouteSettings settings, BuildContext context) {
   switch (settings.name) {
     // case '/dashboard':
     //   BlocProvider.of<NavigationBloc>(context)
@@ -368,5 +376,18 @@ Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
                 body: Center(
                     child: Text('No route defined for ${settings.name}')),
               ));
+  }
+}
+
+Route<dynamic> generateRoute(RouteSettings settings, BuildContext context) {
+  switch (settings.name) {
+    case '/login':
+      return MaterialPageRoute(builder: (_) => LoginPage());
+
+    case '/register':
+      return MaterialPageRoute(builder: (_) => RegisterPage());
+
+    default:
+      return MaterialPageRoute(builder: (_) => LoginPage());
   }
 }
