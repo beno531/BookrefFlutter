@@ -1,4 +1,4 @@
-import 'package:bookref/Models/testbook.dart';
+import 'package:bookref/models/testbook.dart';
 import 'package:bookref/blocs/add_book/add_book.dart';
 import 'package:bookref/blocs/navigation/navigation_bloc.dart';
 import 'package:bookref/blocs/navigation/navigation_event.dart';
@@ -11,7 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'dart:io';
 
 class AddBookPage extends StatefulWidget {
   @override

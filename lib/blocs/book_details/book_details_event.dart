@@ -1,4 +1,4 @@
-import 'package:bookref/Models/book.dart';
+import 'package:bookref/models/book.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 

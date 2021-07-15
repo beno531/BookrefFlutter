@@ -1,4 +1,4 @@
-import 'package:bookref/Models/book.dart';
+import 'package:bookref/models/book.dart';
 import 'package:bookref/blocs/dashboard/dashboard_bloc.dart';
 import 'package:bookref/blocs/dashboard/dashboard_event.dart';
 import 'package:bookref/blocs/dashboard/dashboard_state.dart';
