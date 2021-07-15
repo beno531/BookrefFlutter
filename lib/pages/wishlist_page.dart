@@ -1,4 +1,4 @@
-import 'package:bookref/Models/book.dart';
+import 'package:bookref/models/book.dart';
 import 'package:bookref/blocs/move_book.dart/move_book_bloc.dart';
 import 'package:bookref/blocs/move_book.dart/move_book_state.dart';
 import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';

@@ -1,5 +1,5 @@
-import 'package:bookref/Models/book.dart';
-import 'package:bookref/Models/testbook.dart';
+import 'package:bookref/models/book.dart';
+import 'package:bookref/models/testbook.dart';
 import 'package:bookref/blocs/book_details/book_details_bloc.dart';
 import 'package:bookref/blocs/book_details/book_details_event.dart';
 import 'package:bookref/blocs/book_details/book_details_state.dart';

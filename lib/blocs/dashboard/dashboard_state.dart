@@ -1,4 +1,4 @@
-import 'package:bookref/Models/dashboardBooks.dart';
+import 'package:bookref/models/dashboardBooks.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 

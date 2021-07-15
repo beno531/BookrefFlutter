@@ -1,4 +1,4 @@
-import 'package:bookref/Models/book.dart';
+import 'package:bookref/models/book.dart';
 import 'package:hive/hive.dart';
 
 part 'dashboardBooks.g.dart';

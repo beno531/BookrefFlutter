@@ -1,4 +1,4 @@
-import 'package:bookref/Models/book.dart';
+import 'package:bookref/models/book.dart';
 import 'package:bookref/blocs/add_book/add_book.dart';
 import 'package:bookref/blocs/add_book/add_book_state.dart';
 import 'package:bookref/blocs/currents/currents_bloc.dart';
@@ -6,8 +6,6 @@ import 'package:bookref/blocs/currents/currents_event.dart';
 import 'package:bookref/blocs/currents/currents_state.dart';
 import 'package:bookref/blocs/move_book.dart/move_book_bloc.dart';
 import 'package:bookref/blocs/move_book.dart/move_book_state.dart';
-import 'package:bookref/blocs/notification/notification_bloc.dart';
-import 'package:bookref/blocs/notification/notification_event.dart';
 import 'package:bookref/blocs/remove_book.dart/remove_book_bloc.dart';
 import 'package:bookref/blocs/remove_book.dart/remove_book_state.dart';
 import 'package:bookref/widgets/moveBookDialog.dart';

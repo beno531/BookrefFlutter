@@ -1,8 +1,8 @@
-import 'package:bookref/Models/book.dart';
-import 'package:bookref/Models/dashboardBooks.dart';
-import 'package:bookref/Models/recommendedBook.dart';
-import 'package:bookref/Models/recommendedPerson.dart';
-import 'package:bookref/Models/testbook.dart';
+import 'package:bookref/models/book.dart';
+import 'package:bookref/models/dashboardBooks.dart';
+import 'package:bookref/models/recommendedBook.dart';
+import 'package:bookref/models/recommendedPerson.dart';
+import 'package:bookref/models/testbook.dart';
 import 'package:bookref/models/bookResult.dart';
 import 'package:bookref/repositories/repositories.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';

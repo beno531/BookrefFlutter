@@ -1,4 +1,4 @@
-import 'package:bookref/Models/book.dart';
+import 'package:bookref/models/book.dart';
 import 'package:bookref/widgets/moveBookDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
