@@ -22,3 +22,10 @@ class AddBookButtonPressed extends AddBookEvent {
       this.subtitle,
       this.author});
 }
+
+class AddBookByIsbnButtonPressed extends AddBookEvent {
+  final String isbn;
+  final String status;
+
+  AddBookByIsbnButtonPressed({this.isbn, this.status});
+}

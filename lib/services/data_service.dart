@@ -1,15 +1,14 @@
 import 'package:bookref/Models/book.dart';
-import 'package:bookref/Models/bookResult.dart';
 import 'package:bookref/Models/dashboardBooks.dart';
 import 'package:bookref/Models/recommendedBook.dart';
 import 'package:bookref/Models/recommendedPerson.dart';
 import 'package:bookref/Models/testbook.dart';
+import 'package:bookref/models/bookResult.dart';
 import 'package:bookref/repositories/repositories.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'dart:async';
 import 'package:graphql/client.dart';
 import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
 
 class DataService {
   BookrefRepository _bookrefRepository;
@@ -70,6 +69,13 @@ class DataService {
     return BookResult(result.data['addBook']);
   }
 
+  Future<BookResult> addBookByIsbn(String isbn) async {
+    final result = await _bookrefRepository.addBookByIsbn(isbn);
+
+    print("Result: " + result.data.toString());
+    return BookResult(result.data['addBookByIsbn']);
+  }
+
   Future<void> moveBookInLibrary(String bookId, String statusdata) async {
     await _bookrefRepository.moveBookInLibrary(bookId, statusdata);
   }
@@ -111,6 +117,12 @@ class DataService {
     var res = await convertBookSerToList(books);
 
     return res;
+  }
+
+  Future<dynamic> findBookByIsbn(String isbn) async {
+    final books = await _bookrefRepository.findBookByIsbn(isbn);
+
+    return books.data['allBooks']['nodes'][0]['id'];
   }
 
   Future<List<RecommendedPerson>> getPeopleRecommendationsForBook(
