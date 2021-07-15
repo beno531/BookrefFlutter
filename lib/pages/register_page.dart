@@ -1,6 +1,5 @@
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_event.dart';
-import 'package:bookref/pages/register_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +7,7 @@ import '../blocs/blocs.dart';
 import '../services/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class LoginPage extends StatelessWidget {
+class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,16 +78,16 @@ class LoginPage extends StatelessWidget {
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(40, 0, 10, 0),
-                                  child: Text("Sign in to continue!",
+                                  child: Text("Sign up to continue!",
                                       style: TextStyle(
                                           fontSize: 25,
                                           color: Colors.grey[500])),
                                 ),
                                 Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(40, 90, 40, 0),
+                                      const EdgeInsets.fromLTRB(40, 30, 40, 0),
                                   child: Container(
-                                      height: 320.0, child: _LoginForm()),
+                                      height: 400.0, child: _RegisterForm()),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 70),
@@ -97,12 +96,12 @@ class LoginPage extends StatelessWidget {
                                     children: [
                                       RichText(
                                         text: TextSpan(
-                                          text: "I'm a new User. ",
+                                          text: "I'm already a User. ",
                                           style: TextStyle(
                                               color: Colors.grey[600]),
                                           children: <TextSpan>[
                                             TextSpan(
-                                                text: 'Sign Up',
+                                                text: 'Sign In',
                                                 style: TextStyle(
                                                     color: Colors.grey[900]),
                                                 recognizer:
@@ -110,7 +109,7 @@ class LoginPage extends StatelessWidget {
                                                       ..onTap = () =>
                                                           Navigator.pushNamed(
                                                               context,
-                                                              '/register')),
+                                                              '/login')),
                                           ],
                                         ),
                                       )
@@ -155,7 +154,7 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class _LoginForm extends StatelessWidget {
+class _RegisterForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = RepositoryProvider.of<AuthenticationService>(context);
@@ -165,20 +164,21 @@ class _LoginForm extends StatelessWidget {
       alignment: Alignment.center,
       child: BlocProvider<LoginBloc>(
         create: (context) => LoginBloc(authBloc, authService),
-        child: _SignInForm(),
+        child: _SignUpForm(),
       ),
     );
   }
 }
 
-class _SignInForm extends StatefulWidget {
+class _SignUpForm extends StatefulWidget {
   @override
-  __SignInFormState createState() => __SignInFormState();
+  __SignUpFormState createState() => __SignUpFormState();
 }
 
-class __SignInFormState extends State<_SignInForm> {
+class __SignUpFormState extends State<_SignUpForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
 
   @override
@@ -186,7 +186,8 @@ class __SignInFormState extends State<_SignInForm> {
     final _loginBloc = BlocProvider.of<LoginBloc>(context);
 
     _onLoginButtonPressed() {
-      _loginBloc.add(LoginInWithEmailButtonPressed(
+      _loginBloc.add(RegisterWithEmailButtonPressed(
+          email: _emailController.text,
           username: _usernameController.text,
           password: _passwordController.text));
     }
@@ -211,6 +212,41 @@ class __SignInFormState extends State<_SignInForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Text(
+                      "Email",
+                      style: TextStyle(color: Colors.grey[700]),
+                    ),
+                  ),
+                  TextFormField(
+                    style: TextStyle(color: Colors.grey[600]),
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Email is required';
+                      }
+                      return null;
+                    },
+                    controller: _emailController,
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 5),
                     child: Text(
@@ -278,8 +314,8 @@ class __SignInFormState extends State<_SignInForm> {
                     },
                     controller: _passwordController,
                   ),
-                  const SizedBox(
-                    height: 40,
+                  SizedBox(
+                    height: 12,
                   ),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -293,12 +329,8 @@ class __SignInFormState extends State<_SignInForm> {
                         }
                       },
                       child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          "LOGIN",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w300),
-                        ),
+                        padding: const EdgeInsets.all(18.0),
+                        child: Text("REGISTER"),
                       )),
                 ],
               ),
