@@ -4,8 +4,8 @@ import 'package:bookref/themes/app_colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/blocs.dart';
-import '../services/services.dart';
+import '../../blocs/blocs.dart';
+import '../../services/services.dart';
 
 class LoginPage extends StatelessWidget {
   @override
