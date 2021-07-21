@@ -47,7 +47,7 @@ class CurrentsPage extends StatelessWidget {
 
           if (state is CurrentItemsLoading) {
             return Container(
-              decoration: BoxDecoration(color: Colors.grey[800]),
+              decoration: BoxDecoration(color: Color(0xffE9E8E3)),
               child: Center(
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
@@ -60,9 +60,25 @@ class CurrentsPage extends StatelessWidget {
             final List<Book> currents = state.currents;
 
             return Container(
-              decoration: BoxDecoration(color: Colors.grey[800]),
+              decoration: BoxDecoration(color: Color(0xffE9E8E3)),
               child: Column(
                 children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+                    child: TextField(
+                      decoration: InputDecoration(
+                          border: new OutlineInputBorder(
+                            borderSide: new BorderSide(color: Colors.white),
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(45.0),
+                            ),
+                          ),
+                          prefixIcon: Icon(Icons.search),
+                          fillColor: Colors.white,
+                          filled: true,
+                          hintText: 'Search'),
+                    ),
+                  ),
                   Container(
                       margin: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 30.0),
                       child: Row(
@@ -182,7 +198,7 @@ class CurrentsPage extends StatelessWidget {
 
           if (state is CurrentItemsFailure) {
             return Container(
-              decoration: BoxDecoration(color: Colors.grey[800]),
+              decoration: BoxDecoration(color: Colors.red[800]),
               child: Center(
                   child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
