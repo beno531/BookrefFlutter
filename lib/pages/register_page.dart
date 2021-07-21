@@ -63,7 +63,7 @@ class RegisterPage extends StatelessWidget {
                     top: size.height * 0.28,
                     left: 30,
                     right: 0,
-                    child: Text("Sign in to continue!",
+                    child: Text("Sign up to continue!",
                         style:
                             TextStyle(fontSize: 25, color: Colors.grey[500])),
                   ),
