@@ -328,9 +328,14 @@ query {
         status
         book {
             title
+            subtitle
             authors{
               name
             }
+            link
+            thumbnail
+            created
+            etag
         }
     }
 }

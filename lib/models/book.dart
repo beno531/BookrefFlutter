@@ -17,6 +17,8 @@ class Book {
 
   getBookTitle() => this.book["book"]["title"];
 
+  getBookThumbnail() => this.book["book"]["thumbnail"];
+
   getBookLang() => this.book["book"]["language"];
 
   getBookCreated() => this.book["book"]["created"];

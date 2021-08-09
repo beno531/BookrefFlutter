@@ -18,109 +18,43 @@ class _PrivateNavigatorState extends State<PrivateNavigator> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: NavDrawer(
-        user: User(name: "dummy"),
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: Color(0xffE9E8E3)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 60),
-              child: Container(
-                height: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.menu),
-                      onPressed: () {
-                        _scaffoldKey.currentState.openDrawer();
-                      },
+    return BlocListener<NotificationBloc, NotificationState>(
+      listener: (context, state) {
+        if (state is NotificationPushed) {
+          Scaffold.of(context).showSnackBar(SnackBar(
+            backgroundColor: state.status,
+            content: Container(
+              height: 50.0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Text(
+                      state.title,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
                     ),
-                    RichText(
-                      text: new TextSpan(
-                        style: new TextStyle(
-                          fontSize: 40.0,
-                          fontFamily: 'Amaranth',
-                          color: Colors.black,
-                        ),
-                        children: <TextSpan>[
-                          new TextSpan(
-                              text: 'BOOK',
-                              style:
-                                  new TextStyle(fontWeight: FontWeight.bold)),
-                          new TextSpan(
-                              text: 'REF.',
-                              style: new TextStyle(
-                                  color: Colors.orange[700],
-                                  fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.add_circle_outline_rounded),
-                      onPressed: () {
-                        _navigatorKey.currentState.pushNamed("/addbook");
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                  Text(
+                    state.message,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              child: BlocListener<NotificationBloc, NotificationState>(
-                listener: (context, state) {
-                  if (state is NotificationPushed) {
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      backgroundColor: state.status,
-                      content: Container(
-                        height: 50.0,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 5),
-                              child: Text(
-                                state.title,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Text(
-                              state.message,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                      duration: Duration(seconds: 2),
-                    ));
-                  }
-                },
-                child: Navigator(
-                  initialRoute: "/currents",
-                  onGenerateRoute: (settings) {
-                    return _routewManager.generatePrivateRoute(
-                        settings, context);
-                  },
-                  key: _navigatorKey,
-                ),
-              ),
-            ),
-          ],
-        ),
+            duration: Duration(seconds: 2),
+          ));
+        }
+      },
+      child: Navigator(
+        initialRoute: "/dashboard/currents",
+        onGenerateRoute: (settings) {
+          return _routewManager.generatePrivateRoute(settings, context);
+        },
+        key: _navigatorKey,
       ),
-      bottomNavigationBar: BottomNav(navCallback: (String namedRoute) {
-        print("Navigating to $namedRoute");
-        _navigatorKey.currentState
-            .pushNamedAndRemoveUntil(namedRoute, (r) => false);
-      }),
     );
   }
 }

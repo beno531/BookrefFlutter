@@ -31,7 +31,7 @@ class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      /*decoration: BoxDecoration(
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: Color(0xffBFBFBF),
@@ -40,7 +40,7 @@ class _BottomNavState extends State<BottomNav> {
             offset: Offset(0, 80),
           ),
         ],
-      ),
+      ),*/
       child: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             // BottomNavigationBarItem(
