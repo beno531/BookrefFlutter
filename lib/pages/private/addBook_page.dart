@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:bookref/models/testbook.dart';
 import 'package:bookref/blocs/add_book/add_book.dart';
 import 'package:bookref/blocs/navigation/navigation_bloc.dart';
@@ -241,7 +240,7 @@ class __AddBookDisplayState extends State<AddBookDisplay> {
                                   margin: const EdgeInsets.only(
                                       left: 0.0, right: 20.0),
                                   child: Divider(
-                                    color: Colors.white,
+                                    color: Colors.grey[800],
                                     height: 36,
                                   )),
                             ),
@@ -252,7 +251,7 @@ class __AddBookDisplayState extends State<AddBookDisplay> {
                                   margin: const EdgeInsets.only(
                                       left: 20.0, right: 0.0),
                                   child: Divider(
-                                    color: Colors.white,
+                                    color: Colors.grey[800],
                                     height: 36,
                                   )),
                             ),

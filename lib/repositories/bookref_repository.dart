@@ -334,6 +334,10 @@ query {
             }
             link
             thumbnail
+            language
+            pageCount
+            textSnippet
+            publishedDate
             created
             etag
         }

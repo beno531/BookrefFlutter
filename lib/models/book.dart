@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 
 @HiveType(typeId: 2)
 class Book {
@@ -20,6 +21,16 @@ class Book {
   getBookThumbnail() => this.book["book"]["thumbnail"];
 
   getBookLang() => this.book["book"]["language"];
+
+  getBookPageCount() => this.book["book"]["pageCount"];
+
+  getBookTextSnippet() => this.book["book"]["textSnippet"];
+
+  getBookPublishedDate() {
+    var date = DateTime.parse(this.book["book"]["publishedDate"]);
+    var formatter = new DateFormat('dd.MM.yyyy');
+    return formatter.format(date);
+  }
 
   getBookCreated() => this.book["book"]["created"];
 

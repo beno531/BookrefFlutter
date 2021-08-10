@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bookref/models/book.dart';
 import 'package:bookref/themes/app_colors.dart';
 import 'package:flutter/gestures.dart';
@@ -10,6 +12,7 @@ class BookDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //BlocProvider.of<BookDetailsBloc>(context).add(LoadBookDetails(book: bookRef));
+    log(this.book.book.toString());
     final size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Color(0xffF3F3F3),
@@ -97,7 +100,7 @@ class BookDetailsPage extends StatelessWidget {
                   left: 30,
                   right: 30,
                   child: Container(
-                      height: 313,
+                      decoration: BoxDecoration(),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -134,7 +137,67 @@ class BookDetailsPage extends StatelessWidget {
                                 ],
                               ),
                             ),
-                          )
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 25),
+                            child: Container(
+                              width: double.infinity,
+                              height: size.height * 0.1,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5))),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "RELEASE",
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      Text("${book.getBookPublishedDate()}")
+                                    ],
+                                  ),
+                                  Container(
+                                      height: 60,
+                                      child:
+                                          VerticalDivider(color: Colors.grey)),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "PAGES",
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      Text("${book.getBookPageCount()}")
+                                    ],
+                                  ),
+                                  Container(
+                                      height: 60,
+                                      child:
+                                          VerticalDivider(color: Colors.grey)),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "LANGUAGE",
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      Text("${book.getBookLang()}")
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                              padding: const EdgeInsets.only(top: 30),
+                              child: Container(
+                                  height: 100,
+                                  child: Text("${book.getBookTextSnippet()}")))
                         ],
                       ))),
             ])));
