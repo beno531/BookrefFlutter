@@ -11,3 +11,8 @@ class LoadBookDetails extends BookDetailsEvent {
   Book book;
   LoadBookDetails({@required this.book}) : assert(book != null);
 }
+
+class LoadBookRecommendations extends BookDetailsEvent {
+  Book book;
+  LoadBookRecommendations({@required this.book}) : assert(book != null);
+}

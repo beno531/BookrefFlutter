@@ -1,6 +1,6 @@
 export 'user.dart';
 export 'signin.dart';
-export 'testbook.dart';
+export 'detailsBook.dart';
 export 'recommendedPerson.dart';
 export 'recommendedBook.dart';
 export 'dashboardBooks.dart';

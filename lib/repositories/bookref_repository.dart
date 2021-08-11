@@ -589,10 +589,18 @@ query ($input: ID!){
     bookById(id: $input) {
     id
     title
-    subtitle
-    authors{
-      name
-    }
+            subtitle
+            authors{
+              name
+            }
+            link
+            thumbnail
+            language
+            pageCount
+            textSnippet
+            publishedDate
+            created
+            etag
   }
 }
 ''';

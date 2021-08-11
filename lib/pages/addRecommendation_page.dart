@@ -1,4 +1,4 @@
-import 'package:bookref/models/testbook.dart';
+import 'package:bookref/models/detailsBook.dart';
 import 'package:bookref/blocs/add_recommendation.dart/add_recommendation.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_event.dart';

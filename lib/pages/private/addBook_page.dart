@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'package:bookref/models/testbook.dart';
+import 'package:bookref/models/detailsBook.dart';
 import 'package:bookref/blocs/add_book/add_book.dart';
 import 'package:bookref/blocs/navigation/navigation_bloc.dart';
 import 'package:bookref/blocs/navigation/navigation_event.dart';
