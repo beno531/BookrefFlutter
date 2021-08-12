@@ -3,7 +3,6 @@ import 'package:bookref/blocs/book_details/book_details_bloc.dart';
 import 'package:bookref/blocs/book_details/book_details_event.dart';
 import 'package:bookref/blocs/book_details/book_details_state.dart';
 import 'package:bookref/models/book.dart';
-import 'package:bookref/models/detailsBook.dart';
 import 'package:bookref/services/data_service.dart';
 import 'package:bookref/themes/app_colors.dart';
 import 'package:flutter/gestures.dart';
@@ -50,11 +49,6 @@ class BookDetailsPageDisplay extends StatelessWidget {
       }
 
       if (state is BookDetailsFinished) {
-        final DetailsBook book = state.book;
-        ////final List<Book> wishlist = state.dashboardBooks.wishlist;
-        ////final List<Book> libary = state.dashboardBooks.library;
-        ///
-        print(state.bookRecommendation.length);
         final size = MediaQuery.of(context).size;
         return Scaffold(
             backgroundColor: Color(0xffF3F3F3),
@@ -337,9 +331,9 @@ class BookDetailsPageDisplay extends StatelessWidget {
                                                                                 int index) {
                                                                           return ListTile(
                                                                             title:
-                                                                                Text(state.bookRecommendation[index].getTitle() ?? "None", style: TextStyle(color: Colors.white)),
+                                                                                Text(state.bookRecommendation[index].getTitle() ?? "None", style: TextStyle(color: Colors.grey[900])),
                                                                             subtitle:
-                                                                                Text(state.bookRecommendation[index].getNote() ?? "None", style: TextStyle(color: Colors.white)),
+                                                                                Text(state.bookRecommendation[index].getNote() ?? "None", style: TextStyle(color: Colors.grey[800])),
                                                                           );
                                                                         }),
                                                               ),
@@ -359,9 +353,9 @@ class BookDetailsPageDisplay extends StatelessWidget {
                                                                                 int index) {
                                                                           return ListTile(
                                                                             title:
-                                                                                Text(state.personRecommendation[index].getName() ?? "None", style: TextStyle(color: Colors.white)),
+                                                                                Text(state.personRecommendation[index].getName() ?? "None", style: TextStyle(color: Colors.grey[900])),
                                                                             subtitle:
-                                                                                Text(state.personRecommendation[index].getNote() ?? "None", style: TextStyle(color: Colors.white)),
+                                                                                Text(state.personRecommendation[index].getNote() ?? "None", style: TextStyle(color: Colors.grey[800])),
                                                                           );
                                                                         }),
                                                               ),

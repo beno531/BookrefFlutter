@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bookref/pages/addRecommendation_page.dart';
 import 'package:bookref/pages/private/addBook_page.dart';
 import 'package:bookref/pages/private/currents_page.dart';
 import 'package:bookref/pages/private/details_page.dart';
@@ -36,6 +37,10 @@ class RouteManager {
 
       case '/addBook':
         return MaterialPageRoute(builder: (_) => AddBookPage());
+
+      case '/addRecommendation':
+        return MaterialPageRoute(
+            builder: (_) => AddRecommendationPage(settings.arguments));
 
       default:
         return MaterialPageRoute(
