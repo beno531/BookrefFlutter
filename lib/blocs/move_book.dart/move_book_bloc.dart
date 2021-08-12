@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class MoveBookBloc extends Bloc<MoveBookEvent, MoveBookState> {
   final DataService dataService;
 
-  MoveBookBloc({@required this.dataService}) : super(null);
+  MoveBookBloc({@required this.dataService}) : super(MoveBookInitial());
 
   @override
   Stream<MoveBookState> mapEventToState(MoveBookEvent event) async* {
