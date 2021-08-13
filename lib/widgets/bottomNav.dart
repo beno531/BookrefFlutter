@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bookref/blocs/navigation/navigation_bloc.dart';
 import 'package:bookref/blocs/navigation/navigation_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +12,7 @@ class BottomNav extends StatefulWidget {
 
   BottomNav({
     Key key,
-    this.initialRoute: '/dashbaord',
+    this.initialRoute: '/currents',
     @required this.navCallback,
   }) : super(key: key);
 
@@ -25,7 +27,7 @@ class _BottomNavState extends State<BottomNav> {
   @override
   void initState() {
     super.initState();
-    //_currentRoute = widget.initialRoute;
+    _currentRoute = widget.initialRoute;
   }
 
   @override
@@ -79,15 +81,9 @@ class _BottomNavState extends State<BottomNav> {
 
   buildRoute(int i) {
     switch (i) {
-      // case 0:
-      //   onButtonTap("/dashboard", i);
-      //   break;
       case 0:
         onButtonTap("/currents", i);
         break;
-      // case 2:
-      //   onButtonTap("/addbook", i);
-      //   break;
       case 1:
         onButtonTap("/wishlist", i);
         break;

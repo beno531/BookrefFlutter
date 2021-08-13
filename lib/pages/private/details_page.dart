@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:bookref/blocs/book_details/book_details_bloc.dart';
 import 'package:bookref/blocs/book_details/book_details_event.dart';
 import 'package:bookref/blocs/book_details/book_details_state.dart';
@@ -14,8 +13,6 @@ class BookDetailsPage extends StatelessWidget {
   const BookDetailsPage({Key key, @required this.book}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    log("Hey");
-    log(this.book.book.toString());
     return BlocProvider(
         create: (context) => BookDetailsBloc(dataService: DataService()),
         child: BookDetailsPageDisplay(

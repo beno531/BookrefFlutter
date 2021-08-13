@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DashboardNavigatorPage extends StatefulWidget {
-  final Widget child;
-
-  DashboardNavigatorPage({Key key, this.child}) : super(key: key);
+  DashboardNavigatorPage({Key key}) : super(key: key);
 
   @override
   _DashboardNavigatorPageState createState() => _DashboardNavigatorPageState();
@@ -18,6 +16,7 @@ class DashboardNavigatorPage extends StatefulWidget {
 
 class _DashboardNavigatorPageState extends State<DashboardNavigatorPage> {
   final _routewManager = new RouteManager();
+  final _navigatorKey = new GlobalKey<NavigatorState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -106,14 +105,22 @@ class _DashboardNavigatorPageState extends State<DashboardNavigatorPage> {
                       ));
                     }
                   },
-                  child: widget.child),
+                  child: Navigator(
+                    initialRoute: "/currents",
+                    onGenerateRoute: (settings) {
+                      return _routewManager.generateDashboardRoute(
+                          settings, context);
+                    },
+                    key: _navigatorKey,
+                  )),
             ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNav(navCallback: (String namedRoute) {
         print("Navigating to $namedRoute");
-        //_navigatorKey.currentState.pushNamedAndRemoveUntil(namedRoute, (r) => false);
+        _navigatorKey.currentState
+            .pushNamedAndRemoveUntil(namedRoute, (route) => false);
       }),
     );
   }

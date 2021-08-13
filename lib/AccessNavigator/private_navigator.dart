@@ -1,9 +1,6 @@
 import 'package:bookref/AccessNavigator/route_manager.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_state.dart';
-import 'package:bookref/models/user.dart';
-import 'package:bookref/widgets/bottomNav.dart';
-import 'package:bookref/widgets/navDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -3,6 +3,7 @@ import 'package:bookref/blocs/add_recommendation.dart/add_recommendation.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_event.dart';
 import 'package:bookref/services/data_service.dart';
+import 'package:bookref/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -61,18 +62,23 @@ class __AddRecommendationPageDisplayState
       final recommendationBloc =
           BlocProvider.of<AddRecommendationBloc>(context);
       if (state is AddRecommendationInitial) {
+        final size = MediaQuery.of(context).size;
         return Scaffold(
           appBar: AppBar(
-              title: Text(""),
+              title: Text("Add Recommendation",
+                  style: TextStyle(color: Colors.grey[800])),
+              backgroundColor: AppColors.background,
+              elevation: 0,
               leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios),
+                  color: Colors.grey[800],
                   iconSize: 20.0,
                   onPressed: () {
                     Navigator.pop(context);
                   })),
           body: Container(
-            height: 999,
-            decoration: BoxDecoration(color: Colors.grey[850]),
+            height: size.height,
+            decoration: BoxDecoration(color: AppColors.background),
             child: DefaultTabController(
               length: 2,
               child: SafeArea(
@@ -90,14 +96,14 @@ class __AddRecommendationPageDisplayState
                                     style: TextStyle(
                                         fontSize: 15.0,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.white)),
+                                        color: Colors.grey[800])),
                               ),
                               Tab(
                                 icon: Text('Person',
                                     style: TextStyle(
                                         fontSize: 15.0,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.white)),
+                                        color: Colors.grey[800])),
                               )
                             ],
                           ),
@@ -117,14 +123,6 @@ class __AddRecommendationPageDisplayState
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            Text(
-                                              "BOOK RECOMMENDATION",
-                                              style: TextStyle(
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: Colors.white),
-                                            ),
-                                            SizedBox(height: 25),
                                             isExisting
                                                 ? TypeAheadFormField(
                                                     textFieldConfiguration:
@@ -136,11 +134,8 @@ class __AddRecommendationPageDisplayState
                                                               .of(context)
                                                           .style
                                                           .copyWith(
-                                                              fontStyle:
-                                                                  FontStyle
-                                                                      .italic,
-                                                              color:
-                                                                  Colors.white),
+                                                              color: Colors
+                                                                  .grey[800]),
                                                       decoration:
                                                           InputDecoration(
                                                         border:
@@ -148,20 +143,16 @@ class __AddRecommendationPageDisplayState
                                                           borderSide:
                                                               BorderSide(
                                                                   color: Colors
-                                                                      .white,
+                                                                          .grey[
+                                                                      800],
                                                                   width: 1.0),
                                                         ),
-                                                        labelText:
-                                                            'Select book',
-                                                        labelStyle: TextStyle(
-                                                            color:
-                                                                Colors.white),
                                                         enabledBorder:
                                                             OutlineInputBorder(
                                                           borderSide:
                                                               BorderSide(
                                                                   color: Colors
-                                                                      .amber,
+                                                                      .orange,
                                                                   width: 1.0),
                                                         ),
                                                       ),
@@ -176,26 +167,26 @@ class __AddRecommendationPageDisplayState
                                                         DetailsBook
                                                             suggestion) {
                                                       return ListTile(
-                                                        tileColor:
-                                                            Colors.grey[600],
+                                                        tileColor: Colors.white,
                                                         leading: Icon(
                                                           Icons.book,
-                                                          color: Colors.white,
+                                                          color:
+                                                              Colors.grey[800],
                                                         ),
                                                         title: Text(
                                                           suggestion
                                                               .getBookTitle(),
                                                           style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
+                                                              color: Colors
+                                                                  .grey[800]),
                                                         ),
                                                         subtitle: Text(
                                                           suggestion
                                                                   .getAuthor() ??
                                                               "None",
                                                           style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
+                                                              color: Colors
+                                                                  .grey[800]),
                                                         ),
                                                       );
                                                     },
@@ -244,8 +235,8 @@ class __AddRecommendationPageDisplayState
                                                     children: [
                                                       TextFormField(
                                                         style: TextStyle(
-                                                            color:
-                                                                Colors.white),
+                                                            color: Colors
+                                                                .grey[800]),
                                                         controller:
                                                             identifierInputController,
                                                         onEditingComplete: () =>
@@ -260,8 +251,8 @@ class __AddRecommendationPageDisplayState
                                                           labelText:
                                                               "Identifier/ ISBN",
                                                           labelStyle: TextStyle(
-                                                              color:
-                                                                  Colors.white),
+                                                              color: Colors
+                                                                  .grey[800]),
                                                           floatingLabelBehavior:
                                                               FloatingLabelBehavior
                                                                   .always,
@@ -278,7 +269,7 @@ class __AddRecommendationPageDisplayState
                                                             borderSide:
                                                                 BorderSide(
                                                                     color: Colors
-                                                                        .amber,
+                                                                        .orange,
                                                                     width: 1.0),
                                                           ),
                                                         ),
@@ -290,8 +281,8 @@ class __AddRecommendationPageDisplayState
                                                       SizedBox(height: 25),
                                                       TextFormField(
                                                         style: TextStyle(
-                                                            color:
-                                                                Colors.white),
+                                                            color: Colors
+                                                                .grey[800]),
                                                         controller:
                                                             titleInputController,
                                                         onEditingComplete: () =>
@@ -305,8 +296,8 @@ class __AddRecommendationPageDisplayState
                                                                   .grey[500]),
                                                           labelText: "Title",
                                                           labelStyle: TextStyle(
-                                                              color:
-                                                                  Colors.white),
+                                                              color: Colors
+                                                                  .grey[800]),
                                                           floatingLabelBehavior:
                                                               FloatingLabelBehavior
                                                                   .always,
@@ -323,7 +314,7 @@ class __AddRecommendationPageDisplayState
                                                             borderSide:
                                                                 BorderSide(
                                                                     color: Colors
-                                                                        .amber,
+                                                                        .orange,
                                                                     width: 1.0),
                                                           ),
                                                         ),
@@ -335,8 +326,8 @@ class __AddRecommendationPageDisplayState
                                                       SizedBox(height: 25),
                                                       TextField(
                                                         style: TextStyle(
-                                                            color:
-                                                                Colors.white),
+                                                            color: Colors
+                                                                .grey[800]),
                                                         controller:
                                                             subtitleInputController,
                                                         onEditingComplete: () =>
@@ -350,8 +341,8 @@ class __AddRecommendationPageDisplayState
                                                                   .grey[500]),
                                                           labelText: "Subtitle",
                                                           labelStyle: TextStyle(
-                                                              color:
-                                                                  Colors.white),
+                                                              color: Colors
+                                                                  .grey[800]),
                                                           floatingLabelBehavior:
                                                               FloatingLabelBehavior
                                                                   .always,
@@ -368,7 +359,7 @@ class __AddRecommendationPageDisplayState
                                                             borderSide:
                                                                 BorderSide(
                                                                     color: Colors
-                                                                        .amber,
+                                                                        .orange,
                                                                     width: 1.0),
                                                           ),
                                                         ),
@@ -376,8 +367,8 @@ class __AddRecommendationPageDisplayState
                                                       SizedBox(height: 25),
                                                       TextFormField(
                                                         style: TextStyle(
-                                                            color:
-                                                                Colors.white),
+                                                            color: Colors
+                                                                .grey[800]),
                                                         controller:
                                                             authorInputController,
                                                         onEditingComplete: () =>
@@ -391,8 +382,8 @@ class __AddRecommendationPageDisplayState
                                                                   .grey[500]),
                                                           labelText: "Author",
                                                           labelStyle: TextStyle(
-                                                              color:
-                                                                  Colors.white),
+                                                              color: Colors
+                                                                  .grey[800]),
                                                           floatingLabelBehavior:
                                                               FloatingLabelBehavior
                                                                   .always,
@@ -409,7 +400,7 @@ class __AddRecommendationPageDisplayState
                                                             borderSide:
                                                                 BorderSide(
                                                                     color: Colors
-                                                                        .amber,
+                                                                        .orange,
                                                                     width: 1.0),
                                                           ),
                                                         ),
@@ -426,14 +417,14 @@ class __AddRecommendationPageDisplayState
                                                   bookNotesInputController,
                                               maxLines: 5,
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: Colors.grey[800]),
                                               decoration: InputDecoration(
                                                 hintText: 'I like this book...',
                                                 hintStyle: TextStyle(
                                                     color: Colors.grey[700]),
                                                 labelText: "Notes",
                                                 labelStyle: TextStyle(
-                                                    color: Colors.white),
+                                                    color: Colors.grey[800]),
                                                 floatingLabelBehavior:
                                                     FloatingLabelBehavior
                                                         .always,
@@ -445,7 +436,7 @@ class __AddRecommendationPageDisplayState
                                                 enabledBorder:
                                                     OutlineInputBorder(
                                                   borderSide: BorderSide(
-                                                      color: Colors.amber,
+                                                      color: Colors.orange,
                                                       width: 1.0),
                                                 ),
                                               ),
@@ -453,6 +444,7 @@ class __AddRecommendationPageDisplayState
                                             SizedBox(height: 20.0),
                                             SizedBox(
                                               width: double.infinity,
+                                              height: 50,
                                               child: FlatButton(
                                                   onPressed: () async {
                                                     if (_formKey.currentState
@@ -488,10 +480,7 @@ class __AddRecommendationPageDisplayState
                                                                 message:
                                                                     "Recommendation was created!"));
 
-                                                        Navigator
-                                                            .pushReplacementNamed(
-                                                                context,
-                                                                "/currents");
+                                                        Navigator.pop(context);
                                                       } catch (err) {
                                                         BlocProvider.of<
                                                                     NotificationBloc>(
@@ -529,27 +518,19 @@ class __AddRecommendationPageDisplayState
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          Text(
-                                            "PERSON RECOMMENDATION",
-                                            style: TextStyle(
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.w700,
-                                                color: Colors.white),
-                                          ),
-                                          SizedBox(height: 35),
                                           TextField(
                                             controller: personInputController,
                                             onEditingComplete: () =>
                                                 node.unfocus(),
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: TextStyle(
+                                                color: Colors.grey[800]),
                                             decoration: InputDecoration(
                                               hintText: 'Albert Einstein',
                                               hintStyle: TextStyle(
                                                   color: Colors.grey[700]),
                                               labelText: "Name",
                                               labelStyle: TextStyle(
-                                                  color: Colors.white),
+                                                  color: Colors.grey[800]),
                                               floatingLabelBehavior:
                                                   FloatingLabelBehavior.always,
                                               border: OutlineInputBorder(
@@ -558,7 +539,7 @@ class __AddRecommendationPageDisplayState
                                               ),
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
-                                                    color: Colors.amber,
+                                                    color: Colors.orange,
                                                     width: 1.0),
                                               ),
                                             ),
@@ -568,15 +549,15 @@ class __AddRecommendationPageDisplayState
                                             controller:
                                                 personNotesInputController,
                                             maxLines: 5,
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: TextStyle(
+                                                color: Colors.grey[800]),
                                             decoration: InputDecoration(
                                               hintText: 'I like this person...',
                                               hintStyle: TextStyle(
                                                   color: Colors.grey[700]),
                                               labelText: "Notes",
                                               labelStyle: TextStyle(
-                                                  color: Colors.white),
+                                                  color: Colors.grey[800]),
                                               floatingLabelBehavior:
                                                   FloatingLabelBehavior.always,
                                               border: OutlineInputBorder(
@@ -585,7 +566,7 @@ class __AddRecommendationPageDisplayState
                                               ),
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
-                                                    color: Colors.amber,
+                                                    color: Colors.orange,
                                                     width: 1.0),
                                               ),
                                             ),
@@ -594,6 +575,7 @@ class __AddRecommendationPageDisplayState
                                           SizedBox(height: 20.0),
                                           SizedBox(
                                             width: double.infinity,
+                                            height: 50,
                                             child: FlatButton(
                                                 onPressed: () async {
                                                   try {
