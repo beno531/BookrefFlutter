@@ -17,15 +17,14 @@ class DashboardNavigatorPage extends StatefulWidget {
 }
 
 class _DashboardNavigatorPageState extends State<DashboardNavigatorPage> {
-  //final _navigatorKey = new GlobalKey<NavigatorState>();
   final _routewManager = new RouteManager();
-  //final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //key: _scaffoldKey,
+      key: _scaffoldKey,
       drawer: NavDrawer(
-        user: User(name: "dummy"),
+        user: User(name: "%Placeholder%"),
       ),
       body: Container(
         decoration: BoxDecoration(color: Color(0xffE9E8E3)),
@@ -42,7 +41,7 @@ class _DashboardNavigatorPageState extends State<DashboardNavigatorPage> {
                     IconButton(
                       icon: const Icon(Icons.menu),
                       onPressed: () {
-                        //_scaffoldKey.currentState.openDrawer();
+                        _scaffoldKey.currentState.openDrawer();
                       },
                     ),
                     RichText(
