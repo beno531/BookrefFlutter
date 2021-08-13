@@ -39,7 +39,7 @@ class BookDetailsPageDisplay extends StatelessWidget {
         builder: (context, state) {
       if (state is BookDetailsLoading) {
         return Container(
-          decoration: BoxDecoration(color: Colors.grey[800]),
+          decoration: BoxDecoration(color: AppColors.background),
           child: Center(
             child: CircularProgressIndicator(
               strokeWidth: 2,
