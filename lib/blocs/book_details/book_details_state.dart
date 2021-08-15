@@ -1,7 +1,6 @@
-import 'package:bookref/Models/book.dart';
-import 'package:bookref/Models/recommendedBook.dart';
-import 'package:bookref/Models/recommendedPerson.dart';
-import 'package:bookref/Models/testbook.dart';
+import 'package:bookref/models/recommendedBook.dart';
+import 'package:bookref/models/recommendedPerson.dart';
+import 'package:bookref/models/detailsBook.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 

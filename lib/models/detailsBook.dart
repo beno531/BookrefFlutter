@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class DetailsBook {
   DetailsBook(this.book);
 
@@ -16,6 +18,18 @@ class DetailsBook {
   getBookIsbn() => this.book["isbn"];
 
   getBookSubtitle() => this.book["subtitle"];
+
+  getBookThumbnail() => this.book["thumbnail"];
+
+  getBookPageCount() => this.book["pageCount"];
+
+  getBookTextSnippet() => this.book["textSnippet"];
+
+  getBookPublishedDate() {
+    var date = DateTime.parse(this.book["publishedDate"]);
+    var formatter = new DateFormat('dd.MM.yyyy');
+    return formatter.format(date);
+  }
 
   getAuthor() {
     var authors = this.book["authors"];

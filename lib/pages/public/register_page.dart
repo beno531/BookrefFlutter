@@ -1,156 +1,125 @@
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_event.dart';
+import 'package:bookref/themes/app_colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/blocs.dart';
-import '../services/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../blocs/blocs.dart';
+import '../../services/services.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Login'),
-      // ),
-      body: Container(
-        decoration: BoxDecoration(color: Color(0xffE9E8E3)),
-        child: SafeArea(
-            minimum: const EdgeInsets.all(0),
+        backgroundColor: AppColors.background,
+        body: Container(
+            width: size.width,
+            height: size.height,
             child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-              builder: (context, state) {
-                final authBloc = BlocProvider.of<AuthenticationBloc>(context);
-                if (state is AuthenticationNotAuthenticated) {
-                  return SafeArea(
-                    child: Column(
-                      children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height / 10,
-                          child: Padding(
-                              padding: const EdgeInsets.all(25.0),
-                              child: RichText(
-                                text: new TextSpan(
-                                  // Note: Styles for TextSpans must be explicitly defined.
-                                  // Child text spans will inherit styles from parent
-                                  style: new TextStyle(
-                                    fontSize: 40.0,
-                                    fontFamily: 'Amaranth',
-                                    color: Colors.black,
-                                  ),
-                                  children: <TextSpan>[
-                                    new TextSpan(
-                                        text: 'BOOK',
-                                        style: new TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    new TextSpan(
-                                        text: 'REF.',
-                                        style: new TextStyle(
-                                            color: Colors.orange[700],
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
-                              )),
-                        ),
-                        Expanded(
-                          child: Center(
-                              child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(40, 0, 10, 5),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Welcome,",
-                                        style: TextStyle(
-                                            fontSize: 35,
-                                            fontWeight: FontWeight.bold),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      Spacer()
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(40, 0, 10, 0),
-                                  child: Text("Sign up to continue!",
-                                      style: TextStyle(
-                                          fontSize: 25,
-                                          color: Colors.grey[500])),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(40, 30, 40, 0),
-                                  child: Container(
-                                      height: 400.0, child: _RegisterForm()),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 70),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      RichText(
-                                        text: TextSpan(
-                                          text: "I'm already a User. ",
-                                          style: TextStyle(
-                                              color: Colors.grey[600]),
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                                text: 'Sign In',
-                                                style: TextStyle(
-                                                    color: Colors.grey[900]),
-                                                recognizer:
-                                                    TapGestureRecognizer()
-                                                      ..onTap = () =>
-                                                          Navigator.pushNamed(
-                                                              context,
-                                                              '/login')),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
+                builder: (context, state) {
+              final authBloc = BlocProvider.of<AuthenticationBloc>(context);
+              if (state is AuthenticationNotAuthenticated) {
+                return Stack(children: [
+                  Positioned(
+                      top: size.height * 0.08,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: RichText(
+                          text: new TextSpan(
+                            style: new TextStyle(
+                              fontSize: 40.0,
+                              fontFamily: 'Amaranth',
+                              color: Colors.black,
                             ),
-                          )),
+                            children: <TextSpan>[
+                              new TextSpan(
+                                  text: 'BOOK',
+                                  style: new TextStyle(
+                                      fontWeight: FontWeight.bold)),
+                              new TextSpan(
+                                  text: 'REF.',
+                                  style: new TextStyle(
+                                      color: Colors.orange[700],
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
                         ),
-                      ],
+                      )),
+                  Positioned(
+                    top: size.height * 0.23,
+                    left: 30,
+                    right: 0,
+                    child: Text(
+                      "Welcome,",
+                      style:
+                          TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
                     ),
-                  );
-                }
-                if (state is AuthenticationFailure) {
-                  return Center(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(state.message),
-                      FlatButton(
-                        textColor: Theme.of(context).primaryColor,
-                        child: Text('Retry'),
-                        onPressed: () {
-                          authBloc.add(AppLoaded());
-                        },
-                      )
-                    ],
-                  ));
-                }
-                // return splash screen
-                return Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
                   ),
-                );
-              },
-            )),
-      ),
-    );
+                  Positioned(
+                    top: size.height * 0.28,
+                    left: 30,
+                    right: 0,
+                    child: Text("Sign up to continue!",
+                        style:
+                            TextStyle(fontSize: 25, color: Colors.grey[500])),
+                  ),
+                  Positioned(
+                      top: size.height * 0.36,
+                      left: 30,
+                      right: 30,
+                      child: Container(height: 398, child: _RegisterForm())),
+                  Positioned(
+                      bottom: size.height * 0.10,
+                      left: 30,
+                      right: 30,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                text: "I'm already a User. ",
+                                style: TextStyle(color: Colors.grey[600]),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: 'Sign In',
+                                      style: TextStyle(color: Colors.grey[900]),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () => Navigator.pushNamed(
+                                            context, '/login')),
+                                ],
+                              ),
+                            )
+                          ])),
+                ]);
+              }
+
+              if (state is AuthenticationFailure) {
+                return Center(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(state.message),
+                    FlatButton(
+                      textColor: Theme.of(context).primaryColor,
+                      child: Text('Retry'),
+                      onPressed: () {
+                        authBloc.add(AppLoaded());
+                      },
+                    )
+                  ],
+                ));
+              }
+              // return splash screen
+              return Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                ),
+              );
+            })));
   }
 }
 

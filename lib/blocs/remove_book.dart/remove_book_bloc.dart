@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class RemoveBookBloc extends Bloc<RemoveBookEvent, RemoveBookState> {
   final DataService dataService;
 
-  RemoveBookBloc({@required this.dataService}) : super(null);
+  RemoveBookBloc({@required this.dataService}) : super(RemoveBookInitial());
 
   @override
   Stream<RemoveBookState> mapEventToState(RemoveBookEvent event) async* {

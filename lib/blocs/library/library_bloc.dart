@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:bookref/Models/book.dart';
+import 'package:bookref/models/book.dart';
 import 'package:bookref/blocs/library/library_event.dart';
 import 'package:bookref/blocs/library/library_state.dart';
 import 'package:flutter/cupertino.dart';

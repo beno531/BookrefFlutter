@@ -6,6 +6,8 @@ abstract class MoveBookState extends Equatable {
   List<Object> get props => [];
 }
 
+class MoveBookInitial extends MoveBookState {}
+
 class MoveBookLoading extends MoveBookState {}
 
 class MoveBookFinished extends MoveBookState {}

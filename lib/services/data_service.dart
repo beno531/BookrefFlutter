@@ -1,8 +1,7 @@
-import 'package:bookref/Models/book.dart';
-import 'package:bookref/Models/dashboardBooks.dart';
-import 'package:bookref/Models/recommendedBook.dart';
-import 'package:bookref/Models/recommendedPerson.dart';
-import 'package:bookref/Models/testbook.dart';
+import 'package:bookref/models/book.dart';
+import 'package:bookref/models/recommendedBook.dart';
+import 'package:bookref/models/recommendedPerson.dart';
+import 'package:bookref/models/detailsBook.dart';
 import 'package:bookref/models/bookResult.dart';
 import 'package:bookref/repositories/repositories.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -24,24 +23,6 @@ class DataService {
 
 //   return directory.path;
 // }
-
-  Future<DashboardBooks> getDashboardBooks() async {
-    final currents = await _bookrefRepository.getDashboardCurrents();
-    final wishlist = await _bookrefRepository.getDashboardWishlist();
-    final libraries = await _bookrefRepository.getDashboardLibary();
-
-    var box = await Hive.openBox("data");
-
-    box.put(
-        'currents',
-        DashboardBooks(
-            convertBookQueryToList(currents),
-            convertBookQueryToList(wishlist),
-            convertBookQueryToList(libraries)));
-
-    return DashboardBooks(convertBookQueryToList(currents),
-        convertBookQueryToList(wishlist), convertBookQueryToList(libraries));
-  }
 
   Future<List<Book>> getCurrentBooks() async {
     final currents = await _bookrefRepository.getDashboardCurrents();

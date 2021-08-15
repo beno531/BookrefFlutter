@@ -6,6 +6,8 @@ abstract class RemoveBookState extends Equatable {
   List<Object> get props => [];
 }
 
+class RemoveBookInitial extends RemoveBookState {}
+
 class RemoveBookLoading extends RemoveBookState {}
 
 class RemoveBookFinished extends RemoveBookState {}
