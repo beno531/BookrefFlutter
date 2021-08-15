@@ -353,9 +353,18 @@ query {
         status
         book {
             title
+            subtitle
             authors{
               name
             }
+            link
+            thumbnail
+            language
+            pageCount
+            textSnippet
+            publishedDate
+            created
+            etag
         }
     }
 }
@@ -369,9 +378,18 @@ query {
         status
         book {
             title
+            subtitle
             authors{
               name
             }
+            link
+            thumbnail
+            language
+            pageCount
+            textSnippet
+            publishedDate
+            created
+            etag
         }
     }
 }

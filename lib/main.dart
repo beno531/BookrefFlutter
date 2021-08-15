@@ -1,5 +1,4 @@
-import 'package:bookref/AccessNavigator/private_navigator.dart';
-import 'package:bookref/AccessNavigator/public_navigator.dart';
+import 'package:bookref/Router/router.gr.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/repositories/repositories.dart';
 import 'package:flutter/material.dart';
@@ -48,31 +47,13 @@ void main() async {
           )));
 }
 
-class MyApp extends StatefulWidget {
-  MyApp({Key key}) : super(key: key);
-
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
+  final _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Bookref',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-      ),
-      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          if (state is AuthenticationAuthenticated) {
-            // Private Pages
-            return PrivateNavigator();
-          }
-          // Public Pages
-          return PublicNavigator();
-        },
-      ),
+    return MaterialApp.router(
+      routerDelegate: _appRouter.delegate(),
+      routeInformationParser: _appRouter.defaultRouteParser(),
     );
   }
 }

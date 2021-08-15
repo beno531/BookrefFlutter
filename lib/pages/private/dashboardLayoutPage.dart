@@ -1,4 +1,5 @@
-import 'package:bookref/AccessNavigator/route_manager.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:bookref/Router/router.gr.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_state.dart';
 import 'package:bookref/models/user.dart';
@@ -7,15 +8,14 @@ import 'package:bookref/widgets/navDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DashboardNavigatorPage extends StatefulWidget {
-  DashboardNavigatorPage({Key key}) : super(key: key);
+class DashboardLayoutPage extends StatefulWidget {
+  DashboardLayoutPage({Key key}) : super(key: key);
 
   @override
-  _DashboardNavigatorPageState createState() => _DashboardNavigatorPageState();
+  _DashboardLayoutPageState createState() => _DashboardLayoutPageState();
 }
 
-class _DashboardNavigatorPageState extends State<DashboardNavigatorPage> {
-  final _routewManager = new RouteManager();
+class _DashboardLayoutPageState extends State<DashboardLayoutPage> {
   final _navigatorKey = new GlobalKey<NavigatorState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
@@ -66,7 +66,9 @@ class _DashboardNavigatorPageState extends State<DashboardNavigatorPage> {
                     IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () {
-                        Navigator.pushNamed(context, "/addBook", arguments: {});
+                        context.router.push(
+                          AddBookRoute(),
+                        );
                       },
                     ),
                   ],
@@ -75,52 +77,44 @@ class _DashboardNavigatorPageState extends State<DashboardNavigatorPage> {
             ),
             Expanded(
               child: BlocListener<NotificationBloc, NotificationState>(
-                  listener: (context, state) {
-                    if (state is NotificationPushed) {
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                        backgroundColor: state.status,
-                        content: Container(
-                          height: 50.0,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 5),
-                                child: Text(
-                                  state.title,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                listener: (context, state) {
+                  if (state is NotificationPushed) {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      backgroundColor: state.status,
+                      content: Container(
+                        height: 50.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Text(
+                                state.title,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                state.message,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
+                            ),
+                            Text(
+                              state.message,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
                         ),
-                        duration: Duration(seconds: 2),
-                      ));
-                    }
-                  },
-                  child: Navigator(
-                    initialRoute: "/currents",
-                    onGenerateRoute: (settings) {
-                      return _routewManager.generateDashboardRoute(
-                          settings, context);
-                    },
-                    key: _navigatorKey,
-                  )),
-            ),
+                      ),
+                      duration: Duration(seconds: 2),
+                    ));
+                  }
+                },
+                child: AutoRouter(),
+              ),
+            )
           ],
         ),
       ),
       bottomNavigationBar: BottomNav(navCallback: (String namedRoute) {
         print("Navigating to $namedRoute");
-        _navigatorKey.currentState
-            .pushNamedAndRemoveUntil(namedRoute, (route) => false);
       }),
     );
   }

@@ -1,15 +1,18 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:bookref/Router/router.gr.dart';
 import 'package:bookref/models/book.dart';
+import 'package:bookref/blocs/move_book.dart/move_book_bloc.dart';
+import 'package:bookref/blocs/move_book.dart/move_book_state.dart';
+import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
+import 'package:bookref/blocs/wishlist/wishlist_event.dart';
+import 'package:bookref/blocs/wishlist/wishlist_state.dart';
+import 'package:bookref/widgets/moveBookDialog.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bookref/blocs/currents/currents_bloc.dart';
 import 'package:bookref/blocs/currents/currents_event.dart';
 import 'package:bookref/blocs/currents/currents_state.dart';
 import 'package:bookref/services/data_service.dart';
-import 'package:bookref/widgets/moveBookDialog.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CurrentsPage extends StatelessWidget {
+class WishlistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -54,7 +57,7 @@ class CurrentsPage extends StatelessWidget {
               left: 30,
               right: 0,
               child: Text(
-                "CURRENTS",
+                "Wishlist",
                 style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -80,33 +83,33 @@ class _CurrentBooksDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => CurrentBloc(
+        create: (context) => WishlistBloc(
               dataService: DataService(),
             ),
-        child: _CurrentBooks());
+        child: _WishlistBooks());
   }
 }
 
-class _CurrentBooks extends StatefulWidget {
+class _WishlistBooks extends StatefulWidget {
   @override
-  __CurrentBooksState createState() => __CurrentBooksState();
+  ___WishlistBooksState createState() => ___WishlistBooksState();
 }
 
-class __CurrentBooksState extends State<_CurrentBooks> {
+class ___WishlistBooksState extends State<_WishlistBooks> {
   MoveBookDialog moveBookDialog;
-  __CurrentBooksState() {
+  ___WishlistBooksState() {
     moveBookDialog = MoveBookDialog();
   }
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<CurrentBloc>(context).add(LoadCurrentItems());
-    final _currentsBloc = BlocProvider.of<CurrentBloc>(context);
+    BlocProvider.of<WishlistBloc>(context).add(LoadWishlistItems());
+    final _wishlistBloc = BlocProvider.of<WishlistBloc>(context);
 
-    return BlocBuilder<CurrentBloc, CurrentsState>(builder: (context, state) {
+    return BlocBuilder<WishlistBloc, WishlistState>(builder: (context, state) {
       //final currentsBloc = BlocProvider.of<CurrentBloc>(context);
 
-      if (state is CurrentItemsLoading) {
+      if (state is WishlistItemsLoading) {
         return Container(
           decoration: BoxDecoration(color: Color(0xffE9E8E3)),
           child: Center(
@@ -117,8 +120,8 @@ class __CurrentBooksState extends State<_CurrentBooks> {
         );
       }
 
-      if (state is CurrentItemsFinished) {
-        final List<Book> currents = state.currents;
+      if (state is WishlistItemsFinished) {
+        final List<Book> currents = state.wishlist;
 
         var size = MediaQuery.of(context).size;
 
@@ -169,9 +172,8 @@ class __CurrentBooksState extends State<_CurrentBooks> {
                       textColor: Colors.black,
                       splashColor: Colors.black12,
                       onPressed: () {
-                        context.router.push(
-                          BookDetailsRoute(book: book),
-                        );
+                        Navigator.of(context)
+                            .pushNamed("/bookDetails", arguments: book);
                       },
                       onLongPress: () {
                         moveBookDialog.show(book, context);
@@ -209,9 +211,8 @@ class __CurrentBooksState extends State<_CurrentBooks> {
                       color: Colors.white,
                     ),
                     onTap: () {
-                      context.router.push(
-                        AddRecommendationRoute(bookId: book.getBookId()),
-                      );
+                      Navigator.of(context).pushNamed("/addRecommendation",
+                          arguments: book.getBookId());
                     },
                   ),
                 ),
@@ -221,7 +222,7 @@ class __CurrentBooksState extends State<_CurrentBooks> {
         );
       }
 
-      if (state is CurrentItemsFailure) {
+      if (state is WishlistItemsFailure) {
         return Container(
           decoration: BoxDecoration(color: Colors.red[800]),
           child: Center(
@@ -247,6 +248,6 @@ class __CurrentBooksState extends State<_CurrentBooks> {
   }
 
   Future<void> _pullRefresh() async {
-    BlocProvider.of<CurrentBloc>(context).add(LoadCurrentItems());
+    BlocProvider.of<WishlistBloc>(context).add(LoadWishlistItems());
   }
 }
