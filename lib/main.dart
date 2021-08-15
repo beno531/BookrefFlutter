@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:bookref/Router/router.gr.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/repositories/repositories.dart';
@@ -57,11 +58,14 @@ class MyApp extends StatelessWidget {
       builder: (context, state) {
         log(state.toString());
         return MaterialApp.router(
-          routerDelegate: _appRouter.delegate(initialRoutes: [
-            state is AuthenticationAuthenticated
-                ? DashboardLayoutRoute()
-                : LoginRoute()
-          ]),
+          routerDelegate: AutoRouterDelegate.declarative(
+            _appRouter,
+            routes: (_) => [
+              state is AuthenticationAuthenticated
+                  ? DashboardLayoutRoute()
+                  : LoginRoute()
+            ],
+          ),
           routeInformationParser: _appRouter.defaultRouteParser(),
         );
       },
