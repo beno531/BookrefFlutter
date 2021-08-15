@@ -8,7 +8,7 @@ import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 
 import '../models/book.dart' as _i10;
-import '../pages/library_page.dart' as _i9;
+import '../pages/private/library_page.dart' as _i9;
 import '../pages/private/addBook_page.dart' as _i4;
 import '../pages/private/addRecommendation_page.dart' as _i5;
 import '../pages/private/currents_page.dart' as _i7;

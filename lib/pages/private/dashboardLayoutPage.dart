@@ -19,9 +19,6 @@ class _DashboardLayoutPageState extends State<DashboardLayoutPage> {
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
-        drawer: NavDrawer(
-          user: User(name: "%Placeholder%"),
-        ),
         extendBodyBehindAppBar: true,
         extendBody: true,
         builder: (context, child, animation) {

@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:bookref/pages/private/dashboardLayoutPage.dart';
-import 'package:bookref/pages/library_page.dart';
+import 'package:bookref/pages/private/library_page.dart';
 import 'package:bookref/pages/private/addBook_page.dart';
 import 'package:bookref/pages/private/addRecommendation_page.dart';
 import 'package:bookref/pages/private/currents_page.dart';

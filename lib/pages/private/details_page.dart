@@ -7,6 +7,7 @@ import 'package:bookref/themes/app_colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_share/social_share.dart';
 
 class BookDetailsPage extends StatelessWidget {
   final Book book;
@@ -63,13 +64,27 @@ class BookDetailsPageDisplay extends StatelessWidget {
                       expandedHeight: size.height * 0.36,
                       iconTheme: IconThemeData(color: Colors.black),
                       actions: [
-                        IconButton(
-                          icon: const Icon(Icons.share),
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Funktion folgt bald ;)')));
-                          },
+                        PopupMenuButton(
+                          icon: Icon(Icons
+                              .share), //don't specify icon if you want 3 dot menu
+                          color: Colors.blue,
+                          itemBuilder: (context) => [
+                            PopupMenuItem<int>(
+                              value: 0,
+                              child: Text(
+                                "Copy to Clipboard",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            PopupMenuItem<int>(
+                              value: 1,
+                              child: Text(
+                                "Share via WhatsApp",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                          onSelected: (item) => {onShareBook(item, book)},
                         ),
                       ],
                       flexibleSpace: FlexibleSpaceBar(
@@ -160,7 +175,8 @@ class BookDetailsPageDisplay extends StatelessWidget {
                                             children: <TextSpan>[
                                               new TextSpan(
                                                   text:
-                                                      '${book.getBookSubtitle()}',
+                                                      book.getBookSubtitle() ??
+                                                          "none",
                                                   style: new TextStyle(
                                                       fontWeight:
                                                           FontWeight.w800)),
@@ -178,7 +194,8 @@ class BookDetailsPageDisplay extends StatelessWidget {
                                             ),
                                             children: <TextSpan>[
                                               new TextSpan(
-                                                  text: '${book.getAuthor()}',
+                                                  text: book.getAuthor() ??
+                                                      "none",
                                                   style: new TextStyle(
                                                       fontWeight:
                                                           FontWeight.w800)),
@@ -213,7 +230,8 @@ class BookDetailsPageDisplay extends StatelessWidget {
                                                         const EdgeInsets.only(
                                                             top: 5),
                                                     child: Text(
-                                                        "${book.getBookPublishedDate()}"),
+                                                        book.getBookPublishedDate() ??
+                                                            "none"),
                                                   )
                                                 ],
                                               ),
@@ -235,7 +253,8 @@ class BookDetailsPageDisplay extends StatelessWidget {
                                                         const EdgeInsets.only(
                                                             top: 5),
                                                     child: Text(
-                                                        "${book.getBookPageCount()}"),
+                                                        book.getBookPageCount() ??
+                                                            "none"),
                                                   )
                                                 ],
                                               ),
@@ -257,7 +276,8 @@ class BookDetailsPageDisplay extends StatelessWidget {
                                                         const EdgeInsets.only(
                                                             top: 5),
                                                     child: Text(
-                                                        "${book.getBookLang()}"),
+                                                        book.getBookLang() ??
+                                                            "none"),
                                                   )
                                                 ],
                                               ),
@@ -279,7 +299,8 @@ class BookDetailsPageDisplay extends StatelessWidget {
                                               const EdgeInsets.only(top: 5),
                                           child: Container(
                                               child: Text(
-                                                  "${book.getBookTextSnippet()}"))),
+                                                  book.getBookTextSnippet() ??
+                                                      "none"))),
                                       Padding(
                                         padding: const EdgeInsets.only(top: 20),
                                         child: DefaultTabController(
@@ -315,47 +336,35 @@ class BookDetailsPageDisplay extends StatelessWidget {
                                                           children: <Widget>[
                                                             Container(
                                                               child: Center(
-                                                                child: ListView
-                                                                    .builder(
-                                                                        padding:
-                                                                            const EdgeInsets.all(
-                                                                                8),
-                                                                        itemCount: state
-                                                                            .bookRecommendation
-                                                                            .length,
-                                                                        itemBuilder:
-                                                                            (BuildContext context,
-                                                                                int index) {
-                                                                          return ListTile(
-                                                                            title:
-                                                                                Text(state.bookRecommendation[index].getTitle() ?? "None", style: TextStyle(color: Colors.grey[900])),
-                                                                            subtitle:
-                                                                                Text(state.bookRecommendation[index].getNote() ?? "None", style: TextStyle(color: Colors.grey[800])),
-                                                                          );
-                                                                        }),
-                                                              ),
+                                                                  child: state
+                                                                          .bookRecommendation
+                                                                          .isNotEmpty
+                                                                      ? ListView.builder(
+                                                                          padding: const EdgeInsets.all(8),
+                                                                          itemCount: state.bookRecommendation.length,
+                                                                          itemBuilder: (BuildContext context, int index) {
+                                                                            return ListTile(
+                                                                              title: Text(state.bookRecommendation[index].getTitle() ?? "None", style: TextStyle(color: Colors.grey[900])),
+                                                                              subtitle: Text(state.bookRecommendation[index].getNote() ?? "None", style: TextStyle(color: Colors.grey[800])),
+                                                                            );
+                                                                          })
+                                                                      : Text("No Data")),
                                                             ),
                                                             Container(
                                                               child: Center(
-                                                                child: ListView
-                                                                    .builder(
-                                                                        padding:
-                                                                            const EdgeInsets.all(
-                                                                                8),
-                                                                        itemCount: state
-                                                                            .personRecommendation
-                                                                            .length,
-                                                                        itemBuilder:
-                                                                            (BuildContext context,
-                                                                                int index) {
-                                                                          return ListTile(
-                                                                            title:
-                                                                                Text(state.personRecommendation[index].getName() ?? "None", style: TextStyle(color: Colors.grey[900])),
-                                                                            subtitle:
-                                                                                Text(state.personRecommendation[index].getNote() ?? "None", style: TextStyle(color: Colors.grey[800])),
-                                                                          );
-                                                                        }),
-                                                              ),
+                                                                  child: state
+                                                                          .bookRecommendation
+                                                                          .isNotEmpty
+                                                                      ? ListView.builder(
+                                                                          padding: const EdgeInsets.all(8),
+                                                                          itemCount: state.personRecommendation.length,
+                                                                          itemBuilder: (BuildContext context, int index) {
+                                                                            return ListTile(
+                                                                              title: Text(state.personRecommendation[index].getName() ?? "None", style: TextStyle(color: Colors.grey[900])),
+                                                                              subtitle: Text(state.personRecommendation[index].getNote() ?? "None", style: TextStyle(color: Colors.grey[800])),
+                                                                            );
+                                                                          })
+                                                                      : Text("No Data")),
                                                             ),
                                                           ]))
                                                 ])),
@@ -394,5 +403,24 @@ class BookDetailsPageDisplay extends StatelessWidget {
 
       return Text("Error");
     });
+  }
+
+  onShareBook(itemIndex, Book book) {
+    switch (itemIndex) {
+      case 0:
+        SocialShare.copyToClipboard(book.getBookTitle().toString() +
+            " " +
+            book.getBookSubtitle().toString() +
+            ", " +
+            book.getAuthor().toString());
+        break;
+      case 1:
+        SocialShare.shareWhatsapp(book.getBookTitle().toString() +
+            " " +
+            book.getBookSubtitle().toString() +
+            ", " +
+            book.getAuthor().toString());
+        break;
+    }
   }
 }

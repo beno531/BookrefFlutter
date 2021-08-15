@@ -27,9 +27,11 @@ class Book {
   getBookTextSnippet() => this.book["book"]["textSnippet"];
 
   getBookPublishedDate() {
-    var date = DateTime.parse(this.book["book"]["publishedDate"]);
-    var formatter = new DateFormat('dd.MM.yyyy');
-    return formatter.format(date);
+    try {
+      var date = DateTime.parse(this.book["book"]["publishedDate"]);
+      var formatter = new DateFormat('dd.MM.yyyy');
+      return formatter.format(date);
+    } catch (e) {}
   }
 
   getBookCreated() => this.book["book"]["created"];
