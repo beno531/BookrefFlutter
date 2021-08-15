@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'authentication_event.dart';
 import 'authentication_state.dart';
@@ -37,6 +39,7 @@ class AuthenticationBloc
           currentUser.token != "" &&
           currentUser.name != null) {
         yield AuthenticationAuthenticated(user: currentUser);
+        log("Test1");
       } else {
         yield AuthenticationNotAuthenticated();
       }

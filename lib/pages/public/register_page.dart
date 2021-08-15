@@ -1,3 +1,4 @@
+import 'package:bookref/Router/router.gr.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_event.dart';
 import 'package:bookref/themes/app_colors.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../blocs/blocs.dart';
 import '../../services/services.dart';
+import 'package:auto_route/auto_route.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
@@ -87,8 +89,9 @@ class RegisterPage extends StatelessWidget {
                                       text: 'Sign In',
                                       style: TextStyle(color: Colors.grey[900]),
                                       recognizer: TapGestureRecognizer()
-                                        ..onTap = () => Navigator.pushNamed(
-                                            context, '/login')),
+                                        ..onTap = () => context.router.push(
+                                              LoginRoute(),
+                                            )),
                                 ],
                               ),
                             )
@@ -159,6 +162,10 @@ class __SignUpFormState extends State<_SignUpForm> {
           email: _emailController.text,
           username: _usernameController.text,
           password: _passwordController.text));
+
+      context.router.push(
+        DashboardLayoutRoute(),
+      );
     }
 
     return BlocListener<LoginBloc, LoginState>(

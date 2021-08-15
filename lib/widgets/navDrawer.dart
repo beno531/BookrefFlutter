@@ -1,5 +1,7 @@
+import 'package:bookref/Router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:auto_route/auto_route.dart';
 
 import '../blocs/authentication/authentication.dart';
 import '../models/models.dart';
@@ -49,7 +51,12 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap: () => {authBloc.add(UserLoggedOut())},
+            onTap: () {
+              authBloc.add(UserLoggedOut());
+              context.router.push(
+                LoginRoute(),
+              );
+            },
           ),
         ],
       ),

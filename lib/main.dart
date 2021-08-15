@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bookref/Router/router.gr.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/repositories/repositories.dart';
@@ -51,9 +53,18 @@ class MyApp extends StatelessWidget {
   final _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerDelegate: _appRouter.delegate(),
-      routeInformationParser: _appRouter.defaultRouteParser(),
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
+        log(state.toString());
+        return MaterialApp.router(
+          routerDelegate: _appRouter.delegate(initialRoutes: [
+            state is AuthenticationAuthenticated
+                ? DashboardLayoutRoute()
+                : LoginRoute()
+          ]),
+          routeInformationParser: _appRouter.defaultRouteParser(),
+        );
+      },
     );
   }
 }
