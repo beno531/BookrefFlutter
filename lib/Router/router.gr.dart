@@ -7,14 +7,16 @@
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 
-import '../models/book.dart' as _i10;
-import '../pages/private/library_page.dart' as _i9;
+import '../models/book.dart' as _i12;
+import '../pages/pages.dart' as _i7;
 import '../pages/private/addBook_page.dart' as _i4;
 import '../pages/private/addRecommendation_page.dart' as _i5;
-import '../pages/private/currents_page.dart' as _i7;
+import '../pages/private/currents_page.dart' as _i9;
 import '../pages/private/dashboardLayoutPage.dart' as _i3;
 import '../pages/private/details_page.dart' as _i6;
-import '../pages/private/wishlist_page.dart' as _i8;
+import '../pages/private/library_page.dart' as _i11;
+import '../pages/private/wishlist_page.dart' as _i10;
+import '../pages/public/register_page.dart' as _i8;
 
 class AppRouter extends _i1.RootStackRouter {
   AppRouter([_i2.GlobalKey<_i2.NavigatorState> navigatorKey])
@@ -47,20 +49,30 @@ class AppRouter extends _i1.RootStackRouter {
               orElse: () => const BookDetailsRouteArgs());
           return _i6.BookDetailsPage(key: args.key, book: args.book);
         }),
+    LoginRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return _i7.LoginPage();
+        }),
+    RegisterRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return _i8.RegisterPage();
+        }),
     CurrentsRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return _i7.CurrentsPage();
+          return _i9.CurrentsPage();
         }),
     WishlistRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return _i8.WishlistPage();
+          return _i10.WishlistPage();
         }),
     LibraryRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return _i9.LibraryPage();
+          return _i11.LibraryPage();
         })
   };
 
@@ -80,7 +92,9 @@ class AppRouter extends _i1.RootStackRouter {
         _i1.RouteConfig(AddBookRoute.name, path: '/add-book'),
         _i1.RouteConfig(AddRecommendationRoute.name,
             path: '/add-recommendation'),
-        _i1.RouteConfig(BookDetailsRoute.name, path: '/book-details')
+        _i1.RouteConfig(BookDetailsRoute.name, path: '/book-details'),
+        _i1.RouteConfig(LoginRoute.name, path: '/login'),
+        _i1.RouteConfig(RegisterRoute.name, path: '/register')
       ];
 }
 
@@ -123,7 +137,7 @@ class AddRecommendationRouteArgs {
 }
 
 class BookDetailsRoute extends _i1.PageRouteInfo<BookDetailsRouteArgs> {
-  BookDetailsRoute({_i2.Key key, _i10.Book book})
+  BookDetailsRoute({_i2.Key key, _i12.Book book})
       : super(name,
             path: '/book-details',
             args: BookDetailsRouteArgs(key: key, book: book));
@@ -136,7 +150,19 @@ class BookDetailsRouteArgs {
 
   final _i2.Key key;
 
-  final _i10.Book book;
+  final _i12.Book book;
+}
+
+class LoginRoute extends _i1.PageRouteInfo {
+  const LoginRoute() : super(name, path: '/login');
+
+  static const String name = 'LoginRoute';
+}
+
+class RegisterRoute extends _i1.PageRouteInfo {
+  const RegisterRoute() : super(name, path: '/register');
+
+  static const String name = 'RegisterRoute';
 }
 
 class CurrentsRoute extends _i1.PageRouteInfo {

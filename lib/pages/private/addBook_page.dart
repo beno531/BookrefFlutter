@@ -1,8 +1,6 @@
 import 'dart:developer';
 import 'package:bookref/models/detailsBook.dart';
 import 'package:bookref/blocs/add_book/add_book.dart';
-import 'package:bookref/blocs/navigation/navigation_bloc.dart';
-import 'package:bookref/blocs/navigation/navigation_event.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/blocs/notification/notification_event.dart';
 import 'package:bookref/services/data_service.dart';
@@ -268,10 +266,6 @@ class __AddBookDisplayState extends State<AddBookDisplay> {
                                           status: Colors.green,
                                           title: "Success",
                                           message: "Book was created!"));
-
-                                  BlocProvider.of<NavigationBloc>(context).add(
-                                      ChangeNavigationOnMain(
-                                          route: "/dashboard"));
 
                                   Navigator.of(context).pop();
                                 },
