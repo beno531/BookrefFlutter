@@ -82,13 +82,13 @@ class _BottomNavState extends State<BottomNav> {
   buildRoute(int i) {
     switch (i) {
       case 0:
-        onButtonTap("/currents", i);
+        onButtonTap("/dashboard/currents", i);
         break;
       case 1:
-        onButtonTap("/wishlist", i);
+        onButtonTap("/dashboard/wishlist", i);
         break;
       case 2:
-        onButtonTap("/library", i);
+        onButtonTap("/dashboard/library", i);
         break;
       default:
     }
