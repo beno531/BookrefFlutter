@@ -20,14 +20,13 @@ class AuthenticationService {
   }
 
   Future<User> getCurrentUser() async {
-    log("User Output");
-    var u = User(
-        name: await _userRepository.getUsername(),
-        token: await _connectionService.getToken());
-    log(u.name);
-    return User(
-        name: await _userRepository.getUsername(),
-        token: await _connectionService.getToken());
+    try {
+      return User(
+          name: await _userRepository.getUsername(),
+          token: await _connectionService.getToken());
+    } catch (e) {
+      return User(name: "", token: "");
+    }
   }
 
   Future<User> signIn(String username, String password) async {
