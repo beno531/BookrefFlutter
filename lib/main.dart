@@ -7,6 +7,7 @@ import 'package:bookref/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'blocs/blocs.dart';
 import 'services/services.dart';
 
@@ -18,7 +19,7 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   //await initHiveForFlutter();
-  //var dir = await getApplicationDocumentsDirectory();
+  var dir = await getApplicationDocumentsDirectory();
   /*Hive
     ..init(dir.path)
     ..registerAdapter(DashboardBooksAdapter())

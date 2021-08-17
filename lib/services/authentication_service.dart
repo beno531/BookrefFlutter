@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bookref/repositories/repositories.dart';
 import 'package:bookref/services/connection_service.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -18,13 +20,14 @@ class AuthenticationService {
   }
 
   Future<User> getCurrentUser() async {
-    try {
-      return User(
-          name: await _userRepository.getUsername(),
-          token: await _connectionService.getToken());
-    } catch (e) {
-      return User(name: "", token: "");
-    }
+    log("User Output");
+    var u = User(
+        name: await _userRepository.getUsername(),
+        token: await _connectionService.getToken());
+    log(u.name);
+    return User(
+        name: await _userRepository.getUsername(),
+        token: await _connectionService.getToken());
   }
 
   Future<User> signIn(String username, String password) async {

@@ -31,6 +31,7 @@ class BookDetailsPageDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     BlocProvider.of<BookDetailsBloc>(context)
         .add(LoadBookDetails(book: this.book));
+    final _currentsBloc = BlocProvider.of<BookDetailsBloc>(context);
 
     return BlocBuilder<BookDetailsBloc, BookDetailsState>(
         builder: (context, state) {

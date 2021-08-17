@@ -1,10 +1,15 @@
 import 'package:bookref/models/book.dart';
+import 'package:bookref/blocs/move_book.dart/move_book_bloc.dart';
+import 'package:bookref/blocs/move_book.dart/move_book_state.dart';
 import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
 import 'package:bookref/blocs/wishlist/wishlist_event.dart';
 import 'package:bookref/blocs/wishlist/wishlist_state.dart';
 import 'package:bookref/widgets/moveBookDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bookref/blocs/currents/currents_bloc.dart';
+import 'package:bookref/blocs/currents/currents_event.dart';
+import 'package:bookref/blocs/currents/currents_state.dart';
 import 'package:bookref/services/data_service.dart';
 
 class WishlistPage extends StatelessWidget {

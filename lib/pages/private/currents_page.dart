@@ -101,8 +101,11 @@ class __CurrentBooksState extends State<_CurrentBooks> {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<CurrentBloc>(context).add(LoadCurrentItems());
+    final _currentsBloc = BlocProvider.of<CurrentBloc>(context);
 
     return BlocBuilder<CurrentBloc, CurrentsState>(builder: (context, state) {
+      //final currentsBloc = BlocProvider.of<CurrentBloc>(context);
+
       if (state is CurrentItemsLoading) {
         return Container(
           decoration: BoxDecoration(color: Color(0xffE9E8E3)),
@@ -227,7 +230,6 @@ class __CurrentBooksState extends State<_CurrentBooks> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(state.message),
-              Text("Curr Auth"),
               FlatButton(
                 textColor: Theme.of(context).primaryColor,
                 child: Text('Retry'),

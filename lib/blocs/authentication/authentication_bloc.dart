@@ -37,8 +37,7 @@ class AuthenticationBloc
 
       if (currentUser.token != null &&
           currentUser.token != "" &&
-          currentUser.name != null &&
-          currentUser.name != "") {
+          currentUser.name != null) {
         yield AuthenticationAuthenticated(user: currentUser);
         log("Test1");
       } else {
@@ -46,8 +45,7 @@ class AuthenticationBloc
       }
     } catch (e) {
       yield AuthenticationFailure(
-          //message: e.message ?? 'An unknown error occurred');
-          message: 'Hier ist der Fehler');
+          message: e.message ?? 'An unknown error occurred');
     }
   }
 

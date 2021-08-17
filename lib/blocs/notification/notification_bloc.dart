@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:bookref/blocs/notification/notification_event.dart';
 import 'package:bookref/blocs/notification/notification_state.dart';
+import 'package:flutter/material.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc() : super(NotificationIdle());

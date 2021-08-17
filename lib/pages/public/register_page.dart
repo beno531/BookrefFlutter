@@ -106,7 +106,6 @@ class RegisterPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(state.message),
-                    Text("Register Auth"),
                     FlatButton(
                       textColor: Theme.of(context).primaryColor,
                       child: Text('Retry'),
@@ -163,6 +162,10 @@ class __SignUpFormState extends State<_SignUpForm> {
           email: _emailController.text,
           username: _usernameController.text,
           password: _passwordController.text));
+
+      context.router.push(
+        DashboardLayoutRoute(),
+      );
     }
 
     return BlocListener<LoginBloc, LoginState>(
