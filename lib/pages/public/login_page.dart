@@ -105,6 +105,7 @@ class LoginPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(state.message),
+                    Text("Login Auth"),
                     FlatButton(
                       textColor: Theme.of(context).primaryColor,
                       child: Text('Retry'),
@@ -159,10 +160,6 @@ class __SignInFormState extends State<_SignInForm> {
       _loginBloc.add(LoginInWithEmailButtonPressed(
           username: _usernameController.text,
           password: _passwordController.text));
-
-      context.router.push(
-        DashboardLayoutRoute(),
-      );
     }
 
     return BlocListener<LoginBloc, LoginState>(

@@ -15,9 +15,8 @@ import 'package:bookref/pages/public/register_page.dart';
     AutoRoute(
       path: '/dashboard',
       page: DashboardLayoutPage,
-      initial: true,
       children: [
-        AutoRoute(path: 'currents', page: CurrentsPage, initial: true),
+        AutoRoute(path: 'currents', page: CurrentsPage),
         AutoRoute(path: 'wishlist', page: WishlistPage),
         AutoRoute(path: 'library', page: LibraryPage),
       ],

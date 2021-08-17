@@ -7,7 +7,6 @@ import 'package:bookref/repositories/repositories.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'dart:async';
 import 'package:graphql/client.dart';
-import 'package:hive/hive.dart';
 
 class DataService {
   BookrefRepository _bookrefRepository;
@@ -93,8 +92,6 @@ class DataService {
   FutureOr<Iterable<DetailsBook>> getBooksByName(String bookName) async {
     final books = await _bookrefRepository.getBooksByName(bookName);
 
-    var nn = books.data.toString();
-
     var res = await convertBookSerToList(books);
 
     return res;
@@ -178,7 +175,7 @@ class DataService {
   }
 
   List<Book> convertBookQueryToList(QueryResult queryResult) {
-    var listBooks = List<Book>();
+    var listBooks;
 
     for (var i = 0; i < queryResult.data["books"].length; i++) {
       listBooks.add(
@@ -191,7 +188,7 @@ class DataService {
 
   List<RecommendedBook> convertRecommendedBookQueryToList(
       QueryResult queryResult) {
-    var listBooks = List<RecommendedBook>();
+    var listBooks;
 
     for (var i = 0;
         i < queryResult.data["bookRecommendationsForBook"].length;
@@ -206,7 +203,7 @@ class DataService {
 
   List<RecommendedPerson> convertRecommendedPersonQueryToList(
       QueryResult queryResult) {
-    var listBooks = List<RecommendedPerson>();
+    var listBooks;
 
     for (var i = 0;
         i < queryResult.data["peopleRecommendationsForBook"].length;
@@ -246,7 +243,7 @@ class DataService {
   Future<List<DetailsBook>> convertBookSerToList(
       QueryResult queryResult) async {
     try {
-      var listBooks = List<DetailsBook>();
+      var listBooks;
 
       for (var i = 0; i < queryResult.data['allBooks']['nodes'].length; i++) {
         listBooks.add(DetailsBook(queryResult.data['allBooks']['nodes'][i]));

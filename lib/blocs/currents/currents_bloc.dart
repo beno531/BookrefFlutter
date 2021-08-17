@@ -24,8 +24,13 @@ class CurrentBloc extends Bloc<CurrentsEvent, CurrentsState> {
     log("Bis hier kommts");
     yield CurrentItemsLoading();
     try {
-      await Future.delayed(Duration(seconds: 1), () {}); // Vorerst gefixt
-      List<Book> currentBooks = await dataService.getCurrentBooks();
+      List<Book> currentBooks;
+      try {
+        currentBooks = await dataService.getCurrentBooks();
+      } catch (e) {
+        log("moin0");
+      }
+
       log("Hier geht auch!");
       print("Load Current Items");
 

@@ -101,7 +101,6 @@ class __LibraryBooksState extends State<_LibraryBooks> {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<LibraryBloc>(context).add(LoadLibraryItems());
-    final _libraryBooks = BlocProvider.of<LibraryBloc>(context);
 
     return BlocBuilder<LibraryBloc, LibraryState>(builder: (context, state) {
       //final currentsBloc = BlocProvider.of<CurrentBloc>(context);
