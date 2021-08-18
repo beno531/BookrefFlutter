@@ -15,113 +15,115 @@ class LoginPage extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: AppColors.background,
-        body: Container(
-            width: size.width,
-            height: size.height,
-            child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                builder: (context, state) {
-              final authBloc = BlocProvider.of<AuthenticationBloc>(context);
-              if (state is AuthenticationNotAuthenticated) {
-                return Stack(children: [
-                  Positioned(
-                      top: size.height * 0.08,
-                      left: 0,
-                      right: 0,
-                      child: Center(
-                        child: RichText(
-                          text: new TextSpan(
-                            style: new TextStyle(
-                              fontSize: 40.0,
-                              fontFamily: 'Amaranth',
-                              color: Colors.black,
-                            ),
-                            children: <TextSpan>[
-                              new TextSpan(
-                                  text: 'BOOK',
-                                  style: new TextStyle(
-                                      fontWeight: FontWeight.bold)),
-                              new TextSpan(
-                                  text: 'REF.',
-                                  style: new TextStyle(
-                                      color: Colors.orange[700],
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ),
-                      )),
-                  Positioned(
-                    top: size.height * 0.27,
-                    left: 30,
-                    right: 0,
-                    child: Text(
-                      "Welcome,",
-                      style:
-                          TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  Positioned(
-                    top: size.height * 0.32,
-                    left: 30,
-                    right: 0,
-                    child: Text("Sign in to continue!",
-                        style:
-                            TextStyle(fontSize: 25, color: Colors.grey[500])),
-                  ),
-                  Positioned(
-                      top: size.height * 0.40,
-                      left: 30,
-                      right: 30,
-                      child: Container(height: 313, child: _LoginForm())),
-                  Positioned(
-                      bottom: size.height * 0.10,
-                      left: 30,
-                      right: 30,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            RichText(
-                                text: TextSpan(
-                              text: "I'm a new User. ",
-                              style: TextStyle(color: Colors.grey[600]),
+        body: SingleChildScrollView(
+          child: Container(
+              width: size.width,
+              height: size.height,
+              child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                  builder: (context, state) {
+                final authBloc = BlocProvider.of<AuthenticationBloc>(context);
+                if (state is AuthenticationNotAuthenticated) {
+                  return Stack(children: [
+                    Positioned(
+                        top: size.height * 0.08,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: RichText(
+                            text: new TextSpan(
+                              style: new TextStyle(
+                                fontSize: 40.0,
+                                fontFamily: 'Amaranth',
+                                color: Colors.black,
+                              ),
                               children: <TextSpan>[
-                                TextSpan(
-                                    text: 'Sign Up',
-                                    style: TextStyle(color: Colors.grey[900]),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () => context.router.push(
-                                            RegisterRoute(),
-                                          )),
+                                new TextSpan(
+                                    text: 'BOOK',
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold)),
+                                new TextSpan(
+                                    text: 'REF.',
+                                    style: new TextStyle(
+                                        color: Colors.orange[700],
+                                        fontWeight: FontWeight.bold)),
                               ],
-                            ))
-                          ])),
-                ]);
-              }
+                            ),
+                          ),
+                        )),
+                    Positioned(
+                      top: size.height * 0.27,
+                      left: 30,
+                      right: 0,
+                      child: Text(
+                        "Welcome,",
+                        style: TextStyle(
+                            fontSize: 35, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    Positioned(
+                      top: size.height * 0.32,
+                      left: 30,
+                      right: 0,
+                      child: Text("Sign in to continue!",
+                          style:
+                              TextStyle(fontSize: 25, color: Colors.grey[500])),
+                    ),
+                    Positioned(
+                        top: size.height * 0.40,
+                        left: 30,
+                        right: 30,
+                        child: Container(height: 313, child: _LoginForm())),
+                    Positioned(
+                        top: size.height * 0.90,
+                        left: 30,
+                        right: 30,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              RichText(
+                                  text: TextSpan(
+                                text: "I'm a new User. ",
+                                style: TextStyle(color: Colors.grey[600]),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: 'Sign Up',
+                                      style: TextStyle(color: Colors.grey[900]),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () => context.router.push(
+                                              RegisterRoute(),
+                                            )),
+                                ],
+                              ))
+                            ])),
+                  ]);
+                }
 
-              if (state is AuthenticationFailure) {
+                if (state is AuthenticationFailure) {
+                  return Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(state.message),
+                      FlatButton(
+                        textColor: Theme.of(context).primaryColor,
+                        child: Text('Retry'),
+                        onPressed: () {
+                          authBloc.add(AppLoaded());
+                        },
+                      )
+                    ],
+                  ));
+                }
+                // return splash screen
                 return Center(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Text(state.message),
-                    FlatButton(
-                      textColor: Theme.of(context).primaryColor,
-                      child: Text('Retry'),
-                      onPressed: () {
-                        authBloc.add(AppLoaded());
-                      },
-                    )
-                  ],
-                ));
-              }
-              // return splash screen
-              return Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                ),
-              );
-            })));
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ),
+                );
+              })),
+        ));
   }
 }
 

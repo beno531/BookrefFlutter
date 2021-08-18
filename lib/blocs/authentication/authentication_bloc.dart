@@ -37,7 +37,8 @@ class AuthenticationBloc
 
       if (currentUser.token != null &&
           currentUser.token != "" &&
-          currentUser.name != null) {
+          currentUser.name != null &&
+          currentUser.name != "") {
         yield AuthenticationAuthenticated(user: currentUser);
         log("Test1");
       } else {

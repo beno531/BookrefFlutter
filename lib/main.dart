@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:bookref/Router/router.gr.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
 import 'package:bookref/repositories/repositories.dart';
+import 'package:bookref/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,9 +13,9 @@ import 'blocs/blocs.dart';
 import 'services/services.dart';
 
 void main() async {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: Color(0xffE9E8E3), // navigation bar color
-    statusBarColor: Color(0xffE9E8E3), //navigation bar icon
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+    systemNavigationBarColor: Colors.white,
+    statusBarColor: AppColors.background,
   ));
 
   WidgetsFlutterBinding.ensureInitialized();

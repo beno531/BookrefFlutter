@@ -17,58 +17,61 @@ class AddBookPage extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       //key: _scaffoldKey,
-      body: Container(
-        decoration: BoxDecoration(color: Color(0xffE9E8E3)),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 60),
-              child: Container(
-                height: 40,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: size.width * 0.03,
-                      top: 0,
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(color: Color(0xffE9E8E3)),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 60),
+                child: Container(
+                  height: 40,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: size.width * 0.03,
+                        top: 0,
+                        child: IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
                       ),
-                    ),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: RichText(
-                          text: new TextSpan(
-                            style: new TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.black,
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: RichText(
+                            text: new TextSpan(
+                              style: new TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.black,
+                              ),
+                              children: <TextSpan>[
+                                new TextSpan(
+                                    text: 'ADD BOOK',
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold)),
+                              ],
                             ),
-                            children: <TextSpan>[
-                              new TextSpan(
-                                  text: 'ADD BOOK',
-                                  style: new TextStyle(
-                                      fontWeight: FontWeight.bold)),
-                            ],
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Center(
-                child: BlocProvider<AddBookBloc>(
-                  create: (context) => AddBookBloc(dataService: DataService()),
-                  child: AddBookDisplay(),
+              Expanded(
+                child: Center(
+                  child: BlocProvider<AddBookBloc>(
+                    create: (context) =>
+                        AddBookBloc(dataService: DataService()),
+                    child: AddBookDisplay(),
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
