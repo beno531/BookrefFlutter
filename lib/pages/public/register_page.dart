@@ -165,10 +165,6 @@ class __SignUpFormState extends State<_SignUpForm> {
           email: _emailController.text,
           username: _usernameController.text,
           password: _passwordController.text));
-
-      context.router.push(
-        DashboardLayoutRoute(),
-      );
     }
 
     return BlocListener<LoginBloc, LoginState>(

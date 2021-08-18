@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:bookref/Router/router.gr.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
@@ -68,7 +70,8 @@ class _DashboardLayoutPageState extends State<DashboardLayoutPage> {
                           IconButton(
                             icon: const Icon(Icons.add),
                             onPressed: () {
-                              context.router.push(
+                              log("Hellow");
+                              context.router.navigate(
                                 AddBookRoute(),
                               );
                             },
