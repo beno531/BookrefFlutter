@@ -31,7 +31,7 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapAppLoadedToState(AppLoaded event) async* {
-    yield AuthenticationLoading();
+    //yield AuthenticationFailure(message: "das");
     try {
       final currentUser = await _authenticationService.getCurrentUser();
 
@@ -40,7 +40,6 @@ class AuthenticationBloc
           currentUser.name != null &&
           currentUser.name != "") {
         yield AuthenticationAuthenticated(user: currentUser);
-        log("Test1");
       } else {
         yield AuthenticationNotAuthenticated();
       }

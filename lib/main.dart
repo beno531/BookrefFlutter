@@ -42,7 +42,6 @@ void main() async {
               BlocProvider<AuthenticationBloc>(create: (context) {
                 final authService =
                     RepositoryProvider.of<AuthenticationService>(context);
-                //final bookrefService = RepositoryProvider.of<BookrefService>(context);
                 return AuthenticationBloc(authService)..add(AppLoaded());
               }),
               BlocProvider(create: (context) => NotificationBloc())
@@ -58,17 +57,30 @@ class MyApp extends StatelessWidget {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         log(state.toString());
-        return MaterialApp.router(
-          routerDelegate: AutoRouterDelegate.declarative(
-            _appRouter,
-            routes: (_) => [
-              state is AuthenticationAuthenticated
-                  ? DashboardLayoutRoute()
-                  : LoginRoute()
-            ],
-          ),
+        if (state is AuthenticationAuthenticated) {
+          return MaterialApp.router(
+            routerDelegate:
+                _appRouter.delegate(initialRoutes: [DashboardLayoutRoute()]),
+            routeInformationParser: _appRouter.defaultRouteParser(),
+          );
+        }
+
+        if (state is AuthenticationNotAuthenticated) {
+          return MaterialApp.router(
+            routerDelegate: _appRouter.delegate(initialRoutes: [LoginRoute()]),
+            routeInformationParser: _appRouter.defaultRouteParser(),
+          );
+        }
+
+        return Text("ERROR");
+        /*return MaterialApp.router(
+          routerDelegate: _appRouter.delegate(initialRoutes: [
+            state is AuthenticationAuthenticated
+                ? DashboardLayoutRoute()
+                : LoginRoute()
+          ]),
           routeInformationParser: _appRouter.defaultRouteParser(),
-        );
+        );*/
       },
     );
   }
