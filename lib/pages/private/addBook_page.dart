@@ -20,6 +20,7 @@ class AddBookPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(color: Color(0xffE9E8E3)),
+          height: size.height,
           child: Column(
             children: [
               Padding(

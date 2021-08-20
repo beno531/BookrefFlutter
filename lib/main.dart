@@ -73,14 +73,6 @@ class MyApp extends StatelessWidget {
         }
 
         return Text("ERROR");
-        /*return MaterialApp.router(
-          routerDelegate: _appRouter.delegate(initialRoutes: [
-            state is AuthenticationAuthenticated
-                ? DashboardLayoutRoute()
-                : LoginRoute()
-          ]),
-          routeInformationParser: _appRouter.defaultRouteParser(),
-        );*/
       },
     );
   }
