@@ -116,6 +116,7 @@ class LoginPage extends StatelessWidget {
                     ],
                   ));
                 }
+
                 // return splash screen
                 return Center(
                   child: CircularProgressIndicator(

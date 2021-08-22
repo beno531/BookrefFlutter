@@ -1,6 +1,10 @@
 import 'dart:developer';
+import 'package:auto_route/auto_route.dart';
 import 'package:bookref/Router/router.gr.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
+import 'package:bookref/pages/pages.dart';
+import 'package:bookref/pages/private/currents_page.dart';
+import 'package:bookref/pages/private/dashboardLayoutPage.dart';
 import 'package:bookref/repositories/repositories.dart';
 import 'package:bookref/themes/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -50,28 +54,12 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final _appRouter = AppRouter();
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      builder: (context, state) {
-        log(state.toString());
-        if (state is AuthenticationAuthenticated) {
-          return MaterialApp.router(
-            routerDelegate:
-                _appRouter.delegate(initialRoutes: [DashboardLayoutRoute()]),
-            routeInformationParser: _appRouter.defaultRouteParser(),
-          );
-        }
-
-        if (state is AuthenticationNotAuthenticated) {
-          return MaterialApp.router(
-            routerDelegate: _appRouter.delegate(initialRoutes: [LoginRoute()]),
-            routeInformationParser: _appRouter.defaultRouteParser(),
-          );
-        }
-
-        return Text("ERROR");
-      },
+    return MaterialApp.router(
+      routerDelegate: _appRouter.delegate(initialRoutes: [LoginRoute()]),
+      routeInformationParser: _appRouter.defaultRouteParser(),
     );
   }
 }

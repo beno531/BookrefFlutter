@@ -83,8 +83,6 @@ class AppRouter extends _i1.RootStackRouter {
         _i1.RouteConfig(DashboardLayoutRoute.name,
             path: '/dashboard',
             children: [
-              _i1.RouteConfig('#redirect',
-                  path: '', redirectTo: 'currents', fullMatch: true),
               _i1.RouteConfig(CurrentsRoute.name, path: 'currents'),
               _i1.RouteConfig(WishlistRoute.name, path: 'wishlist'),
               _i1.RouteConfig(LibraryRoute.name, path: 'library')
