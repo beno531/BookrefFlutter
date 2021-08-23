@@ -54,12 +54,23 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final _appRouter = AppRouter();
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerDelegate: _appRouter.delegate(initialRoutes: [LoginRoute()]),
-      routeInformationParser: _appRouter.defaultRouteParser(),
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
+        log(state.toString());
+        return MaterialApp.router(
+          routerDelegate: AutoRouterDelegate.declarative(
+            _appRouter,
+            routes: (_) => [
+              state is AuthenticationAuthenticated
+                  ? DashboardLayoutRoute()
+                  : LoginRoute()
+            ],
+          ),
+          routeInformationParser: _appRouter.defaultRouteParser(),
+        );
+      },
     );
   }
 }
