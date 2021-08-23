@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+
 import 'package:bookref/pages/pages.dart';
 import 'package:bookref/pages/private/dashboardLayoutPage.dart';
 import 'package:bookref/pages/private/library_page.dart';
@@ -17,7 +18,10 @@ import 'package:bookref/pages/public/register_page.dart';
       page: DashboardLayoutPage,
       initial: true,
       children: [
-        AutoRoute(path: 'currents', page: CurrentsPage, initial: true),
+        AutoRoute(
+          path: 'currents',
+          page: CurrentsPage,
+        ),
         AutoRoute(path: 'wishlist', page: WishlistPage),
         AutoRoute(path: 'library', page: LibraryPage),
       ],
@@ -25,7 +29,7 @@ import 'package:bookref/pages/public/register_page.dart';
     AutoRoute(path: '/add-book', page: AddBookPage),
     AutoRoute(path: '/add-recommendation', page: AddRecommendationPage),
     AutoRoute(path: '/book-details', page: BookDetailsPage),
-    AutoRoute(path: '/login', page: LoginPage),
+    AutoRoute(path: '/login', page: LoginPage, initial: true),
     AutoRoute(path: '/register', page: RegisterPage),
   ],
 )

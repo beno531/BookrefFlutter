@@ -1,4 +1,6 @@
+import 'package:bookref/Router/router.gr.dart';
 import 'package:bookref/models/book.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:bookref/blocs/move_book.dart/move_book_bloc.dart';
 import 'package:bookref/blocs/move_book.dart/move_book_state.dart';
 import 'package:bookref/blocs/wishlist/wishlist_bloc.dart';
@@ -172,8 +174,9 @@ class ___WishlistBooksState extends State<_WishlistBooks> {
                       textColor: Colors.black,
                       splashColor: Colors.black12,
                       onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed("/bookDetails", arguments: book);
+                        context.router.push(
+                          BookDetailsRoute(book: book),
+                        );
                       },
                       onLongPress: () {
                         moveBookDialog.show(book, context);

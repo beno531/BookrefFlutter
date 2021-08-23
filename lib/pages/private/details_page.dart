@@ -252,9 +252,10 @@ class BookDetailsPageDisplay extends StatelessWidget {
                                                     padding:
                                                         const EdgeInsets.only(
                                                             top: 5),
-                                                    child: Text(
-                                                        book.getBookPageCount() ??
-                                                            "none"),
+                                                    child: Text(book
+                                                            .getBookPageCount()
+                                                            .toString() ??
+                                                        "none"),
                                                   )
                                                 ],
                                               ),

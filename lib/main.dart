@@ -1,8 +1,10 @@
 import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:bookref/Router/router.gr.dart';
 import 'package:bookref/blocs/notification/notification_bloc.dart';
+import 'package:bookref/pages/pages.dart';
+import 'package:bookref/pages/private/currents_page.dart';
+import 'package:bookref/pages/private/dashboardLayoutPage.dart';
 import 'package:bookref/repositories/repositories.dart';
 import 'package:bookref/themes/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +44,6 @@ void main() async {
               BlocProvider<AuthenticationBloc>(create: (context) {
                 final authService =
                     RepositoryProvider.of<AuthenticationService>(context);
-                //final bookrefService = RepositoryProvider.of<BookrefService>(context);
                 return AuthenticationBloc(authService)..add(AppLoaded());
               }),
               BlocProvider(create: (context) => NotificationBloc())

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:bookref/Router/router.gr.dart';
 import 'authentication_event.dart';
 import 'authentication_state.dart';
 import '../../services/services.dart';
@@ -31,16 +32,17 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapAppLoadedToState(AppLoaded event) async* {
-    yield AuthenticationLoading();
     try {
       final currentUser = await _authenticationService.getCurrentUser();
+
+      log("asd");
 
       if (currentUser.token != null &&
           currentUser.token != "" &&
           currentUser.name != null &&
           currentUser.name != "") {
         yield AuthenticationAuthenticated(user: currentUser);
-        log("Test1");
+        yield AuthenticationNotAuthenticated();
       } else {
         yield AuthenticationNotAuthenticated();
       }

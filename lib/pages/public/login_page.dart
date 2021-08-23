@@ -116,6 +116,7 @@ class LoginPage extends StatelessWidget {
                     ],
                   ));
                 }
+
                 // return splash screen
                 return Center(
                   child: CircularProgressIndicator(
@@ -161,10 +162,6 @@ class __SignInFormState extends State<_SignInForm> {
       _loginBloc.add(LoginInWithEmailButtonPressed(
           username: _usernameController.text,
           password: _passwordController.text));
-
-      context.router.push(
-        DashboardLayoutRoute(),
-      );
     }
 
     return BlocListener<LoginBloc, LoginState>(
