@@ -35,14 +35,11 @@ class AuthenticationBloc
     try {
       final currentUser = await _authenticationService.getCurrentUser();
 
-      log("asd");
-
       if (currentUser.token != null &&
           currentUser.token != "" &&
           currentUser.name != null &&
           currentUser.name != "") {
         yield AuthenticationAuthenticated(user: currentUser);
-        yield AuthenticationNotAuthenticated();
       } else {
         yield AuthenticationNotAuthenticated();
       }
