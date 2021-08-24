@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:bookref/main.dart';
 
 import 'package:bookref/pages/pages.dart';
 import 'package:bookref/pages/private/dashboardLayoutPage.dart';
@@ -13,6 +14,7 @@ import 'package:bookref/pages/public/register_page.dart';
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: <AutoRoute>[
+    AutoRoute(path: '/ini', page: IniPage, initial: true),
     AutoRoute(
       path: '/dashboard',
       page: DashboardLayoutPage,
@@ -29,7 +31,7 @@ import 'package:bookref/pages/public/register_page.dart';
     AutoRoute(path: '/add-book', page: AddBookPage),
     AutoRoute(path: '/add-recommendation', page: AddRecommendationPage),
     AutoRoute(path: '/book-details', page: BookDetailsPage),
-    AutoRoute(path: '/login', page: LoginPage, initial: true),
+    AutoRoute(path: '/login', page: LoginPage),
     AutoRoute(path: '/register', page: RegisterPage),
   ],
 )

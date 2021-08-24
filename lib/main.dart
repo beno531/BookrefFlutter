@@ -56,6 +56,43 @@ class MyApp extends StatelessWidget {
   final _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
+    return MaterialApp.router(
+      routerDelegate: _appRouter.delegate(),
+      routeInformationParser: _appRouter.defaultRouteParser(),
+    );
+  }
+}
+
+class IniPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        log("message: ");
+        log(state.toString());
+
+        if (state is AuthenticationAuthenticated) {
+          context.router.push(DashboardLayoutRoute());
+        } else if (state is AuthenticationNotAuthenticated) {
+          context.router.push(LoginRoute());
+        }
+      },
+      builder: (context, state) {
+        return Center(
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+          ),
+        );
+      },
+    );
+  }
+}
+
+/*
+class MyApp extends StatelessWidget {
+  final _appRouter = AppRouter();
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         log(state.toString());
@@ -74,3 +111,26 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+
+return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        log("message: ");
+        log(state.toString());
+        final appRouter = AppRouter();
+
+        if (state is AuthenticationAuthenticated) {
+          appRouter.replace(DashboardLayoutRoute());
+        } else if (state is AuthenticationNotAuthenticated) {
+          appRouter.push(LoginRoute());
+        }
+      },
+      builder: (context, state) {
+        return MaterialApp.router(
+          routerDelegate: _appRouter.delegate(),
+          routeInformationParser: _appRouter.defaultRouteParser(),
+        );
+      },
+    );
+*/

@@ -27,7 +27,7 @@ class _DashboardLayoutPageState extends State<DashboardLayoutPage> {
           return Scaffold(
             key: _scaffoldKey,
             drawer: NavDrawer(
-              user: User(name: "%Placeholder%"),
+              user: User(name: ""),
             ),
             body: Container(
               decoration: BoxDecoration(color: Color(0xffE9E8E3)),
@@ -70,8 +70,8 @@ class _DashboardLayoutPageState extends State<DashboardLayoutPage> {
                           IconButton(
                             icon: const Icon(Icons.add),
                             onPressed: () {
-                              log("Hellow");
-                              context.router.navigate(
+                              log("hit");
+                              context.router.push(
                                 AddBookRoute(),
                               );
                             },

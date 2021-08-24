@@ -7,16 +7,17 @@
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 
-import '../models/book.dart' as _i12;
-import '../pages/pages.dart' as _i7;
-import '../pages/private/addBook_page.dart' as _i4;
-import '../pages/private/addRecommendation_page.dart' as _i5;
-import '../pages/private/currents_page.dart' as _i9;
-import '../pages/private/dashboardLayoutPage.dart' as _i3;
-import '../pages/private/details_page.dart' as _i6;
-import '../pages/private/library_page.dart' as _i11;
-import '../pages/private/wishlist_page.dart' as _i10;
-import '../pages/public/register_page.dart' as _i8;
+import '../main.dart' as _i3;
+import '../models/book.dart' as _i13;
+import '../pages/pages.dart' as _i8;
+import '../pages/private/addBook_page.dart' as _i5;
+import '../pages/private/addRecommendation_page.dart' as _i6;
+import '../pages/private/currents_page.dart' as _i10;
+import '../pages/private/dashboardLayoutPage.dart' as _i4;
+import '../pages/private/details_page.dart' as _i7;
+import '../pages/private/library_page.dart' as _i12;
+import '../pages/private/wishlist_page.dart' as _i11;
+import '../pages/public/register_page.dart' as _i9;
 
 class AppRouter extends _i1.RootStackRouter {
   AppRouter([_i2.GlobalKey<_i2.NavigatorState> navigatorKey])
@@ -24,62 +25,68 @@ class AppRouter extends _i1.RootStackRouter {
 
   @override
   final Map<String, _i1.PageFactory> pagesMap = {
+    IniRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
+        routeData: routeData,
+        builder: (_) {
+          return _i3.IniPage();
+        }),
     DashboardLayoutRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<DashboardLayoutRouteArgs>(
               orElse: () => const DashboardLayoutRouteArgs());
-          return _i3.DashboardLayoutPage(key: args.key);
+          return _i4.DashboardLayoutPage(key: args.key);
         }),
     AddBookRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return _i4.AddBookPage();
+          return _i5.AddBookPage();
         }),
     AddRecommendationRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<AddRecommendationRouteArgs>();
-          return _i5.AddRecommendationPage(args.bookId);
+          return _i6.AddRecommendationPage(args.bookId);
         }),
     BookDetailsRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (data) {
           final args = data.argsAs<BookDetailsRouteArgs>(
               orElse: () => const BookDetailsRouteArgs());
-          return _i6.BookDetailsPage(key: args.key, book: args.book);
+          return _i7.BookDetailsPage(key: args.key, book: args.book);
         }),
     LoginRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return _i7.LoginPage();
+          return _i8.LoginPage();
         }),
     RegisterRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return _i8.RegisterPage();
+          return _i9.RegisterPage();
         }),
     CurrentsRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return _i9.CurrentsPage();
+          return _i10.CurrentsPage();
         }),
     WishlistRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return _i10.WishlistPage();
+          return _i11.WishlistPage();
         }),
     LibraryRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
         routeData: routeData,
         builder: (_) {
-          return _i11.LibraryPage();
+          return _i12.LibraryPage();
         })
   };
 
   @override
   List<_i1.RouteConfig> get routes => [
         _i1.RouteConfig('/#redirect',
-            path: '/', redirectTo: '/dashboard', fullMatch: true),
+            path: '/', redirectTo: '/ini', fullMatch: true),
+        _i1.RouteConfig(IniRoute.name, path: '/ini'),
         _i1.RouteConfig(DashboardLayoutRoute.name,
             path: '/dashboard',
             children: [
@@ -94,6 +101,12 @@ class AppRouter extends _i1.RootStackRouter {
         _i1.RouteConfig(LoginRoute.name, path: '/login'),
         _i1.RouteConfig(RegisterRoute.name, path: '/register')
       ];
+}
+
+class IniRoute extends _i1.PageRouteInfo {
+  const IniRoute() : super(name, path: '/ini');
+
+  static const String name = 'IniRoute';
 }
 
 class DashboardLayoutRoute extends _i1.PageRouteInfo<DashboardLayoutRouteArgs> {
@@ -135,7 +148,7 @@ class AddRecommendationRouteArgs {
 }
 
 class BookDetailsRoute extends _i1.PageRouteInfo<BookDetailsRouteArgs> {
-  BookDetailsRoute({_i2.Key key, _i12.Book book})
+  BookDetailsRoute({_i2.Key key, _i13.Book book})
       : super(name,
             path: '/book-details',
             args: BookDetailsRouteArgs(key: key, book: book));
@@ -148,7 +161,7 @@ class BookDetailsRouteArgs {
 
   final _i2.Key key;
 
-  final _i12.Book book;
+  final _i13.Book book;
 }
 
 class LoginRoute extends _i1.PageRouteInfo {
