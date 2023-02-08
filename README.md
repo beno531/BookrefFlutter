@@ -1,3 +1,3 @@
 # BOOKREF.
 
-[Link to last release](https://www.bookref.de)
+[Latest release](https://www.bookref.de)
