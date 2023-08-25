@@ -7,8 +7,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ web-test ]
-  pull_request:
-    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -34,11 +32,11 @@ jobs:
     - name: Flutter doctor
       run: flutter doctor
     
-    - name: Build APK
-      run: flutter build apk --release
+    - name: Build Web
+      run: flutter build web
     
-    - name: Upload APK artifact 
+    - name: Upload WEB artifact 
       uses: actions/upload-artifact@v1
       with:
         name: release-apk
-        path: build/app/outputs/flutter-apk/app-release.apk
+        path: build/web
