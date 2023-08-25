@@ -26,7 +26,7 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v1.4.0
       with:
-        channel: 'beta' # 'dev', 'alpha', 'master', default to: 'stable'
+        channel: '3.13.1' # 'dev', 'alpha', 'master', default to: 'stable'
         # flutter-version: '1.22.x' # you can also specify exact version of flutter
     
     - name: Flutter doctor
