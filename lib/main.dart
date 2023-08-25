@@ -1,136 +1,125 @@
-import 'dart:developer';
-import 'package:auto_route/auto_route.dart';
-import 'package:bookref/Router/router.gr.dart';
-import 'package:bookref/blocs/notification/notification_bloc.dart';
-import 'package:bookref/pages/pages.dart';
-import 'package:bookref/pages/private/currents_page.dart';
-import 'package:bookref/pages/private/dashboardLayoutPage.dart';
-import 'package:bookref/repositories/repositories.dart';
-import 'package:bookref/themes/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path_provider/path_provider.dart';
-import 'blocs/blocs.dart';
-import 'services/services.dart';
 
-void main() async {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-    systemNavigationBarColor: Colors.white,
-    statusBarColor: AppColors.background,
-  ));
-
-  WidgetsFlutterBinding.ensureInitialized();
-  //await initHiveForFlutter();
-  var dir = await getApplicationDocumentsDirectory();
-  /*Hive
-    ..init(dir.path)
-    ..registerAdapter(DashboardBooksAdapter())
-    ..registerAdapter(BookAdapter());*/
-
-  runApp(
-      // Injects the Authentication service
-      MultiRepositoryProvider(
-          providers: [
-        RepositoryProvider<AuthenticationService>(create: (context) {
-          return AuthenticationService();
-        }),
-        RepositoryProvider<BookrefRepository>(create: (context) {
-          return BookrefRepository();
-        }),
-      ],
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<AuthenticationBloc>(create: (context) {
-                final authService =
-                    RepositoryProvider.of<AuthenticationService>(context);
-                return AuthenticationBloc(authService)..add(AppLoaded());
-              }),
-              BlocProvider(create: (context) => NotificationBloc())
-            ],
-            child: MyApp(),
-          )));
+void main() {
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final _appRouter = AppRouter();
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerDelegate: _appRouter.delegate(),
-      routeInformationParser: _appRouter.defaultRouteParser(),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // TRY THIS: Try running your application with "flutter run". You'll see
+        // the application has a blue toolbar. Then, without quitting the app,
+        // try changing the seedColor in the colorScheme below to Colors.green
+        // and then invoke "hot reload" (save your changes or press the "hot
+        // reload" button in a Flutter-supported IDE, or press "r" if you used
+        // the command line to start the app).
+        //
+        // Notice that the counter didn't reset back to zero; the application
+        // state is not lost during the reload. To reset the state, use hot
+        // restart instead.
+        //
+        // This works for code too, not just values: Most code changes can be
+        // tested with just a hot reload.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class IniPage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) {
-        log("message: ");
-        log(state.toString());
-
-        if (state is AuthenticationAuthenticated) {
-          context.router.push(DashboardLayoutRoute());
-        } else if (state is AuthenticationNotAuthenticated) {
-          context.router.push(LoginRoute());
-        }
-      },
-      builder: (context, state) {
-        return Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-          ),
-        );
-      },
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
+    return Scaffold(
+      appBar: AppBar(
+        // TRY THIS: Try changing the color here to a specific color (to
+        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
+        // change color while the other colors stay the same.
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+      ),
+      body: Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: Column(
+          // Column is also a layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          //
+          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+          // action in the IDE, or press "p" in the console), to see the
+          // wireframe for each widget.
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
-
-/*
-class MyApp extends StatelessWidget {
-  final _appRouter = AppRouter();
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      builder: (context, state) {
-        log(state.toString());
-        return MaterialApp.router(
-          routerDelegate: AutoRouterDelegate.declarative(
-            _appRouter,
-            routes: (_) => [
-              state is AuthenticationAuthenticated
-                  ? DashboardLayoutRoute()
-                  : LoginRoute()
-            ],
-          ),
-          routeInformationParser: _appRouter.defaultRouteParser(),
-        );
-      },
-    );
-  }
-}
-
-
-
-return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) {
-        log("message: ");
-        log(state.toString());
-        final appRouter = AppRouter();
-
-        if (state is AuthenticationAuthenticated) {
-          appRouter.replace(DashboardLayoutRoute());
-        } else if (state is AuthenticationNotAuthenticated) {
-          appRouter.push(LoginRoute());
-        }
-      },
-      builder: (context, state) {
-        return MaterialApp.router(
-          routerDelegate: _appRouter.delegate(),
-          routeInformationParser: _appRouter.defaultRouteParser(),
-        );
-      },
-    );
-*/
