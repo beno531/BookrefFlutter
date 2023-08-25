@@ -41,5 +41,5 @@ jobs:
     - name: Upload WEB artifact 
       uses: actions/upload-artifact@v1
       with:
-        name: release-apk
+        name: web-app
         path: build/web
